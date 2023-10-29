@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<title>WSL for Linux Deep Dive</title>
+<link href="assets/css/bootstrap.css" rel="stylesheet">
+<!-- Custom styles for this template -->
+<link href="assets/css/starter-template.css" rel="stylesheet">
+<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js?lang=css&amp;skin=sunburst"></script>
+<style type="text/css">
+html {
+	font-size: 90.0%;
+}
+
+h2 {
+	margin-top: 60px;
+}
+
+h4, h3 {
+	padding-top: 40px!;		
+}
+
+p {
+	font-size: 1.2em;
+}
+h4 {
+	font-size: 1.4em;
+}
+
+img, pre.prettyprint {
+	margin-top: 1.5em;
+	margin-bottom: 1.5em;
+}
+h1, h2, h3, h4, h5, h6 {
+    color:#007bff;
+
+}
+blockquote {
+    border-left: 4px solid #999;
+    padding-left: 1rem;
+    page-break-inside: avoid;
+}
+</style>
+<link rel="shortcut icon" type="image/x-icon" href="favicon.ico" />
+</head>
+<body>
+<header>
+    <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="#">WSL for Linux Deep Dive</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
+                aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Home</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#">Windows Subsystem for Linux Deep Dive <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">About</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+<div class="container">
+    <div class="starter-template">
+
+
+<h1 id="windows-subsystem-for-linux-deep-dive">Windows Subsystem for Linux Deep Dive</h1>
+<h2 id="installing-wsl-on-windows-11">Installing WSL on Windows 11</h2>
+<p>Installing the default Linux (Ubuntu).</p>
+<pre class="prettyprint"><code><div>	wsl --install
+</div></code></pre>
+<p>List online versions of Linux.</p>
+<pre class="prettyprint"><code><div>	wsl --list --online
+</div></code></pre>
+<p>List your Linux installations.</p>
+<pre class="prettyprint"><code><div>	wsl --list
+</div></code></pre>
+<p>Returns.</p>
+<blockquote>
+<p>Windows Subsystem for Linux Distributions:<br>
+Ubuntu-20.04 (Default)<br>
+docker-desktop<br>
+docker-desktop-data</p>
+</blockquote>
+<p>Installing a version of Linux.</p>
+<pre class="prettyprint"><code><div>	wsl --install -d &lt;Distribution name&gt;
+</div></code></pre>
+<p>e.g.</p>
+<pre class="prettyprint"><code><div>	wsl --install -d kali-linux
+</div></code></pre>
+<p>Once you install this it will ask you for a username and password for this version of Linux.</p>
+<h2 id="removing-a-linux-installation">Removing a Linux installation</h2>
+<pre class="prettyprint"><code><div>	wsl --unregister Ubuntu-20.04
+</div></code></pre>
+<p><strong>Note:</strong> this will remove everything including your preferences.</p>
+<p>Check the status of your WSL installation.</p>
+<pre class="prettyprint"><code><div>	wsl --status
+</div></code></pre>
+<p>Returns.</p>
+<blockquote>
+<p>Default Distribution: Ubuntu-20.04<br>
+Default Version: 2</p>
+</blockquote>
+<p>Shows that I am running WSL 2.</p>
+<p>The version of Ubuntu I am running can be found with.</p>
+<pre class="prettyprint"><code><div>	lsb_release -a
+</div></code></pre>
+<p>Returns.</p>
+<blockquote>
+<p>No LSB modules are available.<br>
+Distributor ID: Ubuntu<br>
+Description:    Ubuntu 20.04.3 LTS<br>
+Release:        20.04<br>
+Codename:       focal</p>
+</blockquote>
+<h3 id="help">Help</h3>
+<pre class="prettyprint"><code><div>	wsl --<span class="hljs-built_in">help</span>
+</div></code></pre>
+<h2 id="first-steps-with-a-distro">First steps with a Distro</h2>
+<h3 id="updates">Updates</h3>
+<p>Updates are released quicker than Microsoft can do their package updates. To do updates you can use the Linux distributions process.</p>
+<pre class="prettyprint"><code><div>	sudo apt update &amp;&amp; sudo apt upgrade
+</div></code></pre>
+<h3 id="generating-a-ssh-key">Generating a SSH key</h3>
+<p>The system keys are kept in and these should be all you need.</p>
+<blockquote>
+<p>/etc/ssh</p>
+</blockquote>
+<p>Use a ECDSA key with a size of 521 bytes.</p>
+<pre class="prettyprint"><code><div>	ssh-keygen -t ecdsa -b 521
+</div></code></pre>
+<p>This allows you to use the SSH keys to log into Linux or Unix systems.</p>
+<h3 id="generating-a-key-for-my-nas">Generating a key for my NAS</h3>
+<p>You have to enable SSH on your NAS.</p>
+<p><img src="assets/images/wsl/nas-enable-ssh.jpg" alt="Enable ssh on your NAS" title="Enable ssh on your NAS"></p>
+<p>Now, generate a key.</p>
+<pre class="prettyprint"><code><div>	ssh-keygen -t ecdsa -b 521
+</div></code></pre>
+<p><img src="assets/images/wsl/ssh-keygen.jpg" alt="ssh-keygen" title="ssh-keygen"></p>
+<p>Now run the following to see your key.</p>
+<pre class="prettyprint"><code><div>	ll .ssh
+</div></code></pre>
+<blockquote>
+<p>total 16<br>
+drwx------  2 alanr alanr 4096 Dec 18 14:46 ./<br>
+drwxr-xr-x 25 alanr alanr 4096 Dec 18 14:46 ../<br>
+-rw-------  1 alanr alanr  736 Dec 18 14:46 id_ecdsa<br>
+-rw-r--r--  1 alanr alanr  265 Dec 18 14:46 id_ecdsa.pub</p>
+</blockquote>
+<p>I can copy the SSH key to the server.</p>
+<pre class="prettyprint"><code><div>	ssh-copy-id 192.168.1.3
+</div></code></pre>
+<p>This asks for a password on the NAS. Once you do this it will copy the SSH key to the NAS.</p>
+<p>Now you can log in without using a password.</p>
+<pre class="prettyprint"><code><div>	ssh 192.168.1.3
+</div></code></pre>
+<p>Screenshot.</p>
+<p><img src="assets/images/wsl/nas-box.jpg" alt="NAS server" title="NAS server"></p>
+<h2 id="using-docker-with-wsl">Using Docker with WSL</h2>
+<p>Docker is integrated into WSL 2.</p>
+<p>You can run Docker from inside your WSL instances.</p>
+<h3 id="settings">Settings</h3>
+<p>We are running Linux images.</p>
+<p>In Docker General settings check the <strong>Use the WSL 2 based engine</strong> setting.</p>
+<p>In Resources settings.</p>
+<p><img src="assets/images/wsl/wsl-settings.jpg" alt="WSL settings" title="WSL settings"></p>
+<h2 id="using-windows-and-linux-commands">Using Windows and Linux commands</h2>
+<h3 id="using-linux-commands-inside-of-windows">Using Linux commands inside of Windows</h3>
+<p>In Powershell I can update my default Linux instance with.</p>
+<pre class="prettyprint"><code><div>	wsl sudo apt update -y
+</div></code></pre>
+<p>And.</p>
+<pre class="prettyprint"><code><div>	wsl sudo apt upgrade -y
+</div></code></pre>
+<p>All you need to do to run a linux command is add the <code>wsl</code> at the front of the command.</p>
+<p>I can edit my Ubuntu <code>.bashrc</code> from Powershell.</p>
+<pre class="prettyprint"><code><div>	wsl nano ~/.bashrc
+</div></code></pre>
+<p><strong>Note:</strong> if you have multiple instances of Linux running you can change the instance by using the name.</p>
+<pre class="prettyprint"><code><div>	wsl -d Ubuntu-20.04 cat ~/.bashrc
+</div></code></pre>
+<p>This will list the .bashrc file on Ubuntu.</p>
+<p>I can use Linux commands on Windows folders using the default instance of Ubuntu.</p>
+<pre class="prettyprint"><code><div>	wsl grep -<span class="hljs-keyword">in</span> <span class="hljs-string">"Dylan"</span> *.txt
+</div></code></pre>
+<p>Uses the Linux version of grep to find text files with the word <code>Dylan</code> in them.</p>
+<h3 id="using-windows-commands-inside-of-linux">Using Windows commands inside of Linux</h3>
+<p>You can use Windows commands directly in WSL Linux.</p>
+<pre class="prettyprint"><code><div>	dir
+</div></code></pre>
+<p>Will run in your Ubuntu instance.</p>
+<p>In Powershell run this Linux command to create a Windows text file.</p>
+<pre class="prettyprint"><code><div>	 wsl vim test.txt
+</div></code></pre>
+<p>View the file.</p>
+<pre class="prettyprint"><code><div>	 wsl cat test.txt
+</div></code></pre>
+<p>Returns the text file contents.</p>
+<blockquote>
+<p>PS C:\Temp\a&gt; cat test.txt<br>
+This is a new windows text file created using VIM.</p>
+</blockquote>
+<h2 id="file-systems">File systems</h2>
+<p>Files in your Linux system are accessible in Windows.</p>
+<p>The files in your Windows system are accessible in Linux.</p>
+<p><strong>Note:</strong> you get better performance from your native file system.</p>
+<p>Keep your Windows files in Windows and Linux files in Linux.</p>
+<p>You can access the Linux file system from Powershell.</p>
+<pre class="prettyprint"><code><div>dir \\wsl$\Ubuntu-20.04
+</div></code></pre>
+<p>or</p>
+<pre class="prettyprint"><code><div>	dir \\wsl.localhost\Ubuntu-20.04
+</div></code></pre>
+<p>Will list the files in Ubuntu.</p>
+<p>You can access any Linux file system using <code>\\wsl$\</code>.</p>
+<p>Applications that running use their native file system.</p>
+<p>In Linux you can access the Windows file system using the following format.</p>
+<pre class="prettyprint"><code><div>	ls /mnt/c/Git/Notes/
+</div></code></pre>
+<p>Will list c:\Git\Notes directory.</p>
+<p>File permissions will stay the same in Windows or Linux. For example, a read-only file will be read-only in Windows and Linux.</p>
+<h3 id="use-a-different-user-in-linux">Use a different user in Linux</h3>
+<p>You can change a Linux user for commands.</p>
+<pre class="prettyprint"><code><div>	wsl -u root ls -l
+</div></code></pre>
+<p>Will list the contents of the current Windows directory using a Linux command as <code>root</code> user.</p>
+<h2 id="mounting-a-linux-disk-in-windows">Mounting a Linux disk in Windows</h2>
+<p><strong>Note:</strong> to do this you need to use Powershell in Administrator mode.</p>
+<p>You can use WSL to mount an internal Linux disk inside a WSL Linux distribution.</p>
+<p>This is useful for disks that aren't normally supported by Windows.</p>
+<p>When the disk is mounted through WSL, all the instances of Linux will have access to it.</p>
+<p>Once you have added a device you need to find its <code>DeviceID</code>.</p>
+<p>If you have multiple partitions, which one do you need to mount?</p>
+<p>In Powershell</p>
+<pre class="prettyprint"><code><div>	<span class="hljs-built_in">Get-CimInstance</span> <span class="hljs-literal">-query</span> <span class="hljs-string">"SELECT * from Win32_DiskDrive"</span>
+</div></code></pre>
+<p>Or.</p>
+<pre class="prettyprint"><code><div>	wcim diskdrive list brief
+</div></code></pre>
+<p>Both return.</p>
+<blockquote>
+<p>DeviceID           Caption                            Partitions Size          Model</p>
+<hr>
+<p>\.\PHYSICALDRIVE1 WDC WD80EFAX-68KNBN0               1          8001560609280 WDC WD80EFAX-68KNBN0<br>
+\.\PHYSICALDRIVE0 WDC WD60EFRX-68MYMN1               3          6001172513280 WDC WD60EFRX-68MYMN1<br>
+\.\PHYSICALDRIVE3 TOSHIBA TOSHIBA USB DRV USB Device 3          16031070720   TOSHIBA TOSHIBA USB DRV USB Device<br>
+\.\PHYSICALDRIVE2 NVMe Samsung SSD 970               4          1000202273280 NVMe Samsung SSD 970</p>
+</blockquote>
+<p>From this we can see that the device we inserted into a USB drive has a DeviceID of.</p>
+<blockquote>
+<p>\.\PHYSICALDRIVE3</p>
+</blockquote>
+<h3 id="the-mount-option">The mount option</h3>
+<p>The <code>wsl --mount</code> option is used.</p>
+<p>We can mount our USB drive with the command.</p>
+<pre class="prettyprint"><code><div>	wsl --mount \\.\PHYSICALDRIVE3
+</div></code></pre>
+<p>It assumes the drive is <code>ext4</code> format.</p>
+<h3 id="mount-a-specific-partition">Mount a specific partition</h3>
+<p>You can specify the partition to mount.</p>
+<pre class="prettyprint"><code><div>	wsl --mount \\.\PHYSICALDRIVE3 --partiton 3 --<span class="hljs-built_in">type</span> ext4
+</div></code></pre>
+<p>Once mounted Linux has access.</p>
+<p>In Linux the disck is available under the <code>/mnt/wsl</code> mount point.</p>
+<p>For our example it would be.</p>
+<pre class="prettyprint"><code><div>	wsl /mnt/PHYSICALDRIVE3
+</div></code></pre>
+<p>Note that Windows also has access to this drive.</p>
+<p>In our previous example we could access it with.</p>
+<pre class="prettyprint"><code><div>	\\wsl<span class="hljs-variable">$</span>\Ubuntu<span class="hljs-literal">-20</span>.<span class="hljs-number">04</span>\mnt\wsl\PHYSICALDRIVE3
+</div></code></pre>
+<h3 id="unmount-the-device">Unmount the device</h3>
+<pre class="prettyprint"><code><div>	wsl -<span class="hljs-literal">-unmount</span> \\.\PHYSICALDRIVE3
+</div></code></pre>
+<p><strong>Note:</strong> the mount command didn't work for me. I think this is because my Linux USB drive isn't <code>ext4</code> format.</p>
+<h2 id="problem-shooting">Problem shooting</h2>
+<p>Checkout the <a href="https://github.com/microsoft/WSL/issues" title="Microsoft WSL issues">Microsoft WSL issues</a> page.</p>
+<h3 id="updating-wsl">Updating WSL</h3>
+<p>Open a Powershell Administrator shell and run this command.</p>
+<pre class="prettyprint"><code><div>	wsl -<span class="hljs-literal">-update</span>
+</div></code></pre>
+<h3 id="changing-the-bashrc-file">Changing the .bashrc file</h3>
+<p>You don't have to close the Ubuntu terminal when you do changes to the <code>.bashrc</code> file. Just run this command.</p>
+<pre class="prettyprint"><code><div>	<span class="hljs-built_in">source</span> .bashrc
+</div></code></pre>
+<p>This will reload <code>.bashrc</code> without having to reboot the terminal.</p>
+
+
+
+</div><!-- starter-template -->
+</div><!-- /.container -->
+
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"/>
+<script>hljs.initHighlightingOnLoad();</script>
+
+<script src="assets/js/jquery.min.js"></script>
+<script src="assets/js/bootstrap.min.js"></script>
+</body>
+</html>

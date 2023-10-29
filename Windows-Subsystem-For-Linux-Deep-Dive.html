@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Windows-Subsystem-For-Linux-Deep-Dive.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<h1 id="windows-subsystem-for-linux-deep-dive">Windows Subsystem for Linux Deep Dive</h1>
+<h2 id="installing-wsl-on-windows-11">Installing WSL on Windows 11</h2>
+<p>Installing the default Linux (Ubuntu).</p>
+<pre class="hljs"><code><div>	wsl --install
+</div></code></pre>
+<p>List online versions of Linux.</p>
+<pre class="hljs"><code><div>	wsl --list --online
+</div></code></pre>
+<p>List your Linux installations.</p>
+<pre class="hljs"><code><div>	wsl --list
+</div></code></pre>
+<p>Returns.</p>
+<blockquote>
+<p>Windows Subsystem for Linux Distributions:<br>
+Ubuntu-20.04 (Default)<br>
+docker-desktop<br>
+docker-desktop-data</p>
+</blockquote>
+<p>Installing a version of Linux.</p>
+<pre class="hljs"><code><div>	wsl --install -d &lt;Distribution name&gt;
+</div></code></pre>
+<p>e.g.</p>
+<pre class="hljs"><code><div>	wsl --install -d kali-linux
+</div></code></pre>
+<p>Once you install this it will ask you for a username and password for this version of Linux.</p>
+<h2 id="removing-a-linux-installation">Removing a Linux installation</h2>
+<pre class="hljs"><code><div>	wsl --unregister Ubuntu-20.04
+</div></code></pre>
+<p><strong>Note:</strong> this will remove everything including your preferences.</p>
+<p>Check the status of your WSL installation.</p>
+<pre class="hljs"><code><div>	wsl --status
+</div></code></pre>
+<p>Returns.</p>
+<blockquote>
+<p>Default Distribution: Ubuntu-20.04<br>
+Default Version: 2</p>
+</blockquote>
+<p>Shows that I am running WSL 2.</p>
+<p>The version of Ubuntu I am running can be found with.</p>
+<pre class="hljs"><code><div>	lsb_release -a
+</div></code></pre>
+<p>Returns.</p>
+<blockquote>
+<p>No LSB modules are available.<br>
+Distributor ID: Ubuntu<br>
+Description:    Ubuntu 20.04.3 LTS<br>
+Release:        20.04<br>
+Codename:       focal</p>
+</blockquote>
+<h3 id="help">Help</h3>
+<pre class="hljs"><code><div>	wsl --<span class="hljs-built_in">help</span>
+</div></code></pre>
+<h2 id="first-steps-with-a-distro">First steps with a Distro</h2>
+<h3 id="updates">Updates</h3>
+<p>Updates are released quicker than Microsoft can do their package updates. To do updates you can use the Linux distributions process.</p>
+<pre class="hljs"><code><div>	sudo apt update &amp;&amp; sudo apt upgrade
+</div></code></pre>
+<h3 id="generating-a-ssh-key">Generating a SSH key</h3>
+<p>The system keys are kept in and these should be all you need.</p>
+<blockquote>
+<p>/etc/ssh</p>
+</blockquote>
+<p>Use a ECDSA key with a size of 521 bytes.</p>
+<pre class="hljs"><code><div>	ssh-keygen -t ecdsa -b 521
+</div></code></pre>
+<p>This allows you to use the SSH keys to log into Linux or Unix systems.</p>
+<h3 id="generating-a-key-for-my-nas">Generating a key for my NAS</h3>
+<p>You have to enable SSH on your NAS.</p>
+<p><img src="assets/images/wsl/nas-enable-ssh.jpg" alt="Enable ssh on your NAS" title="Enable ssh on your NAS"></p>
+<p>Now, generate a key.</p>
+<pre class="hljs"><code><div>	ssh-keygen -t ecdsa -b 521
+</div></code></pre>
+<p><img src="assets/images/wsl/ssh-keygen.jpg" alt="ssh-keygen" title="ssh-keygen"></p>
+<p>Now run the following to see your key.</p>
+<pre class="hljs"><code><div>	ll .ssh
+</div></code></pre>
+<blockquote>
+<p>total 16<br>
+drwx------  2 alanr alanr 4096 Dec 18 14:46 ./<br>
+drwxr-xr-x 25 alanr alanr 4096 Dec 18 14:46 ../<br>
+-rw-------  1 alanr alanr  736 Dec 18 14:46 id_ecdsa<br>
+-rw-r--r--  1 alanr alanr  265 Dec 18 14:46 id_ecdsa.pub</p>
+</blockquote>
+<p>I can copy the SSH key to the server.</p>
+<pre class="hljs"><code><div>	ssh-copy-id 192.168.1.3
+</div></code></pre>
+<p>This asks for a password on the NAS. Once you do this it will copy the SSH key to the NAS.</p>
+<p>Now you can log in without using a password.</p>
+<pre class="hljs"><code><div>	ssh 192.168.1.3
+</div></code></pre>
+<p>Screenshot.</p>
+<p><img src="assets/images/wsl/nas-box.jpg" alt="NAS server" title="NAS server"></p>
+<h2 id="using-docker-with-wsl">Using Docker with WSL</h2>
+<p>Docker is integrated into WSL 2.</p>
+<p>You can run Docker from inside your WSL instances.</p>
+<h3 id="settings">Settings</h3>
+<p>We are running Linux images.</p>
+<p>In Docker General settings check the <strong>Use the WSL 2 based engine</strong> setting.</p>
+<p>In Resources settings.</p>
+<p><img src="assets/images/wsl/wsl-settings.jpg" alt="WSL settings" title="WSL settings"></p>
+<h2 id="using-windows-and-linux-commands">Using Windows and Linux commands</h2>
+<h3 id="using-linux-commands-inside-of-windows">Using Linux commands inside of Windows</h3>
+<p>In Powershell I can update my default Linux instance with.</p>
+<pre class="hljs"><code><div>	wsl sudo apt update -y
+</div></code></pre>
+<p>And.</p>
+<pre class="hljs"><code><div>	wsl sudo apt upgrade -y
+</div></code></pre>
+<p>All you need to do to run a linux command is add the <code>wsl</code> at the front of the command.</p>
+<p>I can edit my Ubuntu <code>.bashrc</code> from Powershell.</p>
+<pre class="hljs"><code><div>	wsl nano ~/.bashrc
+</div></code></pre>
+<p><strong>Note:</strong> if you have multiple instances of Linux running you can change the instance by using the name.</p>
+<pre class="hljs"><code><div>	wsl -d Ubuntu-20.04 cat ~/.bashrc
+</div></code></pre>
+<p>This will list the .bashrc file on Ubuntu.</p>
+<p>I can use Linux commands on Windows folders using the default instance of Ubuntu.</p>
+<pre class="hljs"><code><div>	wsl grep -<span class="hljs-keyword">in</span> <span class="hljs-string">"Dylan"</span> *.txt
+</div></code></pre>
+<p>Uses the Linux version of grep to find text files with the word <code>Dylan</code> in them.</p>
+<h3 id="using-windows-commands-inside-of-linux">Using Windows commands inside of Linux</h3>
+<p>You can use Windows commands directly in WSL Linux.</p>
+<pre class="hljs"><code><div>	dir
+</div></code></pre>
+<p>Will run in your Ubuntu instance.</p>
+<p>In Powershell run this Linux command to create a Windows text file.</p>
+<pre class="hljs"><code><div>	 wsl vim test.txt
+</div></code></pre>
+<p>View the file.</p>
+<pre class="hljs"><code><div>	 wsl cat test.txt
+</div></code></pre>
+<p>Returns the text file contents.</p>
+<blockquote>
+<p>PS C:\Temp\a&gt; cat test.txt<br>
+This is a new windows text file created using VIM.</p>
+</blockquote>
+<h2 id="file-systems">File systems</h2>
+<p>Files in your Linux system are accessible in Windows.</p>
+<p>The files in your Windows system are accessible in Linux.</p>
+<p><strong>Note:</strong> you get better performance from your native file system.</p>
+<p>Keep your Windows files in Windows and Linux files in Linux.</p>
+<p>You can access the Linux file system from Powershell.</p>
+<pre class="hljs"><code><div>dir \\wsl$\Ubuntu-20.04
+</div></code></pre>
+<p>or</p>
+<pre class="hljs"><code><div>	dir \\wsl.localhost\Ubuntu-20.04
+</div></code></pre>
+<p>Will list the files in Ubuntu.</p>
+<p>You can access any Linux file system using <code>\\wsl$\</code>.</p>
+<p>Applications that running use their native file system.</p>
+<p>In Linux you can access the Windows file system using the following format.</p>
+<pre class="hljs"><code><div>	ls /mnt/c/Git/Notes/
+</div></code></pre>
+<p>Will list c:\Git\Notes directory.</p>
+<p>File permissions will stay the same in Windows or Linux. For example, a read-only file will be read-only in Windows and Linux.</p>
+<h3 id="use-a-different-user-in-linux">Use a different user in Linux</h3>
+<p>You can change a Linux user for commands.</p>
+<pre class="hljs"><code><div>	wsl -u root ls -l
+</div></code></pre>
+<p>Will list the contents of the current Windows directory using a Linux command as <code>root</code> user.</p>
+<h2 id="mounting-a-linux-disk-in-windows">Mounting a Linux disk in Windows</h2>
+<p><strong>Note:</strong> to do this you need to use Powershell in Administrator mode.</p>
+<p>You can use WSL to mount an internal Linux disk inside a WSL Linux distribution.</p>
+<p>This is useful for disks that aren't normally supported by Windows.</p>
+<p>When the disk is mounted through WSL, all the instances of Linux will have access to it.</p>
+<p>Once you have added a device you need to find its <code>DeviceID</code>.</p>
+<p>If you have multiple partitions, which one do you need to mount?</p>
+<p>In Powershell</p>
+<pre class="hljs"><code><div>	<span class="hljs-built_in">Get-CimInstance</span> <span class="hljs-literal">-query</span> <span class="hljs-string">"SELECT * from Win32_DiskDrive"</span>
+</div></code></pre>
+<p>Or.</p>
+<pre class="hljs"><code><div>	wcim diskdrive list brief
+</div></code></pre>
+<p>Both return.</p>
+<blockquote>
+<p>DeviceID           Caption                            Partitions Size          Model</p>
+<hr>
+<p>\.\PHYSICALDRIVE1 WDC WD80EFAX-68KNBN0               1          8001560609280 WDC WD80EFAX-68KNBN0<br>
+\.\PHYSICALDRIVE0 WDC WD60EFRX-68MYMN1               3          6001172513280 WDC WD60EFRX-68MYMN1<br>
+\.\PHYSICALDRIVE3 TOSHIBA TOSHIBA USB DRV USB Device 3          16031070720   TOSHIBA TOSHIBA USB DRV USB Device<br>
+\.\PHYSICALDRIVE2 NVMe Samsung SSD 970               4          1000202273280 NVMe Samsung SSD 970</p>
+</blockquote>
+<p>From this we can see that the device we inserted into a USB drive has a DeviceID of.</p>
+<blockquote>
+<p>\.\PHYSICALDRIVE3</p>
+</blockquote>
+<h3 id="the-mount-option">The mount option</h3>
+<p>The <code>wsl --mount</code> option is used.</p>
+<p>We can mount our USB drive with the command.</p>
+<pre class="hljs"><code><div>	wsl --mount \\.\PHYSICALDRIVE3
+</div></code></pre>
+<p>It assumes the drive is <code>ext4</code> format.</p>
+<h3 id="mount-a-specific-partition">Mount a specific partition</h3>
+<p>You can specify the partition to mount.</p>
+<pre class="hljs"><code><div>	wsl --mount \\.\PHYSICALDRIVE3 --partiton 3 --<span class="hljs-built_in">type</span> ext4
+</div></code></pre>
+<p>Once mounted Linux has access.</p>
+<p>In Linux the disck is available under the <code>/mnt/wsl</code> mount point.</p>
+<p>For our example it would be.</p>
+<pre class="hljs"><code><div>	wsl /mnt/PHYSICALDRIVE3
+</div></code></pre>
+<p>Note that Windows also has access to this drive.</p>
+<p>In our previous example we could access it with.</p>
+<pre class="hljs"><code><div>	\\wsl<span class="hljs-variable">$</span>\Ubuntu<span class="hljs-literal">-20</span>.<span class="hljs-number">04</span>\mnt\wsl\PHYSICALDRIVE3
+</div></code></pre>
+<h3 id="unmount-the-device">Unmount the device</h3>
+<pre class="hljs"><code><div>	wsl -<span class="hljs-literal">-unmount</span> \\.\PHYSICALDRIVE3
+</div></code></pre>
+<p><strong>Note:</strong> the mount command didn't work for me. I think this is because my Linux USB drive isn't <code>ext4</code> format.</p>
+<h2 id="problem-shooting">Problem shooting</h2>
+<p>Checkout the <a href="https://github.com/microsoft/WSL/issues" title="Microsoft WSL issues">Microsoft WSL issues</a> page.</p>
+<h3 id="updating-wsl">Updating WSL</h3>
+<p>Open a Powershell Administrator shell and run this command.</p>
+<pre class="hljs"><code><div>	wsl -<span class="hljs-literal">-update</span>
+</div></code></pre>
+<h3 id="changing-the-bashrc-file">Changing the .bashrc file</h3>
+<p>You don't have to close the Ubuntu terminal when you do changes to the <code>.bashrc</code> file. Just run this command.</p>
+<pre class="hljs"><code><div>	<span class="hljs-built_in">source</span> .bashrc
+</div></code></pre>
+<p>This will reload <code>.bashrc</code> without having to reboot the terminal.</p>
+
+</body>
+</html>

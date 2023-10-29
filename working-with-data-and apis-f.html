@@ -1,0 +1,1087 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<title>Working With Data and API's in JavaScript</title>
+<link href="assets/css/bootstrap.css" rel="stylesheet">
+<!-- Custom styles for this template -->
+<link href="assets/css/starter-template.css" rel="stylesheet">
+<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js?lang=css&amp;skin=sunburst"></script>
+<style type="text/css">
+html {
+	font-size: 90.0%;
+}
+
+h2 {
+	margin-top: 60px;
+}
+
+h4, h3 {
+	padding-top: 40px!;		
+}
+
+p {
+	font-size: 1.2em;
+}
+h4 {
+	font-size: 1.4em;
+}
+
+img, pre.prettyprint {
+	margin-top: 1.5em;
+	margin-bottom: 1.5em;
+}
+h1, h2, h3, h4, h5, h6 {
+    color:#007bff;
+
+}
+blockquote {
+    border-left: 4px solid #999;
+    padding-left: 1rem;
+    page-break-inside: avoid;
+}
+</style>
+<link rel="shortcut icon" type="image/x-icon" href="favicon.ico" />
+</head>
+<body>
+<header>
+    <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="#">JavaScript</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
+                aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Home</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#">Data and API's <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">About</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+<div class="container">
+    <div class="starter-template">
+
+<h1 id="working-with-data-and-apis-in-javascript">Working With Data and API's in JavaScript</h1>
+<h2 id="the-fetch-function">The fetch() function</h2>
+<p>We call <code>fetch()</code> and get a response back. The response (<strong>body</strong>) is a stream of data. Our work doesn't end there because we need to read that data and store it in a format that we can use. This is what we call a complete data stream.</p>
+<p>The data comes in different formats.</p>
+<ul>
+<li>Text</li>
+<li>Blob (image)</li>
+<li>Array of data</li>
+<li>JSON</li>
+</ul>
+<p>In our example we are going to get a blob element and format it onto a HTML page.</p>
+<p>Our first try using <code>fetch()</code> and chaining a promise to it.</p>
+<pre class="prettyprint">    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'About to fetch a rainbow!'</span>);
+
+    fetch(<span class="hljs-string">'images/rainbow.jpg'</span>).then(<span class="hljs-function">(<span class="hljs-params">response</span>) =&gt;</span> {
+        <span class="hljs-built_in">console</span>.log(response);
+    });
+</pre>
+<blockquote>
+<p>About to fetch a rainbow!<br/>
+Response {type: 'basic', url: 'http://127.0.0.1:5500/images/rainbow.jpg', redirected: false, status: 200, ok: true, …}</p>
+</blockquote>
+<p>This shows what our response object looks like.</p>
+<p><strong>Note:</strong> in the promise there is only one argument (response) so in this case we could have left the parentheses off.</p>
+<p>Now we can add another promise to get the blob object.</p>
+<pre class="prettyprint">    fetch(<span class="hljs-string">'images/rainbow.jpg'</span>).then(<span class="hljs-function">(<span class="hljs-params">response</span>) =&gt;</span> {
+        <span class="hljs-built_in">console</span>.log(response);
+        <span class="hljs-keyword">return</span> response.blob();
+    }).then(<span class="hljs-function"><span class="hljs-params">blob</span> =&gt;</span> {
+        <span class="hljs-built_in">console</span>.log(blob);
+    });
+</pre>
+<p>Returns.</p>
+<blockquote>
+<p>About to fetch a rainbow!<br/>
+Response {type: 'basic', url: 'http://127.0.0.1:5500/images/rainbow.jpg', redirected: &gt; false, status: 200, ok: true, …}<br/>
+Blob {size: 246798, type: 'image/jpeg'}</p>
+</blockquote>
+<p>We can now see the blob object being returned.</p>
+<p>We can now attach that blob to the HTML element with the ID of <em>'rainbow'</em>.</p>
+<pre class="prettyprint">    fetch(<span class="hljs-string">'images/rainbow.jpg'</span>).then(<span class="hljs-function">(<span class="hljs-params">response</span>) =&gt;</span> {
+        <span class="hljs-built_in">console</span>.log(response);
+        <span class="hljs-keyword">return</span> response.blob();
+    }).then(<span class="hljs-function"><span class="hljs-params">blob</span> =&gt;</span> {
+        <span class="hljs-built_in">console</span>.log(blob);
+        <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">'rainbow'</span>).src = blob;
+    });
+</pre>
+<p>This doesn't work because the blob needs to be formatted into an image.</p>
+<p>There is a JavaScript element that will take this blob and format it into an image element.</p>
+<h2 id="urlcreateobjecturl">URL.createObjectURL()</h2>
+<p>Checkout the MDN URL.createObjectURL() documentation on how this works.</p>
+<pre class="prettyprint">    fetch(<span class="hljs-string">'images/rainbow.jpg'</span>).then(<span class="hljs-function">(<span class="hljs-params">response</span>) =&gt;</span> {
+        <span class="hljs-built_in">console</span>.log(response)   
+        <span class="hljs-keyword">return</span> response.blob();
+    }).then(<span class="hljs-function"><span class="hljs-params">blob</span> =&gt;</span> {
+        <span class="hljs-built_in">console</span>.log(blob);
+        <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">'rainbow'</span>).src = URL.createObjectURL(blob);
+    });
+</pre>
+<p>This time we get the following response on the page.</p>
+<p><img src="assets/images/fetch/rainbow-image.jpg" alt="Rainbow image" title="Rainbow image"></p>
+<p>This code is working but it is missing a number of features.</p>
+<h2 id="handling-errors">Handling errors</h2>
+<p>The nice thing about chaining is that we can continue adding on a catch function to catch any errors that occur.</p>
+<p>To see this work we are going to misspell the name of our image.</p>
+<pre class="prettyprint">    fetch(<span class="hljs-string">'images/rainbow.jpg'</span>).then(<span class="hljs-function">(<span class="hljs-params">response</span>) =&gt;</span> {
+        <span class="hljs-built_in">console</span>.log(response);
+        <span class="hljs-keyword">return</span> response.blob();
+    }).then(<span class="hljs-function"><span class="hljs-params">blob</span> =&gt;</span> {
+        <span class="hljs-built_in">console</span>.log(blob);
+        <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">'rainbow'</span>).src = URL.createObjectURL(blob);
+    }).catch(<span class="hljs-function"><span class="hljs-params">error</span> =&gt;</span> {
+        <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'error!'</span>);
+        <span class="hljs-built_in">console</span>.log(error);
+    });
+</pre>
+<p>We have added a <code>catch()</code> block to catch any errors.</p>
+<p>This code returns.</p>
+<blockquote>
+<p>About to fetch a rainbow!<br/>
+Response<br/>
+Blob<br/>
+error!<br/>
+TypeError: Cannot set properties of null (setting 'src') at index.html:21</p>
+</blockquote>
+<p>When we look at line 21 we see that we have misspelled the ID.</p>
+<p>We can condense the code and make it a bit more readable by using.</p>
+<h2 id="async-await">async /await</h2>
+<p><code>async</code> is a keyword that means that our code will happen asynchronously.</p>
+<p>If we want to use <code>await</code> we have to use it in the context of a function.</p>
+<p>We will write a new function.</p>
+<pre class="prettyprint">    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'About to fetch a rainbow!'</span>);
+
+    <span class="hljs-keyword">const</span> catchRainbow = <span class="hljs-keyword">async</span> () =&gt; {
+        <span class="hljs-keyword">const</span> response = <span class="hljs-keyword">await</span> fetch(<span class="hljs-string">'images/rainbow.jpg'</span>);
+        <span class="hljs-keyword">const</span> blob = <span class="hljs-keyword">await</span> response.blob();
+        <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">'rainbow'</span>).src = URL.createObjectURL(blob);
+    };
+
+    catchRainbow().catch(<span class="hljs-function"><span class="hljs-params">error</span> =&gt;</span> {
+        <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'error!'</span>);
+        <span class="hljs-built_in">console</span>.log(error);
+    });
+</pre>
+<p>Using <code>async</code> / <code>await</code> reduces the complexity of our code and makes it easier to read.</p>
+<p>Our <code>fetch()</code> and <code>response</code> calls are done in one line of code.</p>
+<p>We can still use our <code>catch()</code> method by chaining it to our <code>catchRainbow()</code> function.</p>
+<p>This nice thing about this code is that it runs asynchronously. This means that it will wait until the response is <strong>fetched</strong> and wait until the blob has been returned by the response.</p>
+<h3 id="extra-challenges">Extra challenges</h3>
+<ul>
+<li>add multiple images (use an array)</li>
+<li>instead of an image add a poem</li>
+</ul>
+<h2 id="retrieving-data-from-a-csv">Retrieving data from a CSV</h2>
+<p>We are using a test CSV that is a subset of the real data file for testing.</p>
+<pre class="prettyprint">    <span class="hljs-keyword">const</span> getData = <span class="hljs-keyword">async</span> () =&gt; {
+        <span class="hljs-keyword">const</span> response = <span class="hljs-keyword">await</span> fetch(<span class="hljs-string">'test.csv'</span>);
+        <span class="hljs-keyword">const</span> data = <span class="hljs-keyword">await</span> response.text(); 
+        <span class="hljs-built_in">console</span>.log(data);
+    }
+
+    getData();
+</pre>
+<p>Returns.</p>
+<blockquote>
+<p>Year,Glob,NHem,SHem,24N-90N,24S-24N,90S-24S,64N-90N,44N-64N,24N-44N,EQU-24N,24S-EQU,44S-24S,64S-44S,90S-64S<br/>
+1880,-.16,-.28,-.04,-.36,-.12,-.01,-.83,-.46,-.26,-.16,-.09,-.03,.05,.65<br/>
+1881,-.08,-.17,.01,-.33,.11,-.07,-.93,-.43,-.18,.09,.12,-.05,-.07,.57</p>
+</blockquote>
+<p>We can break this CSV down into rows</p>
+<pre class="prettyprint">    <span class="hljs-keyword">const</span> getData = <span class="hljs-keyword">async</span> () =&gt; {
+        <span class="hljs-keyword">const</span> response = <span class="hljs-keyword">await</span> fetch(<span class="hljs-string">'test.csv'</span>);
+        <span class="hljs-keyword">const</span> data = <span class="hljs-keyword">await</span> response.text(); 
+    
+        <span class="hljs-keyword">const</span> table = data.split(<span class="hljs-string">'\n'</span>);
+    
+        <span class="hljs-built_in">console</span>.log(table);
+    }
+
+    getData();
+</pre>
+<p>Returns.</p>
+<blockquote>
+<p>0: &quot;Year,Glob,NHem,SHem,24N-90N,24S-24N,90S-24S,64N-90N,44N-64N,24N-44N,EQU-24N,&gt; 24S-EQU,44S-24S,64S-44S,90S-64S&quot;<br/>
+1: &quot;1880,-.16,-.28,-.04,-.36,-.12,-.01,-.83,-.46,-.26,-.16,-.09,-.03,.05,.65&quot;<br/>
+2: &quot;1881,-.08,-.17,.01,-.33,.11,-.07,-.93,-.43,-.18,.09,.12,-.05,-.07,.57&quot;<br/>
+length: 3</p>
+</blockquote>
+<p>If we want to remove the header row from the data we can do that with <code>.slice()</code>.</p>
+<pre class="prettyprint">    <span class="hljs-keyword">const</span> table = data.split(<span class="hljs-string">'\n'</span>).slice(<span class="hljs-number">1</span>);
+</pre>
+<p>Returns.</p>
+<blockquote>
+<p>0: &quot;1880,-.16,-.28,-.04,-.36,-.12,-.01,-.83,-.46,-.26,-.16,-.09,-.03,.05,.65&quot;<br/>
+1: &quot;1881,-.08,-.17,.01,-.33,.11,-.07,-.93,-.43,-.18,.09,.12,-.05,-.07,.57&quot;<br/>
+length: 2</p>
+</blockquote>
+<p>Now, we only want the first two columns in each row, the <em>year</em> and the difference from the mean temperature.</p>
+<pre class="prettyprint">    <span class="hljs-keyword">const</span> table = data.split(<span class="hljs-string">'\n'</span>).slice(<span class="hljs-number">1</span>);
+
+    table.forEach(<span class="hljs-function"><span class="hljs-params">row</span> =&gt;</span> {
+        <span class="hljs-keyword">const</span> columns = row.split(<span class="hljs-string">','</span>);
+
+        <span class="hljs-keyword">const</span> year = columns[<span class="hljs-number">0</span>];
+        <span class="hljs-keyword">const</span> temp = columns[<span class="hljs-number">1</span>];
+
+        <span class="hljs-built_in">console</span>.log(<span class="hljs-string">`Year: <span class="hljs-subst">${year}</span> - Diff in mean temp: <span class="hljs-subst">${temp}</span>`</span>);
+    });
+</pre>
+<p>Returns.</p>
+<blockquote>
+<p>Year: 1880 - Diff in mean temp: -.16<br/>
+Year: 1881 - Diff in mean temp: -.08</p>
+</blockquote>
+<p>Now that we are happy that we are returning the data that we need we can change to the real data CSV.</p>
+<pre class="prettyprint">    <span class="hljs-keyword">const</span> getData = <span class="hljs-keyword">async</span> () =&gt; {
+        <span class="hljs-keyword">const</span> response = <span class="hljs-keyword">await</span> fetch(<span class="hljs-string">'ZonAnn.Ts+dSST.csv'</span>);
+
+        <span class="hljs-keyword">const</span> data = <span class="hljs-keyword">await</span> response.text(); 
+        <span class="hljs-keyword">const</span> table = data.split(<span class="hljs-string">'\n'</span>).slice(<span class="hljs-number">1</span>);
+
+        table.forEach(<span class="hljs-function"><span class="hljs-params">row</span> =&gt;</span> {
+            <span class="hljs-keyword">const</span> columns = row.split(<span class="hljs-string">','</span>);
+
+            <span class="hljs-keyword">const</span> year = columns[<span class="hljs-number">0</span>];
+            <span class="hljs-keyword">const</span> temp = columns[<span class="hljs-number">1</span>];
+
+            <span class="hljs-built_in">console</span>.log(<span class="hljs-string">`Year: <span class="hljs-subst">${year}</span> - Diff in mean temp: <span class="hljs-subst">${temp}</span>`</span>);
+        });
+    }
+
+    getData();
+</pre>
+<p>Returns.</p>
+<blockquote>
+<p>Year: 1880 - Diff in mean temp: -.16<br/>
+Year: 1881 - Diff in mean temp: -.08<br/>
+Year: 1882 - Diff in mean temp: -.10<br/>
+...<br/>
+Year: 2018 - Diff in mean temp: .85<br/>
+Year: 2019 - Diff in mean temp: .98<br/>
+Year: 2020 - Diff in mean temp: 1.02</p>
+</blockquote>
+<h3 id="extra-challenge">Extra challenge</h3>
+<ul>
+<li>Bring in your own set of data and display it to the console.</li>
+</ul>
+<pre class="prettyprint">    <span class="hljs-keyword">const</span> getCoffeeData = <span class="hljs-keyword">async</span> () =&gt; {
+        <span class="hljs-keyword">const</span> response = <span class="hljs-keyword">await</span> fetch(<span class="hljs-string">'./data/coffee.csv'</span>);
+        <span class="hljs-keyword">const</span> data = <span class="hljs-keyword">await</span> response.text(); 
+    
+        <span class="hljs-keyword">const</span> table = data.split(<span class="hljs-string">'\n'</span>).slice(<span class="hljs-number">1</span>);
+    
+        table.forEach(<span class="hljs-function"><span class="hljs-params">row</span> =&gt;</span> {
+            <span class="hljs-keyword">const</span> columns = row.split(<span class="hljs-string">','</span>);
+    
+            <span class="hljs-keyword">const</span> StoreNo = columns[<span class="hljs-number">0</span>];
+            <span class="hljs-keyword">const</span> name = columns[<span class="hljs-number">1</span>];
+            <span class="hljs-keyword">const</span> city = columns[<span class="hljs-number">5</span>];
+            <span class="hljs-keyword">const</span> state = columns[<span class="hljs-number">6</span>];
+            <span class="hljs-keyword">const</span> zip = columns[<span class="hljs-number">7</span>];
+    
+            <span class="hljs-built_in">console</span>.log(<span class="hljs-string">`Store No: <span class="hljs-subst">${StoreNo}</span> - Name: <span class="hljs-subst">${name}</span>, <span class="hljs-subst">${city}</span>, <span class="hljs-subst">${state}</span>, <span class="hljs-subst">${zip}</span>`</span>)  ;
+        });
+    }
+    
+    getCoffeeData();
+</pre>
+<p>Returns.</p>
+<blockquote>
+<p>Store No: 11854 - Name: Epping Main St, Epping, NH, 03042-2224<br/>
+Store No: 79420 - Name: Stop &amp; Shop-Exeter #204, Exeter, NH, 03833-2105<br/>
+Store No: 3872 - Name: Target Greenland T-2530, Greenland, NH, 03840-2438<br/>
+...<br/>
+Store No: 70341 - Name: Kowalski's - Eagan, Eagan, MN, 55122-2213<br/>
+Store No: 76896 - Name: Super Target Apple Vly South ST-239, Apple Valley, MN, 55124-7286<br/>
+Store No: 2619 - Name: Eagan-Cliff Rd., Suite 101, Eagan, MN</p>
+</blockquote>
+<h2 id="mapping-data-to-a-web-page">Mapping data to a web page</h2>
+<p>In this example we are going to Add Leaflet.js to our project. We are going to add the position of the ISS space station to a map using Open Street Maps as our mapping layer.</p>
+<p>We need to bring in the Leaflet.css and the Leaflet.js files. Add these to our header.</p>
+<pre class="prettyprint">    <span class="hljs-tag">&lt;<span class="hljs-name">link</span>
+      <span class="hljs-attr">rel</span>=<span class="hljs-string">"stylesheet"</span>
+      <span class="hljs-attr">href</span>=<span class="hljs-string">"https://unpkg.com/leaflet@1.4.0/dist/leaflet.css"</span>
+      <span class="hljs-attr">integrity</span>=<span class="hljs-string">"sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="</span>
+      <span class="hljs-attr">crossorigin</span>=<span class="hljs-string">""</span>
+    /&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">script</span>
+      <span class="hljs-attr">src</span>=<span class="hljs-string">"https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"</span>
+      <span class="hljs-attr">integrity</span>=<span class="hljs-string">"sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg=="</span>
+      <span class="hljs-attr">crossorigin</span>=<span class="hljs-string">""</span>
+    &gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+</pre>
+<p>In the body we will add the following HTML.</p>
+<pre class="prettyprint">    <span class="hljs-tag">&lt;<span class="hljs-name">h1</span>&gt;</span>Where is the ISS?<span class="hljs-tag">&lt;/<span class="hljs-name">h1</span>&gt;</span>
+
+    <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>
+      latitude: <span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">id</span>=<span class="hljs-string">"lat"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>°<span class="hljs-tag">&lt;<span class="hljs-name">br</span> /&gt;</span>
+      longitude: <span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">id</span>=<span class="hljs-string">"lon"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>°
+    <span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+
+    <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">"issMap"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+</pre>
+<p>The div with the &quot;id=issMap&quot; is where our map will reside.</p>
+<p>In our script code we need to add the following to be able to show the map on the screen. We will use Open Street Maps for our mapping source.</p>
+<pre class="prettyprint">    <span class="hljs-keyword">const</span> mymap = L.map(<span class="hljs-string">'issMap'</span>).setView([<span class="hljs-number">0</span>, <span class="hljs-number">0</span>], <span class="hljs-number">1</span>);
+    <span class="hljs-keyword">const</span> attribution = <span class="hljs-string">'&amp;copy; &lt;a href="https://www.openstreetmap.org/copyright"&gt;OpenStreetMap&lt;/a&gt; contributors'</span>;
+
+    <span class="hljs-keyword">const</span> tileUrl = <span class="hljs-string">'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'</span>;
+    <span class="hljs-keyword">const</span> tiles = L.tileLayer(tileUrl, { attribution });
+    tiles.addTo(mymap);
+</pre>
+<p>The attribution is required and <code>tileUrl</code> will link us to Open Street Maps.</p>
+<p>To be able to see the map we need to use.</p>
+<pre class="prettyprint">    L.tileLayer(tileUrl, { attribution });
+</pre>
+<p>Where <code>L</code> is a Leaflet object and <code>.tileLayer</code> is a Leaflet function requiring the Open Street Map URL and the attribution.</p>
+<p>Next we add the tiles to our mapping div.</p>
+<pre class="prettyprint">    tiles.addTo(mymap);
+</pre>
+<h3 id="adding-a-marker-to-our-map">Adding a marker to our map</h3>
+<p>Leaflet can add any number of markers to our mapping layer. We will use one marker to track the movement of the ISS space station.</p>
+<p>We can create an icon for our map.</p>
+<pre class="prettyprint">    <span class="hljs-keyword">const</span> issIcon = L.icon({
+      <span class="hljs-attr">iconUrl</span>: <span class="hljs-string">'./images/iss200.png'</span>,
+      <span class="hljs-attr">iconSize</span>: [<span class="hljs-number">50</span>, <span class="hljs-number">32</span>],
+      <span class="hljs-attr">iconAnchor</span>: [<span class="hljs-number">25</span>, <span class="hljs-number">16</span>]
+    });
+</pre>
+<p>Once again this uses a Leaflet method named <code>.icon()</code>. This allows us to add an image as our icon.</p>
+<p>We add the marker we created to the map with this code.</p>
+<pre class="prettyprint">    <span class="hljs-keyword">const</span> marker = L.marker([<span class="hljs-number">0</span>, <span class="hljs-number">0</span>], { <span class="hljs-attr">icon</span>: issIcon }).addTo(mymap);
+</pre>
+<p>To retrieve the ISS space stations position we use the following URL.</p>
+<pre class="prettyprint">    <span class="hljs-keyword">const</span> api_url = <span class="hljs-string">'https://api.wheretheiss.at/v1/satellites/25544'</span>;
+</pre>
+<p>If I type the URL directly into my browser it will bring back JSON data detailing where the IIS space station is currently positioned. The JSON below is a sample of the data.</p>
+<pre class="prettyprint">    {
+        <span class="hljs-attr">"name"</span>:<span class="hljs-string">"iss"</span>,
+        <span class="hljs-attr">"id"</span>:<span class="hljs-number">25544</span>,
+        <span class="hljs-attr">"latitude"</span>:<span class="hljs-number">51.525874961197</span>,
+        <span class="hljs-attr">"longitude"</span>:<span class="hljs-number">-92.619376682684</span>,
+        <span class="hljs-attr">"altitude"</span>:<span class="hljs-number">427.57396267943</span>,
+        <span class="hljs-attr">"velocity"</span>:<span class="hljs-number">27580.587403264</span>,
+        <span class="hljs-attr">"visibility"</span>:<span class="hljs-string">"eclipsed"</span>,
+        <span class="hljs-attr">"footprint"</span>:<span class="hljs-number">4545.7973924638</span>,
+        <span class="hljs-attr">"timestamp"</span>:<span class="hljs-number">1631601445</span>,
+        <span class="hljs-attr">"daynum"</span>:<span class="hljs-number">2459471.7759838</span>,
+        <span class="hljs-attr">"solar_lat"</span>:<span class="hljs-number">3.2978423085164</span>,
+        <span class="hljs-attr">"solar_lon"</span>:<span class="hljs-number">79.541121690567</span>,
+        <span class="hljs-attr">"units"</span>:<span class="hljs-string">"kilometers"</span>
+    }
+</pre>
+<p>We will use this data in an async function.</p>
+<pre class="prettyprint">    <span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getISS</span>(<span class="hljs-params"></span>) </span>{
+      <span class="hljs-keyword">const</span> response = <span class="hljs-keyword">await</span> fetch(api_url);
+      <span class="hljs-keyword">const</span> dataPoint = <span class="hljs-keyword">await</span> response.json();
+      <span class="hljs-keyword">const</span> { latitude, longitude } = dataPoint; 
+    
+      marker.setLatLng([latitude, longitude]);
+    
+      <span class="hljs-keyword">if</span> (firstTime) {
+        mymap.setView([latitude, longitude], <span class="hljs-number">2</span>);
+        firstTime = <span class="hljs-literal">false</span>;
+      }
+    
+      <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">'lat'</span>).textContent = latitude.toFixed(<span class="hljs-number">2</span>);
+      <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">'lon'</span>).textContent = longitude.toFixed(<span class="hljs-number">2</span>);
+    }
+
+      getISS();
+
+      setInterval(getISS, <span class="hljs-number">1000</span>);
+</pre>
+<p>We need to set the view information the first time we call the <code>getISS()</code> function. To do this we will use an <code>if</code> statement to set the variable <code>firstTime</code> to false after the initial run.</p>
+<p>We also want to continually receive the data so we can watch the space station move around the world. We can do this with the JavaScript <code>setInterval()</code> function. In our case we are running the function every second.</p>
+<p>Note also in our function that we are deserializing our data point to just grab the latitude and longitude data.</p>
+<pre class="prettyprint">    <span class="hljs-keyword">const</span> { latitude, longitude } = dataPoint;
+</pre>
+<p>This a cleaner way to get to our data than using.</p>
+<pre class="prettyprint">    latitude = dataPoint.latitude;
+    longitude = dataPoint.longitude;
+</pre>
+<h2 id="using-nodejs">Using Node.js</h2>
+<p>So far we are just using a single web page to run our programs as client side JavaScript. There are a number of things that you aren't able to so in client side JavaScript so now we are going to run server side JavaScript using Node.js.</p>
+<h3 id="setup-the-project">setup the project</h3>
+<p>In a new folder create an <em>index.js</em> file and a <em>public</em> folder with and <em>index.html</em> page.</p>
+<p>Run.</p>
+<pre class="prettyprint">    npm init
+</pre>
+<p>Install.</p>
+<pre class="prettyprint">    npm install express --save
+</pre>
+<p>Install.</p>
+<pre class="prettyprint">    npm install nodemon
+</pre>
+<p>Add this code to <em>index.js</em>.</p>
+<pre class="prettyprint">    <span class="hljs-keyword">const</span> express = <span class="hljs-built_in">require</span>(<span class="hljs-string">'express'</span>);
+    <span class="hljs-keyword">const</span> app = express();
+
+    app.listen(<span class="hljs-number">3000</span>, () =&gt; { <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'Listening at port 3000!'</span>) });
+
+    app.use(express.static(<span class="hljs-string">'public'</span>));
+</pre>
+<p>This sets up a basic server so you can serve the <em>index.html</em> page.</p>
+<h2 id="using-geolocation">Using Geolocation</h2>
+<p>We can use the <strong>Navigator</strong> object in our browser to get geolocation points if it is allowed.</p>
+<pre class="prettyprint">    <span class="hljs-keyword">if</span> (<span class="hljs-string">'geolocation'</span> <span class="hljs-keyword">in</span> navigator) {
+        navigator.geolocation.getCurrentPosition(<span class="hljs-function">(<span class="hljs-params">position</span>) =&gt;</span> {
+            <span class="hljs-built_in">console</span>.log(<span class="hljs-string">`<span class="hljs-subst">${position.coords.latitude}</span>, <span class="hljs-subst">${position.coords.longitud    <span class="hljs-string">`);  
+        });
+    } else {
+        console.log('Geolocation not available');
+    }
+</span></span></span></pre>
+<p>Returns.</p>
+<blockquote>
+<p>1.2941664, 103.7861271</p>
+</blockquote>
+<p>It is easy to display this data on the web page.</p>
+<p>In the HTML.</p>
+<pre class="prettyprint">    <span class="hljs-tag">&lt;<span class="hljs-name">h3</span>&gt;</span>Latitude: <span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">id</span>=<span class="hljs-string">"lat"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>°<span class="hljs-tag">&lt;<span class="hljs-name">br</span>/&gt;</span>Longitude: <span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">id</span>=<span class="hljs-string">"lon"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>°<span class="hljs-tag">&lt;/<span class="hljs-name">h3</span>&gt;</span>
+</pre>
+<p>In the JavaScript.</p>
+<pre class="prettyprint">    <span class="hljs-keyword">if</span> (<span class="hljs-string">'geolocation'</span> <span class="hljs-keyword">in</span> navigator) {
+        navigator.geolocation.getCurrentPosition(<span class="hljs-function">(<span class="hljs-params">position</span>) =&gt;</span> {
+            <span class="hljs-keyword">const</span> latitude = <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">'lat'</span>);
+            <span class="hljs-keyword">const</span> longitude = <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">'lon'</span>);
+        
+            latitude.innerHTML = position.coords.latitude;
+            longitude.innerHTML = position.coords.longitude;
+        });
+    } <span class="hljs-keyword">else</span> {
+        <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'Geolocation not available'</span>);
+    }   
+</pre>
+<p>Previously we used Leaflet.js with Open Street Maps to view the ISS space station marker on the screen. Why not modify that code to display our location?</p>
+<p>HTML.</p>
+<pre class="prettyprint">    <span class="hljs-tag">&lt;<span class="hljs-name">h4</span>&gt;</span>Latitude: <span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">id</span>=<span class="hljs-string">"lat"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>°<span class="hljs-tag">&lt;<span class="hljs-name">br</span>/&gt;</span>Longitude: <span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">id</span>=<span class="hljs-string">"lon"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>°<span class="hljs-tag">&lt;/<span class="hljs-name">h4</span>&gt;</span>
+    
+    <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">"locationMap"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+</pre>
+<p>JavaScript.</p>
+<pre class="prettyprint">    <span class="hljs-keyword">if</span> (<span class="hljs-string">'geolocation'</span> <span class="hljs-keyword">in</span> navigator) {
+        navigator.geolocation.getCurrentPosition(<span class="hljs-function">(<span class="hljs-params">position</span>) =&gt;</span> {            
+            <span class="hljs-keyword">const</span> mymap = L.map(<span class="hljs-string">'locationMap'</span>).setView([<span class="hljs-number">0</span>, <span class="hljs-number">0</span>], <span class="hljs-number">1</span>);
+            <span class="hljs-keyword">const</span> attribution = <span class="hljs-string">'&amp;copy; &lt;a href="https://www.openstreetmap.org/copyright"&gt;OpenStreetMap&lt;/a&gt; contributors'</span>;
+            <span class="hljs-keyword">const</span> tileUrl = <span class="hljs-string">'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'</span>;
+            
+            <span class="hljs-keyword">const</span> tiles = L.tileLayer(tileUrl, { attribution });
+            tiles.addTo(mymap);
+
+            <span class="hljs-keyword">const</span> getDataPoint = <span class="hljs-keyword">async</span> () =&gt; {
+                <span class="hljs-keyword">const</span> latitude = position.coords.latitude;
+                <span class="hljs-keyword">const</span> longitude = position.coords.longitude;
+
+                L.marker([latitude, longitude]).addTo(mymap)
+                    .bindPopup(<span class="hljs-string">`This is my location.&lt;br/&gt;\tLatitude: <span class="hljs-subst">${latitude}</span>°, longitude: <span class="hljs-subst">${longitude}</span>°`</span>);
+                    
+                mymap.setView([latitude, longitude], <span class="hljs-number">5</span>);
+  
+                <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">'lat'</span>).textContent = latitude.toFixed(<span class="hljs-number">2</span>);
+                <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">'lon'</span>).textContent = longitude.toFixed(<span class="hljs-number">2</span>);            
+            }
+
+            getDataPoint();
+        });
+    } <span class="hljs-keyword">else</span> {
+        <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'Geolocation not available'</span>);
+    }
+</pre>
+<p>Result.</p>
+<p><img src="assets/images/fetch/location-map.jpg" alt="Location image" title="Location image"></p>
+<h2 id="http-post-request-with-fetch">HTTP Post request with Fetch()</h2>
+<p>We are now going to send data from the client to our server using a POST request.</p>
+<p>We will be sending our latitude and longitude to the server.</p>
+<p>At present we will just <code>console.log()</code> the data and eventually we will save this data in a database.</p>
+<p>There are three parts required to do this.</p>
+<h3 id="routing">Routing</h3>
+<p>We need to create an endpoint that describes the address we are posting our data to.</p>
+<h3 id="json-parsing">JSON parsing</h3>
+<p>When we send data we need to send it as JSON for the server to understand what it receives.</p>
+<h3 id="post-with-fetch">POST with fetch()</h3>
+<p>We need to modify the fetch() request to post data to the server.</p>
+<p>We start off with <strong>routing</strong> and that is either a GET or a POST. In our case it will be a POST because we are sending data to the server.</p>
+<p>The route requires an address to where we want POST the data. once we receive the data on the server we will process it and then send back a response to the client.</p>
+<p>Let's set up our request.</p>
+<pre class="prettyprint">    app.post(<span class="hljs-string">'/api'</span>, (request, response) =&gt; {
+        <span class="hljs-keyword">const</span> data = request.body;
+        response.json({
+            <span class="hljs-attr">status</span>: <span class="hljs-string">'Success!'</span>,
+            <span class="hljs-attr">latitude</span>: data.latitude,
+            <span class="hljs-attr">longitude</span>: data.longitude
+        });
+    });
+</pre>
+<p>We are POSTing the data to <strong>/api</strong>. Our function requires <em>request</em> and <em>response</em> parameters. <em>request</em> is the data we are sending to the server. <em>response</em> is what we are sending back to the client.</p>
+<p>In this function we aren't doing anything with the data except creating a response that can be sent back to the client.</p>
+<p>Now we need to go back to the client and send some data to our endpoint (/api) as a POST.</p>
+<p>I will create a function named <code>postLatLong()</code> to POST my data.</p>
+<pre class="prettyprint">    <span class="hljs-keyword">const</span> postLatLong = <span class="hljs-keyword">async</span> (latitude, longitude) =&gt; {
+        <span class="hljs-keyword">const</span> data = { latitude, longitude };
+            
+        <span class="hljs-keyword">const</span> options = {
+            <span class="hljs-attr">method</span>: <span class="hljs-string">'POST'</span>,
+            <span class="hljs-attr">body</span>: <span class="hljs-built_in">JSON</span>.stringify(data),
+            <span class="hljs-attr">headers</span>: { 
+                <span class="hljs-string">'Content-Type'</span>: <span class="hljs-string">'application/json'</span>
+            }
+        };
+
+        <span class="hljs-keyword">const</span> response = <span class="hljs-keyword">await</span> fetch(<span class="hljs-string">'/api'</span>, options);
+        <span class="hljs-keyword">const</span> json = <span class="hljs-keyword">await</span> response.json();
+        <span class="hljs-built_in">console</span>.log(json);
+    }
+</pre>
+<p>This function requires a latitude and longitude that can be used as our data for the POST.</p>
+<p>We are using <code>async</code>/<code>await</code> to send and receive our data.</p>
+<p>We will use the previous method of getting the latitude and longitude.</p>
+<pre class="prettyprint">    <span class="hljs-keyword">if</span> (<span class="hljs-string">'geolocation'</span> <span class="hljs-keyword">in</span> navigator) {
+        navigator.geolocation.getCurrentPosition(<span class="hljs-function">(<span class="hljs-params">position</span>) =&gt;</span> {            
+            <span class="hljs-keyword">const</span> latitude = position.coords.latitude.toFixed(<span class="hljs-number">4</span>);
+            <span class="hljs-keyword">const</span> longitude = position.coords.longitude.toFixed(<span class="hljs-number">4</span>);
+
+            <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">'lat'</span>).textContent = latitude;
+            <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">'lon'</span>).textContent = longitude;
+
+            postLatLong(latitude, longitude);
+        }); 
+    } <span class="hljs-keyword">else</span> {
+            <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'Geolocation not available'</span>);
+    }
+</pre>
+<p>Returns.</p>
+<blockquote>
+<p>{status: 'Success!', latitude: '-37.8012', longitude: '144.8870'}<br/>
+latitude: &quot;-37.8012&quot;<br/>
+longitude: &quot;144.8870&quot;<br/>
+status: &quot;Success!&quot;<br/>
+[[Prototype]]: Object</p>
+</blockquote>
+<p>We can extend this example in preparation for the next task which is to persist the data into a database.</p>
+<p>Create an array to save all of the data we have collected.</p>
+<p>Create a submit button on the web page so we can save multiple location points.</p>
+<h2 id="saving-to-a-database">Saving to a database</h2>
+<p>We are going to use a lightweight database names NeDB. This is a subset of MongoDB that runs in memory and will save a database as a text file.</p>
+<p>At present we are creating a geolocation point and dumping that to the console. We are going to add a submit button to our page so that we can log multiple points to the console.</p>
+<p>We have also place our JavaScript in a separate file so that we now only see HTML in our page.</p>
+<p>This is our new code.</p>
+<pre class="prettyprint">    <span class="hljs-tag">&lt;<span class="hljs-name">h1</span>&gt;</span>Data Selfie App<span class="hljs-tag">&lt;/<span class="hljs-name">h1</span>&gt;</span>
+
+    <span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">"/"</span>&gt;</span>enter<span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span> | <span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">"/logs"</span>&gt;</span>list<span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>
+      latitude: <span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">id</span>=<span class="hljs-string">"latitude"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span><span class="hljs-symbol">&amp;deg;</span><span class="hljs-tag">&lt;<span class="hljs-name">br</span> /&gt;</span>
+      longitude: <span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">id</span>=<span class="hljs-string">"longitude"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span><span class="hljs-symbol">&amp;deg;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">label</span> <span class="hljs-attr">for</span>=<span class="hljs-string">"mood"</span>&gt;</span>enter your mood<span class="hljs-tag">&lt;/<span class="hljs-name">label</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">id</span>=<span class="hljs-string">"mood"</span> <span class="hljs-attr">value</span>=<span class="hljs-string">"rainbow"</span> /&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">id</span>=<span class="hljs-string">"submit"</span>&gt;</span>submit<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">"sketch.js"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+</pre>
+<p>Our page now looks like this.</p>
+<p><img src="assets/images/fetch/web-page.jpg" alt="Web page" title="Web page"></p>
+<p>When I click on submit it returns.</p>
+<blockquote>
+<p>geolocation available<br/>
+1.2941664 103.7861271<br/>
+[[Prototype]]: Object<br/>
+lat: 1.2941664<br/>
+lon: 103.7861271<br/>
+mood: &quot;rainbow&quot;<br/>
+timestamp: 1631942239951</p>
+</blockquote>
+<p>If I keep clicking on the submit button it will record multiple locations.</p>
+<p>The problem is that when I close my web server down the points that I have submitted will be lost. We need to add persistance so will use a database.</p>
+<p><a href="https://github.com/louischatriot/nedb">Check this site out for documentation.</a></p>
+<p>We can install with <strong>npm</strong>.</p>
+<pre class="prettyprint">    npm install nedb
+</pre>
+<p>For a really detailed explanation on how to use NeDB check out this <a href="https://stackabuse.com/nedb-a-lightweight-javascript-database/">link</a>.</p>
+<p>On the server site we need to call NeDB.</p>
+<pre class="prettyprint">    <span class="hljs-keyword">const</span> Datastore = <span class="hljs-built_in">require</span>(<span class="hljs-string">'nedb'</span>);
+</pre>
+<p>Now we need to open the database named <code>database.db</code>. This database is in our root application folder.</p>
+<pre class="prettyprint">    <span class="hljs-keyword">const</span> database = <span class="hljs-keyword">new</span> Datastore(<span class="hljs-string">'database.db'</span>);
+    database.loadDatabase();
+</pre>
+<p>At present the database doesn't exist but when we call, <code>database.loadDatabase()</code> it will create the database if it doesn't exist or load an existing database if it finds one.</p>
+<p>Once I run this server the database will be created and I can look at it in a text editor. At present there is no data.</p>
+<p>I can insert some data.</p>
+<pre class="prettyprint">    database.insert({ <span class="hljs-attr">name</span>: <span class="hljs-string">"Alan Robson"</span>, <span class="hljs-attr">status</span>: <span class="hljs-string">"working"</span> });
+    database.insert({ <span class="hljs-attr">name</span>: <span class="hljs-string">"Charley Robson"</span>, <span class="hljs-attr">status</span>: <span class="hljs-string">"playing"</span> });
+    database.insert({ <span class="hljs-attr">name</span>: <span class="hljs-string">"James Robson"</span>, <span class="hljs-attr">status</span>: <span class="hljs-string">"gaming"</span> });
+</pre>
+<p>When I submit.</p>
+<blockquote>
+<p>{&quot;name&quot;:&quot;Alan Robson&quot;,&quot;status&quot;:&quot;working&quot;,&quot;_id&quot;:&quot;yEGUSr1BatwY4ry6&quot;}<br/>
+{&quot;name&quot;:&quot;Charley Robson&quot;,&quot;status&quot;:&quot;playing&quot;,&quot;_id&quot;:&quot;Qn5Fij1kegm6DKnH&quot;}<br/>
+{&quot;name&quot;:&quot;James Robson&quot;,&quot;status&quot;:&quot;gaming&quot;,&quot;_id&quot;:&quot;J76rcPSP8FluLzU5&quot;}</p>
+</blockquote>
+<p><strong>Note,</strong> the <strong>_id</strong> value is unique and based on MongoDB. Each record in the database has an <strong>_id</strong>.</p>
+<p>I don't want to leave this data in my database so I can use a text editor to delete it.</p>
+<p>For our needs we can.</p>
+<pre class="prettyprint">    database.insert(data);
+</pre>
+<p>We will also add a timestamp into each database record.</p>
+<pre class="prettyprint">    <span class="hljs-keyword">const</span> timestamp = <span class="hljs-built_in">Date</span>.now();
+    data.timestamp = timestamp;
+</pre>
+<p>our final POST request will be.</p>
+<pre class="prettyprint">    app.post(<span class="hljs-string">'/api'</span>, (request, response) =&gt; {
+        <span class="hljs-keyword">const</span> data = request.body;
+        <span class="hljs-keyword">const</span> timestamp = <span class="hljs-built_in">Date</span>.now();
+        data.timestamp = timestamp;
+        database.insert(data);
+        response.json(data);
+    });
+</pre>
+<h2 id="querying-the-database">Querying the Database</h2>
+<p>To query the database we are going to add a new route to our server. This route will be a GET route.</p>
+<p>We will still use the <code>fetch()</code> request but it is a simpler request. In our request we are going to query the database with the find command to bring back all records.</p>
+<p>We are going to create a new web page named <strong>logs/index.html</strong> that will show a list of all records in our database. We have added a couple of more fields to the data to save our mood and a picture from our camera.</p>
+<h3 id="logindexhtml">log/index.html</h3>
+<pre class="prettyprint">    <span class="hljs-tag">&lt;<span class="hljs-name">h1</span>&gt;</span>Data Selfie App<span class="hljs-tag">&lt;/<span class="hljs-name">h1</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">"/"</span>&gt;</span>enter<span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span> | <span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">"./logs"</span>&gt;</span>list<span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">"logs.js"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+</pre>
+<h3 id="logsjs">logs.js</h3>
+<pre class="prettyprint">    <span class="hljs-keyword">const</span> getData = <span class="hljs-keyword">async</span> () =&gt; {
+      <span class="hljs-keyword">const</span> response = <span class="hljs-keyword">await</span> fetch(<span class="hljs-string">'/api'</span>);
+      <span class="hljs-keyword">const</span> data = <span class="hljs-keyword">await</span> response.json();
+
+      <span class="hljs-keyword">for</span> (item <span class="hljs-keyword">of</span> data) {
+        <span class="hljs-keyword">const</span> root = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">'p'</span>);
+        <span class="hljs-keyword">const</span> mood = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">'div'</span>);
+        <span class="hljs-keyword">const</span> geo = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">'div'</span>);
+        <span class="hljs-keyword">const</span> date = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">'div'</span>);
+        <span class="hljs-keyword">const</span> image = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">'img'</span>);
+
+        mood.textContent = <span class="hljs-string">`mood: <span class="hljs-subst">${item.mood}</span>`</span>;
+        geo.textContent = <span class="hljs-string">`<span class="hljs-subst">${item.lat}</span>°, <span class="hljs-subst">${item.lon}</span>°`</span>;
+        <span class="hljs-keyword">const</span> dateString = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>(item.timestamp).toLocaleString();
+        date.textContent = dateString;
+        image.src = item.image64;
+        image.alt = <span class="hljs-string">'Alan Robson making silly faces.'</span>;
+
+        root.append(mood, geo, date, image);
+        <span class="hljs-built_in">document</span>.body.append(root);
+      }
+      <span class="hljs-built_in">console</span>.log(data);
+    }
+
+    getData();
+</pre>
+<p>Page.</p>
+<p><img src="assets/images/fetch/logs-page.jpg" alt="Log page" title="Log page"></p>
+<p>Console (image truncated).</p>
+<blockquote>
+<p>{&quot;lat&quot;:1.2941664,&quot;lon&quot;:103.7861271,&quot;mood&quot;:&quot;canary&quot;,&quot;image64&quot;:&quot;data:image/png;base64,iVBORw0KG...kSuQmCC&quot;,&quot;timestamp&quot;:1631954010155,&quot;_id&quot;:&quot;HTb1PoRraDlOzyWq&quot;}<br/>
+{&quot;lat&quot;:1.2941664,&quot;lon&quot;:103.7861271,&quot;mood&quot;:&quot;wombat&quot;,&quot;image64&quot;:&quot;data:image/png;base64,iVBORw0KG...kSuQmCC&quot;,&quot;timestamp&quot;:1631954022314,&quot;_id&quot;:&quot;dclODD52BbTHLgUk&quot;}<br/>
+{&quot;lat&quot;:1.2941664,&quot;lon&quot;:103.7861271,&quot;mood&quot;:&quot;panda&quot;,&quot;image64&quot;:&quot;data:image/png;base64,iVBORw0KGg...kSuQmCC&quot;,&quot;timestamp&quot;:1631954032523,&quot;_id&quot;:&quot;cgCZqAWhGIuu0QBF&quot;}</p>
+</blockquote>
+<h2 id="hiding-our-api-keys">Hiding our API keys</h2>
+<p>At present our API key is in our code and if we want to push our code to Github there is the potential of anybody having access to our API key.</p>
+<p>Even worse than this is that we are using our API key in our front end which means that the key is easily seen by anybody looking at our code.</p>
+<p>We need to hide the API key and other important bits of information. It would be preferable to add the API key to the environment.</p>
+<p>To do this we are going to use the package, <code>dotenv</code>.</p>
+<pre class="prettyprint">    npm install dotenv
+</pre>
+<p>How <code>dotenv</code> works is explained on their website.</p>
+<p><code>dotenv</code> is a zero-dependency module that loads environment variables from a <code>.env</code> file into <code>process.env</code>.</p>
+<p>We create a <code>.env</code> file in our root folder.</p>
+<pre class="prettyprint">    PORT=<span class="hljs-number">3000</span>
+    API_KEY=<span class="hljs-number">7</span>edb191eb003cf05b77aa1ee1a66f6a899
+</pre>
+<p>These are our hidden variables.</p>
+<p>To get our hidden variables we add this line to our Node <code>index.js</code> file.</p>
+<pre class="prettyprint">    <span class="hljs-built_in">require</span>(<span class="hljs-string">'dotenv'</span>).config();
+</pre>
+<p>This allows us to load everything that is in a <code>.env</code> file into our code.</p>
+<p>I can have a quick look at all of my environment variables with.</p>
+<pre class="prettyprint">    <span class="hljs-built_in">console</span>.log(process.env);
+</pre>
+<blockquote>
+<p>ACLOCAL_PATH: 'C:\Program Files\Git\mingw64\share\aclocal;C:\Program  Files\Git\usr\share\aclocal',<br/>
+ALLUSERSPROFILE: 'C:\ProgramData',<br/>
+API_KEY: '7edb191eb003cf05b77aa1ee1a66f6a899',<br/>
+APPDATA: 'C:\Users\alanr\AppData\Roaming',<br/>
+'asl.log': 'Destination=file',</p>
+</blockquote>
+<p>On our server you will be able to see all of our environment variables including the environment path for the computer.</p>
+<p>We are only interested in the <strong>API</strong> and <strong>PORT</strong> keys.</p>
+<p><strong>Note:</strong> as this is a Node package it can only be seen on the server side. This causes us problems because we are using the API key on the client side so we will have to find a workaround.</p>
+<p>To use these in our code.</p>
+<pre class="prettyprint">    app.listen(process.env.PORT, () =&gt; <span class="hljs-built_in">console</span>.log(<span class="hljs-string">`listening at <span class="hljs-subst">${process.env.PORT}</span>`</span>));
+</pre>
+<p>I am also going to create a GET request to send the API key from the server to the client.</p>
+<p>In our API (index.js) I have created a <strong>GET</strong> request.</p>
+<pre class="prettyprint">    app.get(<span class="hljs-string">'/key'</span>, (request, response) =&gt; {
+        <span class="hljs-keyword">return</span> response.json({ <span class="hljs-string">"key"</span>: process.env.API_KEY });
+    });
+</pre>
+<p>I call this in our client (/js/script.js).</p>
+<pre class="prettyprint">    <span class="hljs-keyword">const</span> getAPIKey = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> {
+      <span class="hljs-keyword">const</span> request = <span class="hljs-keyword">new</span> XMLHttpRequest();
+      request.open(<span class="hljs-string">'GET'</span>, <span class="hljs-string">'/key'</span>, <span class="hljs-literal">false</span>);
+      request.send();
+
+      <span class="hljs-keyword">if</span> (request.readyState === <span class="hljs-number">4</span> &amp;&amp; request.status === <span class="hljs-number">200</span>) {
+        <span class="hljs-keyword">const</span> data = <span class="hljs-built_in">JSON</span>.parse(request.responseText);
+        <span class="hljs-keyword">return</span> data.key;
+      } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (request.readyState === <span class="hljs-number">4</span>) {
+        <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">'There was an error retrieving the data.'</span>);
+      }
+    }
+
+    <span class="hljs-keyword">const</span> apiKey = getAPIKey();
+
+    <span class="hljs-built_in">console</span>.log(apiKey);
+</pre>
+<p>This returns.</p>
+<blockquote>
+<p>7edb191eb003cf05b77aa1ee1a66f6a899</p>
+</blockquote>
+<p>Now we are able to use the key we retrieved from the server side and keep our API key hidden in our environment variables.</p>
+<p>When we are ready to upload our files to Git we can hide our environment keys in the <code>.gitignore</code> file by adding this line.</p>
+<h4 id="gitignore">.gitignore</h4>
+<pre class="prettyprint">    node_modules
+    .env
+</pre>
+<h2 id="deploying-on-heroku">Deploying on Heroku</h2>
+<p>We need to create a Github repository for our project. This will allow us to automatically push to Heroku.</p>
+<p>Make sure you have the Heroku CLI installed on your PC.</p>
+<p>Open up your Heroku account by typing in your command prompt.</p>
+<pre class="prettyprint">    heroku login
+</pre>
+<p>This will ask you to open a browser window and it will send you to <em>heroku.com</em>.</p>
+<p>On the Heroku dashboard you can create a new app. I will call mine ar-weather which matched my project.</p>
+<p>I will use the Deploy page to setup my app. I can connect to Github from here and select the project that I want to use.</p>
+<p>Click on <em>Enable Automatic deploys</em>.</p>
+<p>Select the <strong>main</strong> branch and click on <em>Deploy branch</em>.</p>
+<p>This will open a list of commands you need to invoke to connect your local git project to Heroku.</p>
+<p>In your terminal run this command to see your remote sites</p>
+<pre class="prettyprint">    git remote -v
+</pre>
+<p>This should show you.</p>
+<blockquote>
+<p>origin  https://github.com/alanrob17/ar-weather.git (fetch)<br/>
+  origin  https://github.com/alanrob17/ar-weather.git (push)</p> 
+</blockquote>
+<p>It states that you are remoting to Github. You also need to remote to Heroku.</p>
+<pre class="prettyprint">    heroku git:remote -a ar-weather
+</pre>
+<p>Now, run the remote command again.</p>
+<blockquote>
+<p>heroku  https://git.heroku.com/ar-weather.git (fetch)<br/>
+heroku  https://git.heroku.com/ar-weather.git (push)<br/>
+origin  https://github.com/alanrob17/ar-weather.git (fetch)<br/>
+origin  https://github.com/alanrob17/ar-weather.git (push)</p>
+</blockquote>
+<p>You are now connected to Heroku.</p>
+<p>From the terminal you can push to Github.</p>
+<pre class="prettyprint">    git push heroku master
+</pre>
+<p>This will compile the Heroku website. You don't really need to do this.</p>
+<p>If I do a <em>git push</em> to Github it will automatically push to Heroku and the changes you have made should be reflected on your Heroku website.</p>
+<h3 id="installing-your-apikey-on-heroku">Installing your API_KEY on Heroku</h3>
+<p>Before you can run your project you have to setup your API key and port. You can do this in <em>settings</em> on the Heroku dashboard.</p>
+<p>Click on <strong>Reveal Config Vars</strong> and add your keys in here.</p>
+<p><img src="assets/images/fetch/heroku-config.jpg" alt="Heroku configuration" title="Heroku configuration"></p>
+<p>You can also do this in the terminal.</p>
+<pre class="prettyprint">    heroku config
+</pre>
+<p>If you don't see any environment variables you can.</p>
+<pre class="prettyprint">    heroku config:<span class="hljs-built_in">set</span> API_KEY=7edb191eb003cf05b77aa1ee1a66f6a899
+
+    heroku config:<span class="hljs-built_in">set</span> PORT=3000
+</pre>
+<p>This will also restart the app for you.</p>
+<p>Now.</p>
+<pre class="prettyprint">    heroku config
+</pre>
+<p>Will show you.</p>
+<blockquote>
+<p>=== ar-weather Config Vars<br/>
+API_KEY: 7edb191eb003cf05b77aa1ee1a66f6a899<br/>
+PORT:    3000</p>
+</blockquote>
+<p>Now you can run your website on.</p>
+<blockquote>
+<p>https://ar-weather.herokuapp.com</p>
+</blockquote>
+<h2 id="refactoring-the-project">Refactoring the project</h2>
+<p>We are going to take out the camera option and reformat our code so that we can add a map of all our database points with tooltips on each point.</p>
+<p>The REST API code.</p>
+<h4 id="indexjs">index.js</h4>
+<pre class="prettyprint">    <span class="hljs-keyword">const</span> express = <span class="hljs-built_in">require</span>(<span class="hljs-string">'express'</span>);
+    <span class="hljs-keyword">const</span> Datastore = <span class="hljs-built_in">require</span>(<span class="hljs-string">'nedb'</span>);
+    <span class="hljs-keyword">const</span> fetch = <span class="hljs-built_in">require</span>(<span class="hljs-string">'node-fetch'</span>);
+    <span class="hljs-built_in">require</span>(<span class="hljs-string">'dotenv'</span>).config();
+
+    <span class="hljs-keyword">const</span> app = express();
+    <span class="hljs-keyword">const</span> port = process.env.PORT || <span class="hljs-number">3000</span>;
+    app.listen(port, () =&gt; {
+      <span class="hljs-built_in">console</span>.log(<span class="hljs-string">`Starting server at <span class="hljs-subst">${port}</span>`</span>);
+    });
+
+    app.use(express.static(<span class="hljs-string">'public'</span>));
+    app.use(express.json({ <span class="hljs-attr">limit</span>: <span class="hljs-string">'1mb'</span> }));
+
+    <span class="hljs-keyword">const</span> database = <span class="hljs-keyword">new</span> Datastore(<span class="hljs-string">'database.db'</span>);
+    database.loadDatabase();
+
+    app.get(<span class="hljs-string">'/api'</span>, (request, response) =&gt; {
+      database.find({}, (err, data) =&gt; {
+        <span class="hljs-keyword">if</span> (err) {
+          response.end();
+          <span class="hljs-keyword">return</span>;
+        }
+        response.json(data);
+      });
+    });
+
+    app.post(<span class="hljs-string">'/api'</span>, (request, response) =&gt; {
+      <span class="hljs-keyword">const</span> data = request.body;
+      <span class="hljs-keyword">const</span> timestamp = <span class="hljs-built_in">Date</span>.now();
+      data.timestamp = timestamp;
+
+      database.insert(data);
+      response.json(data);
+    });
+
+    app.get(<span class="hljs-string">'/weather/:latlon'</span>, <span class="hljs-keyword">async</span> (request, response) =&gt; {
+      <span class="hljs-keyword">const</span> latlon = request.params.latlon.split(<span class="hljs-string">','</span>);
+
+      <span class="hljs-keyword">const</span> lat = latlon[<span class="hljs-number">0</span>];
+      <span class="hljs-keyword">const</span> lon = latlon[<span class="hljs-number">1</span>];
+
+      <span class="hljs-keyword">const</span> api_key = process.env.API_KEY;
+      <span class="hljs-keyword">const</span> weather_url = <span class="hljs-string">`https://api.openweathermap.org/data/2.5/weather?lat=<span class="hljs-subst">${lat}</span>&amp;lon=<span class="hljs-subst">${lon}</span>&amp;units=metric&amp;  APPID=<span class="hljs-subst">${api_key}</span>`</span>;
+      <span class="hljs-keyword">const</span> weather_response = <span class="hljs-keyword">await</span> fetch(weather_url);
+      <span class="hljs-keyword">const</span> weather_data = <span class="hljs-keyword">await</span> weather_response.json();
+
+      <span class="hljs-keyword">const</span> data = {
+        <span class="hljs-attr">weather</span>: weather_data
+      };
+      response.json(data);
+    });
+</pre>
+<h2 id="main-page">Main page</h2>
+<h4 id="indexhtml">index.html</h4>
+<pre class="prettyprint">  <span class="hljs-tag">&lt;<span class="hljs-name">body</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">h1</span>&gt;</span>The Weather is Here<span class="hljs-tag">&lt;/<span class="hljs-name">h1</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">h4</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">id</span>=<span class="hljs-string">"location"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span> - <span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">id</span>=<span class="hljs-string">"currentDate"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span> - <span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">id</span>=<span class="hljs-string">"currentTime"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">h4</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">"/"</span>&gt;</span>check in<span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span> | <span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">"/checkins"</span>&gt;</span>view checkins<span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>
+      The weather here at <span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">id</span>=<span class="hljs-string">"latitude"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span><span class="hljs-symbol">&amp;deg;</span>,
+      <span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">id</span>=<span class="hljs-string">"longitude"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span><span class="hljs-symbol">&amp;deg;</span> is <span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">id</span>=<span class="hljs-string">"summary"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span> with
+      a temperature of <span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">id</span>=<span class="hljs-string">"temp"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span><span class="hljs-symbol">&amp;deg;</span> C.
+    <span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">"./index.js"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span>
+</pre>
+<p>Main page code.</p>
+<h4 id="indexjs">index.js</h4>
+<pre class="prettyprint">    <span class="hljs-keyword">const</span> timeConverter = <span class="hljs-function"><span class="hljs-params">timestamp</span> =&gt;</span> {
+      <span class="hljs-keyword">const</span> a = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>(timestamp * <span class="hljs-number">1000</span>);
+      <span class="hljs-keyword">const</span> hour = a.getHours();
+      <span class="hljs-keyword">const</span> min = a.getMinutes();
+      <span class="hljs-keyword">const</span> sec = a.getSeconds();
+      <span class="hljs-keyword">const</span> time = hour + <span class="hljs-string">':'</span> + min + <span class="hljs-string">':'</span> + sec;
+    
+      <span class="hljs-keyword">return</span> time;
+    }
+
+    <span class="hljs-keyword">const</span> dateConverter = <span class="hljs-function"><span class="hljs-params">timestamp</span> =&gt;</span> {
+      <span class="hljs-keyword">const</span> a = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>(timestamp * <span class="hljs-number">1000</span>);
+      <span class="hljs-keyword">const</span> months = [<span class="hljs-string">'Jan'</span>, <span class="hljs-string">'Feb'</span>, <span class="hljs-string">'Mar'</span>, <span class="hljs-string">'Apr'</span>, <span class="hljs-string">'May'</span>, <span class="hljs-string">'Jun'</span>, <span class="hljs-string">'Jul'</span>, <span class="hljs-string">'Aug'</span>, <span class="hljs-string">'Sep'</span>, <span class="hljs-string">'Oct'</span>, <span class="hljs-string">'Nov'</span>, <span class="hljs-string">'Dec'</span>];
+      <span class="hljs-keyword">const</span> year = a.getFullYear();
+      <span class="hljs-keyword">const</span> month = months[a.getMonth()];
+      <span class="hljs-keyword">const</span> date = a.getDate();
+      <span class="hljs-keyword">const</span> newDate = date + <span class="hljs-string">' '</span> + month + <span class="hljs-string">' '</span> + year;
+
+      <span class="hljs-keyword">return</span> newDate;
+    }
+
+    <span class="hljs-keyword">const</span> getDate = <span class="hljs-function"><span class="hljs-params">lastRecorded</span> =&gt;</span> {
+      lastRecorded = lastRecorded.substr(<span class="hljs-number">0</span>, lastRecorded.indexOf(<span class="hljs-string">'T'</span>));
+      
+      <span class="hljs-keyword">if</span> (lastRecorded !== <span class="hljs-string">''</span>) {
+        <span class="hljs-keyword">const</span> last = lastRecorded.split(<span class="hljs-string">'-'</span>);
+        lastRecorded = <span class="hljs-string">`<span class="hljs-subst">${last[<span class="hljs-number">2</span>]}</span>-<span class="hljs-subst">${last[<span class="hljs-number">1</span>]}</span>-<span class="hljs-subst">${last[<span class="hljs-number">0</span>]}</span>`</span>
+      }
+
+      <span class="hljs-keyword">return</span> lastRecorded;
+    }
+
+    <span class="hljs-keyword">const</span> getTime = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> {
+      <span class="hljs-keyword">const</span> dt = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>();
+      <span class="hljs-keyword">let</span> hours = dt.getHours();
+      <span class="hljs-keyword">const</span> minutes = dt.getMinutes();
+      <span class="hljs-keyword">let</span> timePostFix = <span class="hljs-string">'am'</span>;
+
+      <span class="hljs-keyword">if</span> (hours === <span class="hljs-number">12</span>) {
+        timePostFix = <span class="hljs-string">'pm'</span>;
+      } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (hours &gt; <span class="hljs-number">12</span>) {
+        timePostFix = <span class="hljs-string">'pm'</span>;
+        hours = hours - <span class="hljs-number">12</span>;
+      }
+
+      <span class="hljs-keyword">return</span> <span class="hljs-string">`<span class="hljs-subst">${hours}</span>:<span class="hljs-subst">${minutes}</span> <span class="hljs-subst">${timePostFix}</span>.`</span>;
+    }
+
+    <span class="hljs-comment">// Geo Locate</span>
+    <span class="hljs-keyword">let</span> lat, lon;
+    
+    <span class="hljs-keyword">if</span> (<span class="hljs-string">'geolocation'</span> <span class="hljs-keyword">in</span> navigator) {
+      <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'geolocation available'</span>);
+      navigator.geolocation.getCurrentPosition(<span class="hljs-keyword">async</span> position =&gt; {
+        <span class="hljs-keyword">let</span> lat, lon, location, currentDate, currentTime, sunrise, sunset, weather;
+        <span class="hljs-keyword">try</span> {
+          lat = position.coords.latitude;
+          lon = position.coords.longitude;
+          <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">'latitude'</span>).textContent = lat.toFixed(<span class="hljs-number">2</span>);
+          <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">'longitude'</span>).textContent = lon.toFixed(<span class="hljs-number">2</span>);
+          <span class="hljs-keyword">const</span> api_url = <span class="hljs-string">`weather/<span class="hljs-subst">${lat}</span>,<span class="hljs-subst">${lon}</span>`</span>;
+          <span class="hljs-keyword">const</span> response = <span class="hljs-keyword">await</span> fetch(api_url);
+          <span class="hljs-keyword">const</span> json = <span class="hljs-keyword">await</span> response.json();
+          weather = json.weather
+
+          currentTime = getTime();
+
+          <span class="hljs-keyword">const</span> sunriseTime = weather.sys.sunrise;
+          <span class="hljs-keyword">const</span> sunsetTime = weather.sys.sunset;
+          sunrise = timeConverter(sunriseTime);
+          sunset = timeConverter(sunsetTime);
+          currentDate = dateConverter(sunriseTime);
+          location = weather.name;
+
+          <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">'summary'</span>).textContent = weather.weather[<span class="hljs-number">0</span>].description;
+          <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">'temp'</span>).textContent = weather.main.temp;
+          <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">'location'</span>).textContent = location;
+          <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">'currentDate'</span>).textContent = currentDate;
+          <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">'currentTime'</span>).textContent = currentTime;
+        } <span class="hljs-keyword">catch</span> (error) {
+          <span class="hljs-built_in">console</span>.log(error);
+        }
+
+        <span class="hljs-keyword">const</span> data = { lat, lon, location, currentDate, currentTime, sunrise, sunset, weather };
+    
+        <span class="hljs-keyword">const</span> options = {
+          <span class="hljs-attr">method</span>: <span class="hljs-string">'POST'</span>,
+          <span class="hljs-attr">headers</span>: {
+            <span class="hljs-string">'Content-Type'</span>: <span class="hljs-string">'application/json'</span>
+          },
+          <span class="hljs-attr">body</span>: <span class="hljs-built_in">JSON</span>.stringify(data)
+        };
+        
+        <span class="hljs-keyword">const</span> db_response = <span class="hljs-keyword">await</span> fetch(<span class="hljs-string">'/api'</span>, options);
+        <span class="hljs-keyword">const</span> db_json = <span class="hljs-keyword">await</span> db_response.json();
+      });
+    } <span class="hljs-keyword">else</span> {
+      <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'geolocation not available'</span>);
+    }
+</pre>
+<p><img src="assets/images/fetch/main-page.jpg" alt="Main web page" title="Main web page"></p>
+<h2 id="map-page">Map page</h2>
+<pre class="prettyprint">    <span class="hljs-meta">&lt;!DOCTYPE <span class="hljs-meta-keyword">html</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">html</span> <span class="hljs-attr">lang</span>=<span class="hljs-string">"en"</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">head</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">meta</span> <span class="hljs-attr">charset</span>=<span class="hljs-string">"UTF-8"</span> /&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">meta</span>
+          <span class="hljs-attr">name</span>=<span class="hljs-string">"viewport"</span>
+          <span class="hljs-attr">content</span>=<span class="hljs-string">"width=device-width, initial-scale=1.0"</span>
+        /&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">meta</span> <span class="hljs-attr">http-equiv</span>=<span class="hljs-string">"X-UA-Compatible"</span> <span class="hljs-attr">content</span>=<span class="hljs-string">"ie=edge"</span> /&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">link</span>
+          <span class="hljs-attr">rel</span>=<span class="hljs-string">"stylesheet"</span>
+          <span class="hljs-attr">href</span>=<span class="hljs-string">"https://unpkg.com/leaflet@1.4.0/dist/leaflet.css"</span>
+          <span class="hljs-attr">integrity</span>=<span class="hljs-string">"sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh  +drA=="</span>
+          <span class="hljs-attr">crossorigin</span>=<span class="hljs-string">""</span>
+        /&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">script</span>
+          <span class="hljs-attr">src</span>=<span class="hljs-string">"https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"</span>
+          <span class="hljs-attr">integrity</span>=<span class="hljs-string">"sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/   EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg=="</span>
+          <span class="hljs-attr">crossorigin</span>=<span class="hljs-string">""</span>
+        &gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">style</span>&gt;</span><span class="css">
+          <span class="hljs-selector-id">#checkinMap</span> {
+            <span class="hljs-attribute">height</span>: <span class="hljs-number">480px</span>;
+            <span class="hljs-attribute">margin</span>: <span class="hljs-number">8px</span> <span class="hljs-number">0px</span>;
+          }
+        </span><span class="hljs-tag">&lt;/<span class="hljs-name">style</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">link</span> <span class="hljs-attr">rel</span>=<span class="hljs-string">"stylesheet"</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"text/css"</span> <span class="hljs-attr">href</span>=<span class="hljs-string">"../style.css"</span> /&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">title</span>&gt;</span>The Weather Here<span class="hljs-tag">&lt;/<span class="hljs-name">title</span>&gt;</span>
+      <span class="hljs-tag">&lt;/<span class="hljs-name">head</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">body</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">h1</span>&gt;</span>The Weather Here<span class="hljs-tag">&lt;/<span class="hljs-name">h1</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+          <span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">"/"</span>&gt;</span>check in<span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span> | <span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">"/checkins"</span>&gt;</span>view checkins<span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span>
+        <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">"checkinMap"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">"logs.js"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+      <span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span>
+</pre>
+<h4 id="logsjs">logs.js</h4>
+<pre class="prettyprint">    <span class="hljs-comment">// set map co-ordinate to Alice Springs to the the map of Australia on the screen.</span>
+    <span class="hljs-keyword">const</span> myMap = L.map(<span class="hljs-string">'checkinMap'</span>).setView([<span class="hljs-number">-23.6993336</span>, <span class="hljs-number">133.8713537</span>], <span class="hljs-number">4</span>);
+    <span class="hljs-keyword">const</span> attribution = <span class="hljs-string">'&amp;copy; &lt;a href="https://www.openstreetmap.org/copyright"&gt;OpenStreetMap&lt;/a&gt; contributors'</span>;
+    <span class="hljs-keyword">const</span> tileUrl = <span class="hljs-string">'https://{s}.tile.openstreetmap.de/tiles/osmde/{z}/{x}/{y}.png'</span>;
+    <span class="hljs-keyword">const</span> tiles = L.tileLayer(tileUrl, { attribution });
+    tiles.addTo(myMap);
+
+    getData();
+
+    <span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getData</span>(<span class="hljs-params"></span>) </span>{
+      <span class="hljs-keyword">const</span> response = <span class="hljs-keyword">await</span> fetch(<span class="hljs-string">'/api'</span>);
+      <span class="hljs-keyword">const</span> data = <span class="hljs-keyword">await</span> response.json();
+
+      <span class="hljs-keyword">for</span> (item <span class="hljs-keyword">of</span> data) {
+        <span class="hljs-keyword">const</span> marker = L.marker([item.lat, item.lon]).addTo(myMap);
+        <span class="hljs-keyword">let</span> message = <span class="hljs-string">`The weather in <span class="hljs-subst">${item.location}</span> (<span class="hljs-subst">${item.lat}</span>&amp;deg;,
+        <span class="hljs-subst">${item.lon}</span>&amp;deg;) is <span class="hljs-subst">${item.weather.weather[<span class="hljs-number">0</span>].description}</span> with
+        a temperature of <span class="hljs-subst">${item.weather.main.temp}</span>&amp;deg; C.
+         Sunrise is <span class="hljs-subst">${item.sunrise}</span>, Sunset is <span class="hljs-subst">${item.sunset}</span>.
+         <span class="hljs-subst">${item.currentDate}</span> - <span class="hljs-subst">${item.currentTime}</span>`</span>;
+
+        marker.bindPopup(message);
+      }
+    }
+</pre>
+<p><img src="assets/images/fetch/map-page.jpg" alt="Map page" title="Map page"></p>
+
+</div><!-- starter-template -->
+</div><!-- /.container -->
+
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"/>
+<script>hljs.initHighlightingOnLoad();</script>
+
+<script src="assets/js/jquery.min.js"></script>
+<script src="assets/js/bootstrap.min.js"></script>
+</body>
+</html>

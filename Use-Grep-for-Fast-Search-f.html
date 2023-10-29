@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<title>Use Grep for Fast Search</title>
+<link href="assets/css/bootstrap.css" rel="stylesheet">
+<!-- Custom styles for this template -->
+<link href="assets/css/starter-template.css" rel="stylesheet">
+<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js?lang=css&amp;skin=sunburst"></script>
+<style type="text/css">
+html {
+	font-size: 90.0%;
+}
+
+h2 {
+	margin-top: 60px;
+}
+
+h4, h3 {
+	padding-top: 40px!;		
+}
+
+p {
+	font-size: 1.2em;
+}
+h4 {
+	font-size: 1.4em;
+}
+
+img, pre.prettyprint {
+	margin-top: 1.5em;
+	margin-bottom: 1.5em;
+}
+h1, h2, h3, h4, h5, h6 {
+    color:#007bff;
+
+}
+blockquote {
+    border-left: 4px solid #999;
+    padding-left: 1rem;
+    page-break-inside: avoid;
+}
+</style>
+<link rel="shortcut icon" type="image/x-icon" href="favicon.ico" />
+</head>
+<body>
+<header>
+    <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="#">Grep</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
+                aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Home</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#">Use Grep for Fast Search from the Command Line <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">About</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+<div class="container">
+    <div class="starter-template">
+
+
+<h1 id="use-grep-for-fast-search-from-the-command-line">Use Grep for Fast Search from the Command Line</h1>
+<h2 id="search-the-contents-of-files-using-grep">Search The Contents Of Files Using Grep</h2>
+<p>For most of my grep searches I will use the following command.</p>
+<pre class="prettyprint">    grep --color -<span class="hljs-keyword">in</span>
+</pre>
+<ul>
+<li><strong>--color</strong> for colour output.</li>
+<li><strong>-i</strong> for case-insensitive.</li>
+<li><strong>-n</strong> for line numbers.</li>
+</ul>
+<p>Grep is helpful for searching through projects. Our first example is searching for information in a <strong>package.json</strong> file.</p>
+<h3 id="find-version-number">Find version number</h3>
+<pre class="prettyprint">    grep version package.json
+</pre>
+<blockquote>
+<p>&quot;version&quot;: &quot;0.1.1&quot;,</p>
+</blockquote>
+<p>Breaking that command down we have.</p>
+<ul>
+<li><strong>grep</strong> is the program name.</li>
+<li><strong>version</strong> is the text we are searching for.</li>
+<li><strong>package.json</strong> is the file we are searching trough.</li>
+</ul>
+<h3 id="find-all-gulp-references">Find all gulp references</h3>
+<pre class="prettyprint">    grep --color -<span class="hljs-keyword">in</span> gulp package.json
+</pre>
+<p><img src="assets/grep/gulp-references.jpg" alt="Gulp references" title="Gulp references"></p>
+<h3 id="search-markdown-files-for-headings">search markdown files for headings</h3>
+<pre class="prettyprint">    grep <span class="hljs-string">"#"</span> app-spec.md contributing.md code-of-conduct.md
+</pre>
+<h4 id="partial-output">Partial output</h4>
+<p><img src="assets/grep/headings-in-markdown.jpg" alt="Headings in Markdown" title="Headings in Markdown"></p>
+<p>Can also search using glob patterns.</p>
+<pre class="prettyprint">    grep <span class="hljs-string">"#"</span> *md
+</pre>
+<p>This will search through all <code>md</code> files in the current directory.</p>
+<h2 id="search-directory-contents-using-grep">Search Directory Contents Using Grep</h2>
+<pre class="prettyprint">     grep toggle ./*
+</pre>
+<p>This will give us some results but it won't search through all directories.</p>
+<pre class="prettyprint">    grep -r toggle .
+</pre>
+<p>This will now let us search through all files in all directories recursively which returns way too much information.</p>
+<p>We can drill down with.</p>
+<pre class="prettyprint">    grep -r toggle examples/react/js
+</pre>
+<p><img src="assets/grep/searching-a-specific-folder.jpg" alt="Searching a specific folder" title="Searching a specific folder"></p>
+<p>This searches all files in the directory, <em>examples/react/js</em>.</p>
+<h2 id="search-for-filename-patterns-using-find">Search For Filename Patterns Using Find</h2>
+<p>We can search for all files with a particular extension.</p>
+<pre class="prettyprint">    find . -name <span class="hljs-string">"*jsx"</span>
+</pre>
+<blockquote>
+<p>./examples/react/js/app.jsx<br>
+./examples/react/js/footer.jsx<br>
+./examples/react/js/todoItem.jsx<br>
+./examples/react-alt/js/app.jsx<br>
+./examples/react-alt/js/footer.jsx<br>
+./examples/react-alt/js/todoItem.jsx<br>
+./examples/react-backbone/js/app.jsx<br>
+./examples/react-backbone/js/footer.jsx<br>
+./examples/react-backbone/js/todoItem.jsx</p>
+</blockquote>
+<p>This is the list of files that it found with a <code>.jsx</code> extension.</p>
+<p><strong>find</strong> works differently to the <strong>grep</strong> command. First we specify where we are searching, then what we are searching for.</p>
+<h2 id="search-matching-files-by-combining-find-and-grep-with-xargs">Search Matching Files By Combining Find And Grep With Xargs</h2>
+<p><strong>find</strong> will search for all files with a particular pattern.</p>
+<pre class="prettyprint">    find examples/ -name <span class="hljs-string">"*Spec.js"</span>
+</pre>
+<h4 id="result">Result</h4>
+<blockquote>
+<p>examples/angularjs/test/unit/directivesSpec.js<br>
+examples/angularjs/test/unit/todoCtrlSpec.js<br>
+examples/angularjs_require/test/unit/directives/todoEscapeSpec.js<br>
+examples/angularjs_require/test/unit/directives/todoFocusSpec.js<br>
+examples/vanillajs/test/ControllerSpec.js</p>
+</blockquote>
+<p>Now, we can pipe that result into <strong>xargs</strong> and what <strong>xargs</strong> does is execute a command on the piped output. We are now going to run grep on the output.</p>
+<pre class="prettyprint">     find examples/ -name <span class="hljs-string">"*Spec.js"</span> | xargs grep <span class="hljs-string">"describe"</span>
+</pre>
+<p><img src="assets/grep/xargs.jpg" alt="Using xargs" title="Using xargs"></p>
+<p>You could do this using grep by itself.</p>
+<pre class="prettyprint">    grep -r --include=<span class="hljs-string">"*Spec.js"</span> <span class="hljs-string">"describe"</span> examples/
+</pre>
+<p>This command isn't as intuitive as the one using <strong>find</strong>.</p>
+<p>The other benefit over the previous command is that you can run the <strong>find</strong> part of the command first and when you are satisfied that you are getting the correct pattern of files back you can then pipe them to grep to search those particular files.</p>
+<h2 id="search-the-contents-of-a-git-repository-with-git-grep">Search The Contents Of A Git Repository With Git Grep</h2>
+<p>When searching through Git projects we can use Git's grep and that will use the <em>.gitignore</em> file to ignore files that we don't want to search like the <em>node_modules</em> directory.</p>
+<pre class="prettyprint">    git grep import
+</pre>
+<h4 id="partial-results">Partial results</h4>
+<p><img src="assets/grep/git-grep.jpg" alt="Using Git grep" title="Using Git grep"></p>
+<h2 id="show-context-around-matches-using-grep">Show Context Around Matches Using Grep</h2>
+<p>Remember our header search in markdown files?</p>
+<pre class="prettyprint">    grep <span class="hljs-string">"#"</span> *md
+</pre>
+<p>This will give me a listing of all headers in markdown files. What if I want more context? I can add numbering to find out where the headers appear in a particular markdown file. This will help me if I want to navigate to a header in a file in my text editor.</p>
+<pre class="prettyprint">    grep -n <span class="hljs-string">"#"</span> *md
+</pre>
+<p><code>-n</code> will add line numbers</p>
+<blockquote>
+<p>readme.md:46:#### <a href="https://github.com/samccone">Sam Saccone</a> - Developer<br>
+readme.md:51:#### <a href="https://github.com/arthurvr">Arthur Verschaeve</a> - Developer<br>
+readme.md:56:#### <a href="https://github.com/FadySamirSadek">Fady Samir Sadek</a> - Developer<br>
+readme.md:61:#### <a href="https://github.com/gf3">Gianni Chiappetta</a> - Logo designer<br>
+readme.md:66:## Disclaimer<br>
+readme.md:77:## Getting Involved<br>
+readme.md:84:## License</p>
+</blockquote>
+<p>Another form of context will be to add content around the match and we can do this with.</p>
+<pre class="prettyprint">    grep -n -A 2 <span class="hljs-string">"#"</span> *md
+</pre>
+<p><img src="assets/grep/context-around-match.jpg" alt="Context around a match" title="Context around a match"></p>
+<p><strong>-A 2</strong> will add two lines of content <strong>after</strong> the matched line so that you can see some context around the match.</p>
+<pre class="prettyprint">    grep -n -A 2 -B 2 <span class="hljs-string">"#"</span> *md
+</pre>
+<p>This will add two lines of context before and after the match.</p>
+<p><img src="assets/grep/above-and-below-context.jpg" alt="Context before and after the match" title="Context before and after the match"></p>
+<p>An easier way to do this is use the following command to give you the before and after context.</p>
+<pre class="prettyprint">    grep -n -C 2 <span class="hljs-string">"#"</span> *md
+</pre>
+<h2 id="search-for-basic-patterns-using-grep">Search For Basic Patterns Using Grep</h2>
+<p>The first basic pattern we will use is the . (dot) pattern.</p>
+<pre class="prettyprint">    grep --color <span class="hljs-string">"h."</span> readme.md
+</pre>
+<p><img src="assets/grep/basic-patterns.jpg" alt="Basic patterns" title="Basic patterns"></p>
+<p>The . (dot) pattern matches any character so it picks up an <strong>h</strong> plus ant character after that <strong>h</strong>.</p>
+<pre class="prettyprint">    grep --color <span class="hljs-string">"http."</span> readme.md
+</pre>
+<p><img src="assets/grep/dot-pattern.jpg" alt="Dot pattern" title="Dot pattern"></p>
+<p>What if you want to search for a literal dot?</p>
+<pre class="prettyprint">    grep --color <span class="hljs-string">"\.com"</span> readme.md
+</pre>
+<p><img src="assets/grep/literal-dot.jpg" alt="Literal dot pattern" title="Literal dot pattern"></p>
+<p>The next special character is the <code>*</code> (star) character.</p>
+<pre class="prettyprint">    grep --color <span class="hljs-string">"#*"</span> readme.md
+</pre>
+<p><img src="assets/grep/star-character.jpg" alt="Literal dot pattern" title="Literal dot pattern"></p>
+<p>This pattern <code>#*</code> finds the first hash and then all other hashes after it.</p>
+<p><strong>Note:</strong> if there are more hashes in a line of text then the pattern will find the first match and then ignore all other characters until it finds the next hashes in the line.</p>
+<p><img src="assets/grep/multiple-hash-patterns.jpg" alt="Multiple hash patterns" title="Multiple hash patterns"></p>
+<p>You can use multiple special characters in your pattern.</p>
+<pre class="prettyprint">    grep --color <span class="hljs-string">"(.*)"</span> readme.md
+</pre>
+<p><img src="assets/grep/dot-star.jpg" alt="Dot star pattern" title="Dot star pattern"></p>
+<p>This will find all characters within the bracket pattern. Note that if there are multiple bracket patterns on one line then all characters within both bracket patterns will also be caught,</p>
+<h2 id="search-for-more-complex-patterns-with-regex-in-grep">Search For More Complex Patterns With Regex In Grep</h2>
+<p>Another special character you can use in you patterns are the <code>?</code> and <code>+</code> characters. These determine how many times a pattern should match.</p>
+<p>originally we used the dot (.) character to specify the next character.</p>
+<pre class="prettyprint">    grep <span class="hljs-string">"http."</span> readme.md
+</pre>
+<p>This will catch https and http: which may not be what we want to catch.</p>
+<p>We can do this more cleanly with.</p>
+<pre class="prettyprint">    grep --color <span class="hljs-string">"https\?"</span> readme.md
+</pre>
+<p>This will catch either <strong>http</strong> or <strong>https</strong>, not the <strong>http:</strong> pattern</p>
+<p><img src="assets/grep/question-mark.jpg" alt="Question mark pattern" title="Question mark pattern"></p>
+<p>The question mark says match this character zero or one time. So match the &quot;s&quot; zero or one time in the pattern.</p>
+<p><strong>Note:</strong> we have to escape the question mark with a backslash.</p>
+<p>The next special character is the <code>+</code> sign. This says match the character one or more time in the pattern</p>
+<pre class="prettyprint">    grep --color <span class="hljs-string">"https\+"</span> readme.md
+</pre>
+<p>So now we match the &quot;s&quot; one or more times, so in our search this time we won't match <strong>http</strong>.</p>
+<p><img src="assets/grep/plus-sign.jpg" alt="Plus sign pattern" title="Plus sign pattern"></p>
+<p>If we search for the # sign with a pattern of &quot;#+&quot; we will get the following.</p>
+<pre class="prettyprint">    grep --color <span class="hljs-string">"#\+"</span> readme.md
+</pre>
+<p><img src="assets/grep/all-headers.jpg" alt="All headers" title="All headers"></p>
+<p>This will give us a list of all headers but if we change this to:</p>
+<pre class="prettyprint">    grep --color <span class="hljs-string">"###\+"</span> readme.md
+</pre>
+<p>And we get:</p>
+<p><img src="assets/grep/lmited-headers.jpg" alt="Limited number of headers" title="Limited number of headers"></p>
+<p>This pattern says search for 2 hashes and then a third pound or more. It will catch hashes with 3 or more hashes.</p>
+<p>We do we have to escape <code>?</code> and <code>+</code> but not the <code>.</code> or <code>*</code> characters? This is because grep handles the <code>.</code> and <code>*</code> as basic regular expressions and the <code>?</code> and <code>+</code> are classed as extended regular expressions.</p>
+<p>We could get around this with an <code>E</code> flag.</p>
+<pre class="prettyprint">    grep --color -E <span class="hljs-string">"###?"</span> readme.md
+</pre>
+<p>or.</p>
+<pre class="prettyprint">    grep --color -E <span class="hljs-string">"###+"</span> readme.md
+</pre>
+<p>It is probably easier to escape the extended characters.</p>
+<h2 id="search-for-optional-patterns-with-grep-or">Search For Optional Patterns With Grep Or</h2>
+<p>We can use optional regular expression patterns to search for more than one option.</p>
+<pre class="prettyprint">    <span class="hljs-built_in">echo</span> <span class="hljs-string">"Is it grey or gray?"</span> | grep --color <span class="hljs-string">"grey\|gray"</span>
+</pre>
+<p><img src="assets/grep/optional-characters.jpg" alt="Using optional regular expression characters" title="Using optional regular expression characters"></p>
+<p>Once again the <code>|</code> (or) characters is an extended regular expression character so we escape it or use the <code>-E</code> flag.</p>
+<p>Now we will do another optional search using the recursive flag to search all directories in <em>examples/</em></p>
+<pre class="prettyprint">    grep --color -r <span class="hljs-string">"grey\|gray"</span> examples/
+</pre>
+<p><img src="assets/grep/optional-characters-2.jpg" alt="Another optional regular expression characters" title="Another optional regular expression characters"></p>
+<h2 id="specify-line-beginning-and-end-in-patterns-using-and-with-grep">Specify Line Beginning And End In Patterns Using And With Grep</h2>
+<p>When we have been searching for hash characters so far we have been searching for characters anywhere in our file. We can specify anchor tags to search at the start or end of a file.</p>
+<pre class="prettyprint">    grep --color <span class="hljs-string">"#"</span> app-spec.md
+</pre>
+<p>Will find hash characters anywhere in the file.</p>
+<p><img src="assets/grep/characters-anywhere.jpg" alt="Hash characters anywhere in the file" title="Hash characters anywhere in the file"></p>
+<p>We can get more specific, for example search for a hash character as the first character in a line with the <code>^</code> anchor tag.</p>
+<pre class="prettyprint">    grep --color <span class="hljs-string">"^#"</span> app-spec.md
+</pre>
+<p><img src="assets/grep/start-line-anchor-tag.jpg" alt="Hash characters at the start of a line" title="Hash characters at the start of a line"></p>
+<p>To search at the end of a line.</p>
+<pre class="prettyprint">    grep --color <span class="hljs-string">",$"</span> app-spec.md
+</pre>
+<p><img src="assets/grep/search-for-end-of-line.jpg" alt="Search for a character at the end of the line" title="Search for a character at the end of the line"></p>
+<p>We can combine different patterns to find more complicated search strings. For example find the ES6 import statements in a file.</p>
+<pre class="prettyprint">    grep --color -r <span class="hljs-string">"^import .* from"</span> examples/
+</pre>
+<p><img src="assets/grep/complex-pattern.jpg" alt="Search for a more complex pattern" title="Search for a more complex pattern"></p>
+<h2 id="search-for-classes-of-characters-using-bracket-expressions-with-grep">Search For Classes Of Characters Using Bracket Expressions With Grep</h2>
+<p>If you want to match a whole class of characters the you can use characters in grep.</p>
+<pre class="prettyprint">    <span class="hljs-built_in">echo</span> <span class="hljs-string">"abc123"</span> | grep --color <span class="hljs-string">"[ab]"</span>
+</pre>
+<p><img src="assets/grep/brackets.jpg" alt="Bracket expressions" title="Bracket expressions"></p>
+<p>This is checking for the characters <code>a</code> or <code>b</code>.</p>
+<pre class="prettyprint">    <span class="hljs-built_in">echo</span> <span class="hljs-string">"abc123acb"</span> | grep --color <span class="hljs-string">"[ab]"</span>
+</pre>
+<p><img src="assets/grep/brackets-2.jpg" alt="Bracket expressions 2" title="Bracket expressions 2"></p>
+<p>You can match all lowercase characters with.</p>
+<pre class="prettyprint">    <span class="hljs-built_in">echo</span> <span class="hljs-string">"abc123acb"</span> | grep --color <span class="hljs-string">"[a-z]"</span>
+</pre>
+<p><img src="assets/grep/brackets-3.jpg" alt="Bracket expressions 3" title="Bracket expressions 3"></p>
+<p>The following expression will match <code>123</code>.</p>
+<pre class="prettyprint">    <span class="hljs-built_in">echo</span> <span class="hljs-string">"abc123acb"</span> | grep --color <span class="hljs-string">"[1-9]"</span>
+</pre>
+<p>Let's combine these to make a more complex expression.</p>
+<pre class="prettyprint">    grep --color <span class="hljs-string">"de[a-z]*er"</span> readme.md
+</pre>
+<p><img src="assets/grep/complex-expression.jpg" alt="A more complex expression" title="A more complex expression"></p>
+<p>This matches the words <em>developer</em> and <em>designer</em>. We have two literal strings, <code>de</code> and <code>er</code> and then we match any number of alphabetical characters that start and end with the two literal strings.</p>
+<p>Instead of typing in <strong>a-z</strong> there are some built in classes that you can use.</p>
+<pre class="prettyprint">    grep --color <span class="hljs-string">"de[[:alpha:]]*er"</span> readme.md
+</pre>
+<p><code>[:alpha:]</code> means the alphabetic characters.</p>
+<p><strong>Note:</strong> that this will match uppercase and lowercase alpha characters.</p>
+<p>We can do a case insensitive search using brackets.</p>
+<pre class="prettyprint">    find . -name <span class="hljs-string">"*js"</span> | grep --color <span class="hljs-string">"[sS]pec"</span>
+</pre>
+<p>This means find <strong>spec</strong> or <strong>Spec</strong>.</p>
+<p><img src="assets/grep/case-insensitive-search.jpg" alt="A case insensitive search" title="A case insensitive search"></p>
+<h2 id="search-with-groups-using-grep">Search With Groups Using Grep</h2>
+<p>Earlier we learnt how to search optional patterns using the optional bar.</p>
+<pre class="prettyprint">    grep -rE --color <span class="hljs-string">"grey|gray"</span> .
+</pre>
+<p>This is good for simple searches but what if we want to search for more options. We will have to use grouping.</p>
+<p>This statement searches for grey OR gray OR resolved with a closing double quote.</p>
+<pre class="prettyprint">    grep -rE --color <span class="hljs-string">"(grey|gray)|(resolved)\""</span> .
+</pre>
+<p><img src="assets/grep/grouping.jpg" alt="Grouping options" title="Grouping options"></p>
+<p>Another set of grouping options.</p>
+<pre class="prettyprint">    grep -rE --color <span class="hljs-string">"(grey|gray)(-|\")"</span> .
+</pre>
+<p>We search for grey OR gray followed by either a <strong>-</strong> or <strong>&quot;</strong>.</p>
+<p><img src="assets/grep/another-grouping.jpg" alt="Another grouping option" title="Another grouping option"></p>
+<p>We can get even more descriptive with our groupings.</p>
+<pre class="prettyprint">    grep -rE --color <span class="hljs-string">"(grey|gray)(\'|\"): (\'|\")#?[[:xdigit:]]+"</span> .
+</pre>
+<p><strong>Note:</strong> this didn't work for me. I had to unescape the single quotes.</p>
+<pre class="prettyprint">    grep -rE --color <span class="hljs-string">"(grey|gray)('|\"): ('|\")#?[[:xdigit:]]+"</span> .
+</pre>
+<p>Results.</p>
+<p><img src="assets/grep/complex-grouping.jpg" alt="Complex grouping option" title="Complex grouping option"></p>
+<h2 id="find-matches-excluding-a-pattern-with-grep--v">Find Matches Excluding A Pattern With grep -v</h2>
+<p>Have a look at all the JavaScript files in the angularjs example.</p>
+<pre class="prettyprint">    find examples/angularjs -name <span class="hljs-string">"*js"</span>
+</pre>
+<p>Returns.</p>
+<blockquote>
+<p>examples/angularjs<br>
+examples/angularjs/js<br>
+examples/angularjs/js/app.js<br>
+examples/angularjs/js/controllers/todoCtrl.js<br>
+examples/angularjs/js/directives/todoEscape.js<br>
+examples/angularjs/js/directives/todoFocus.js<br>
+examples/angularjs/js/services/todoStorage.js<br>
+examples/angularjs/node_modules/angular/angular.js<br>
+examples/angularjs/node_modules/angular-resource/angular-resource.js<br>
+examples/angularjs/node_modules/angular-route/angular-route.js<br>
+examples/angularjs/node_modules/todomvc-common/base.js<br>
+examples/angularjs/test/config/karma.conf.js<br>
+examples/angularjs/test/unit/directivesSpec.js<br>
+examples/angularjs/test/unit/todoCtrlSpec.js</p>
+</blockquote>
+<p>We are only interested in the application code and we don't want to search for files in <em>node_modules</em>.</p>
+<p>We can do this bt piping our initial results into grep and using the inverse pattern matching <code>-v</code>.</p>
+<pre class="prettyprint">    find examples/angularjs -name <span class="hljs-string">"*js"</span> | grep -v <span class="hljs-string">"node_modules"</span>
+</pre>
+<p>Returns.</p>
+<blockquote>
+<p>examples/angularjs<br>
+examples/angularjs/js<br>
+examples/angularjs/js/app.js<br>
+examples/angularjs/js/controllers/todoCtrl.js<br>
+examples/angularjs/js/directives/todoEscape.js<br>
+examples/angularjs/js/directives/todoFocus.js<br>
+examples/angularjs/js/services/todoStorage.js<br>
+examples/angularjs/test/config/karma.conf.js<br>
+examples/angularjs/test/unit/directivesSpec.js<br>
+examples/angularjs/test/unit/todoCtrlSpec.js</p>
+</blockquote>
+<p>In this example instead of matching everything that matches we are matching everything that doesn't match.</p>
+<pre class="prettyprint">    find examples -name <span class="hljs-string">"*js"</span> | grep -vE <span class="hljs-string">"node_modules|[S|s]pec"</span>
+</pre>
+<p>In this case we knockout any files with <em>node_modules</em> and the words <em>Spec</em> or <em>spec</em>.</p>
+
+</div><!-- starter-template -->
+</div><!-- /.container -->
+
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"/>
+<script>hljs.initHighlightingOnLoad();</script>
+
+<script src="assets/js/jquery.min.js"></script>
+<script src="assets/js/bootstrap.min.js"></script>
+</body>
+</html>

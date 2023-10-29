@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<title>Using HTTPS in your IIS websites</title>
+<link href="assets/css/bootstrap.css" rel="stylesheet">
+<!-- Custom styles for this template -->
+<link href="assets/css/starter-template.css" rel="stylesheet">
+<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js?lang=css&amp;skin=sunburst"></script>
+<style type="text/css">
+html {
+	font-size: 90.0%;
+}
+
+h2 {
+	margin-top: 60px;
+}
+
+h4, h3 {
+	padding-top: 40px!;		
+}
+
+p {
+	font-size: 1.2em;
+}
+h4 {
+	font-size: 1.4em;
+}
+
+img, pre.prettyprint {
+	margin-top: 1.5em;
+	margin-bottom: 1.5em;
+}
+h1, h2, h3, h4, h5, h6 {
+    color:#007bff;
+
+}
+blockquote {
+    border-left: 4px solid #999;
+    padding-left: 1rem;
+    page-break-inside: avoid;
+}
+</style>
+<link rel="shortcut icon" type="image/x-icon" href="favicon.ico" />
+</head>
+<body>
+<header>
+    <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="#">Internet Information Server</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
+                aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Home</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#">Using HTTPS in your IIS websites <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">About</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+<div class="container">
+    <div class="starter-template">
+
+
+<h1 id="using-iis-to-setup-https-on-a-website">Using IIS to setup HTTPS on a website</h1>
+<p><strong>Note:</strong> I have previously setup my website in IIS and added a record in my <code>hosts</code> file to map to my website name.</p>
+<pre class="prettyprint"><code><div>    127.0.0.1 RecordDB.com.au
+</div></code></pre>
+<h2 id="install-microsoft-urlrewrite">Install Microsoft URLRewrite</h2>
+<p>Go to IIS website and download the URLRewrite executable. Install it on your machine and now go to your IIS console and select your website (in my case it will be <code>recorddb.com.au</code>).</p>
+<p>You should see this in your website settings.</p>
+<p><img src="assets/images/iis/urlrewrite-in-iis.jpg" alt="URLRewrite in IIS" title="URLRewrite in IIS"></p>
+<h2 id="obtain-a-certificate">Obtain a certificate</h2>
+<p>Go to the Root of your IIS server and click on <strong>Server certificate</strong>.</p>
+<p><img src="assets/images/iis/server-certificate.jpg" alt="Server certificate in IIS" title="Server certificate in IIS"></p>
+<p>This opens the following dialog.</p>
+<p><img src="assets/images/iis/create-self-signed-certificate.jpg" alt="Create personal certificate with friendly name" title="Create personal certificate with friendly name"></p>
+<p>Add a friendly name, <code>recorddb.com.au</code> and make sure <strong>personal</strong> is selected. You will then see a list of all your personal certificates.</p>
+<p><img src="assets/images/iis/created-certificate.jpg" alt="List of created certificates" title="List of created certificates"></p>
+<p>On your website in IIS right-click and select <strong>Edit Bindings</strong> to add a new SSL binding.</p>
+<p><img src="assets/images/iis/new-ssl-binding.jpg" alt="New SSL binding" title="New SSL binding"></p>
+<p>Remove the port 80 binding.</p>
+<h2 id="running-your-website">Running your website</h2>
+<p>You can now use <strong>https</strong> to serve your website by clicking on the <strong>Browse Website</strong> option. Make sure to select the <strong>https</strong> link.</p>
+<p><img src="assets/images/iis/browse-https.jpg" alt="Browse https" title="Browse https"></p>
+<p>You will get a browser error of <em>Potential Security Risk Ahead</em>. Continue on and ignore this.</p>
+<p>Your browser displays an error page because the self-signed certificate was issued by your computer, not by a trusted Certificate Authority (CA). Browsers will trust the certificate if you add it to the list of Trusted Root Certification Authorities in the certificates store on the local computer, or in Group Policy for the domain.</p>
+<p>You can see your certificate in Certificate Manager.</p>
+<p><img src="assets/images/iis/certificate-manager.jpg" alt="Certificate manager" title="Certificate manager"></p>
+<p><strong>Note:</strong> In Firefox you see you link as.</p>
+<p><img src="assets/images/iis/firefox.jpg" alt="SSL in Firefox" title="SSL in Firefox"></p>
+<p>If you click on the certificate it tells you that the connection isn't secure. Chrome, Brave and Edge will have a line through <strong>https</strong> to let you visually know that the site isn't secure.</p>
+<h2 id="url-rewrite">URL Rewrite</h2>
+<p>Normally we would finish here but I am going to add a <strong>URL Rewrite</strong> rule to our website.</p>
+<p>Click on <strong>URL Rewrite</strong> in your website. Add a new blank rule named <strong>Http Redirect</strong>.</p>
+<p>The setting are.</p>
+<p><img src="assets/images/iis/edit-inbound-rule-1.jpg" alt="Inbound rule page 1" title="Inbound rule page 1"></p>
+<p><img src="assets/images/iis/edit-inbound-rule-3.jpg" alt="Inbound rule page 2" title="Inbound rule page 2"></p>
+<p><img src="assets/images/iis/edit-inbound-rule-2.jpg" alt="Inbound rule page 3" title="Inbound rule page 3"></p>
+<p>Now if a user uses the URL, <strong><a href="http://recordb.com.au">http://recordb.com.au</a></strong> it will be redirected to <strong><a href="https://recordb.com.au">https://recordb.com.au</a></strong></p>
+
+
+
+</div><!-- starter-template -->
+</div><!-- /.container -->
+
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"/>
+<script>hljs.initHighlightingOnLoad();</script>
+
+<script src="assets/js/jquery.min.js"></script>
+<script src="assets/js/bootstrap.min.js"></script>
+</body>
+</html>

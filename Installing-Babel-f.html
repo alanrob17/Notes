@@ -1,0 +1,1000 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Installing Babel And Webpack</title>
+    <link href="assets/css/bootstrap.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="assets/css/starter-template.css" rel="stylesheet">
+    <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js?lang=css&amp;skin=sunburst"></script>
+	<style type="text/css">
+	h2 {
+		margin-top: 60px;
+	}
+	
+	h4, h3 {
+		padding-top: 40px!;		
+	}
+	
+	p {
+		font-size: 1.2em;
+	}
+
+	h4 {
+		font-size: 1.4em;
+	}
+	
+	img, pre.prettyprint {
+		margin-top: 1.5em;
+		margin-bottom: 1.5em;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+        color:#007bff;
+  
+    }
+
+    blockquote {
+        border-left: 4px solid #999;
+        padding-left: 1rem;
+        page-break-inside: avoid;
+    }
+	</style>
+    <link rel="shortcut icon" type="image/x-icon" href="favicon.ico" />
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href="#">Udemy - The Complete JavaScript Course 2019</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
+                    aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarCollapse">
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Home</a>
+                        </li>
+                        <li class="nav-item active">
+                            <a class="nav-link" href="#">Installing Babel And Webpack <span class="sr-only">(current)</span></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">About</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container">
+        <div class="starter-template">
+
+<h1 class="code-line" data-line-start=0 data-line-end=1 ><a id="Installing_Babel_And_Webpack_0"></a>Installing Babel And Webpack</h1>
+<pre class="prettyprint">npm install -g babel-cli
+
+babel --version
+</pre>
+<p class="has-line-data" data-line-start="6" data-line-end="7">Go to the folder you want to use Babel in (ours is <em>js-bootcamp/boilerplate</em>).</p>
+<p class="has-line-data" data-line-start="8" data-line-end="9">We have a file we want to transpile named <em>input.js</em>.</p>
+<pre class="prettyprint">babel input.js -o output.js
+</pre>
+<p class="has-line-data" data-line-start="12" data-line-end="13"><em>output.js</em> is our output file.</p>
+<p class="has-line-data" data-line-start="14" data-line-end="15">If you look at <em>output.js</em> you will notice that it has hardly changed.</p>
+<p class="has-line-data" data-line-start="16" data-line-end="17">We need to create a project file and we can do that by running:</p>
+<pre class="prettyprint">npm init
+</pre>
+<p class="has-line-data" data-line-start="20" data-line-end="21">Accept all the defaults and it will create a <em>package.json</em> file.</p>
+<p class="has-line-data" data-line-start="22" data-line-end="23">Now we need to add a Babel preset (locally only).</p>
+<pre class="prettyprint">npm install babel-preset-env@1.6.1
+</pre>
+<p class="has-line-data" data-line-start="26" data-line-end="27">This installs the preset version 1.6.1 in the <em>node_modules</em> folder. If you look at your <em>package.json</em> file again you will notice that it has added a dependency which is the preset we installed.</p>
+<pre class="prettyprint">&quot;dependencies&quot;: {
+    &quot;babel-preset-env&quot;: &quot;^1.6.1&quot;
+} 
+</pre>
+<p class="has-line-data" data-line-start="32" data-line-end="33">We also have a new file added to our root folder named <em>package-lock.json</em>. This keeps track of the version of modules we are using in case there are conflicts in the future.</p>
+<p class="has-line-data" data-line-start="34" data-line-end="35">Now we can run our transpiler command again with our new preset.</p>
+<pre class="prettyprint">babel input.js -o output.js --presets env
+</pre>
+<p class="has-line-data" data-line-start="38" data-line-end="39">or</p>
+<pre class="prettyprint">babel input.js --out-file output.js --presets env
+</pre>
+<p class="has-line-data" data-line-start="42" data-line-end="43">Now you will notice that there is a big difference in <em>output.js</em>.</p>
+<p class="has-line-data" data-line-start="44" data-line-end="45">This is a modified version of our file that is going to work in a wider range of browsers.</p>
+<p class="has-line-data" data-line-start="46" data-line-end="47">Once we have transpiled our .js files we can delete the <em>node_modules</em> folder. We don’t really need it anymore.</p>
+<p class="has-line-data" data-line-start="48" data-line-end="49">If you need to transpile again in the same folder just run this command to get the <em>node_modules</em> folder back.</p>
+<pre class="prettyprint">npm install
+</pre>
+<p class="has-line-data" data-line-start="52" data-line-end="53">You don’t need the preset part of the line anymore because when <em>npm</em> is installing it will look at your package.json file and automatically install dependencies. This makes it easy to pass our projects around.</p>
+<p class="has-line-data" data-line-start="54" data-line-end="55">We are now going to change our folder structure.</p>
+<p class="has-line-data" data-line-start="56" data-line-end="57">Add in a <strong>public</strong> folder which will contain our web application, that is everything that we need to send to our server. Inside of <em>public</em> create a <strong>js</strong> folder.</p>
+<p class="has-line-data" data-line-start="58" data-line-end="59">The next folder will be <strong>src</strong> which will contain all of our js code before we send it to Babel.</p>
+<p class="has-line-data" data-line-start="60" data-line-end="61">Inside the <em>public</em> folder we are going to put in all of the js code that was processed by Babel.</p>
+<p class="has-line-data" data-line-start="62" data-line-end="63">Rename <em>input.js</em> to <em>index.js</em> and put in in the <em>src</em> folder. Delete <em>output.js</em>.</p>
+<p class="has-line-data" data-line-start="64" data-line-end="65">Compile your code with:</p>
+<pre class="prettyprint">babel src/index.js -o public/js/bundle.js --presets env
+</pre>
+<p class="has-line-data" data-line-start="68" data-line-end="69">This is the long handed way of compiling. We can add this command into <em>package.json</em>.</p>
+<pre class="prettyprint">{
+  &quot;name&quot;: &quot;boilerplate&quot;,
+  &quot;version&quot;: &quot;1.0.0&quot;,
+  &quot;description&quot;: &quot;&quot;,
+  &quot;main&quot;: &quot;input.js&quot;,
+  &quot;scripts&quot;: {
+    &quot;build&quot;: &quot;babel src/index.js -o public/js/bundle.js --presets env&quot;
+  },
+  &quot;author&quot;: &quot;&quot;,
+  &quot;license&quot;: &quot;ISC&quot;,
+  &quot;dependencies&quot;: {
+    &quot;babel-preset-env&quot;: &quot;^1.6.1&quot;
+  }
+}
+</pre>
+<p class="has-line-data" data-line-start="85" data-line-end="86">We can then run this command as many times as we want:</p>
+<pre class="prettyprint">npm run build
+</pre>
+<p class="has-line-data" data-line-start="89" data-line-end="90">To get our code to run we will build an <strong>index.html</strong> file in our <em>public</em> folder.</p>
+<p class="has-line-data" data-line-start="91" data-line-end="92">Link <em>bundle.js</em> into <em>index.html</em> and change the <em>index.js</em> file to:</p>
+<pre class="prettyprint">'use strict';
+
+const name = 'Alan';
+
+console.log(name);
+
+class Hangman {
+    myMethod() {
+        return 'Testing...';
+    }
+}
+
+const hangman = new Hangman();
+
+console.log(hangman.myMethod());
+</pre>
+<p class="has-line-data" data-line-start="109" data-line-end="110">Re-compile the js code and run the program.</p>
+<pre class="prettyprint">Alan
+Testing...
+</pre>
+<p class="has-line-data" data-line-start="114" data-line-end="115">Is printed in the console.</p>
+<p class="has-line-data" data-line-start="116" data-line-end="117">Internet Explorer doesn’t have classes built into its version of JavaScript but now that we have transpiled our code we can run it in Internet Explorer.</p>
+<p class="has-line-data" data-line-start="118" data-line-end="119">Once again we wouldn’t want to manually compile our JavaScript code each time we made a change to our code. Fortunately we can set this up in <em>package.json</em> to automatically compile for us. Change our build line to:</p>
+<pre class="prettyprint">&quot;build&quot;: &quot;babel src/index.js -o public/js/bundle.js --presets env --watch&quot;
+</pre>
+<p class="has-line-data" data-line-start="122" data-line-end="123">Now we run <em>npm run build</em> again.</p>
+<p class="has-line-data" data-line-start="124" data-line-end="125">This time the script keeps running until we close it down.</p>
+<p class="has-line-data" data-line-start="126" data-line-end="127">To see this work change your name in <em>index.js</em> to James and look at the console in your browser.</p>
+<p class="has-line-data" data-line-start="128" data-line-end="129">It produces the following result:</p>
+<pre class="prettyprint">James
+Testing...
+</pre>
+<h2 class="code-line" data-line-start=133 data-line-end=134 ><a id="Avoiding_Global_Modules_133"></a>Avoiding Global Modules</h2>
+<p class="has-line-data" data-line-start="135" data-line-end="136">Babel and Live Server were both installed globally on my PC. This makes it hard if I want to give my whole package away for use on another PC.</p>
+<p class="has-line-data" data-line-start="137" data-line-end="138">We can uninstall global modules and then install them as local dependencies for our project.</p>
+<h2 class="code-line" data-line-start=139 data-line-end=140 ><a id="Webpack_139"></a>Webpack</h2>
+<p class="has-line-data" data-line-start="141" data-line-end="142">We have minor issues with multiple JavaScript files in a project. The main problem is that you have to load each JavaScript file into your HTML file in a particular order.</p>
+<h3 class="code-line" data-line-start=143 data-line-end=144 ><a id="Current_workflow_143"></a>Current workflow</h3>
+<p class="has-line-data" data-line-start="145" data-line-end="146"><img src="assets/babel/current-workflow.jpg" alt="Current workflow" title="Current workflow"></p>
+<p class="has-line-data" data-line-start="147" data-line-end="148">In the Notes app we have three JavaScript files and an Index HTML file. The JavaScript files have to be loaded in order into our HTML file…</p>
+<ol>
+<li class="has-line-data" data-line-start="149" data-line-end="150">uuid.js</li>
+<li class="has-line-data" data-line-start="150" data-line-end="151">notes-app.js</li>
+<li class="has-line-data" data-line-start="151" data-line-end="153">notes-functions.js</li>
+</ol>
+<p class="has-line-data" data-line-start="153" data-line-end="154">Webpack allows us to work around this issue so we will be using it instead of Babel for organising our project. We still be using Babel to compile our code though.</p>
+<h3 class="code-line" data-line-start=155 data-line-end=156 ><a id="New_workflow_155"></a>New workflow</h3>
+<p class="has-line-data" data-line-start="157" data-line-end="158"><img src="assets/babel/new-workflow.jpg" alt="New workflow" title="new workflow"></p>
+<p class="has-line-data" data-line-start="159" data-line-end="160">The folder structure is similar to our Boilerplate example.</p>
+<ul>
+<li class="has-line-data" data-line-start="161" data-line-end="162">public</li>
+<li class="has-line-data" data-line-start="162" data-line-end="163">src</li>
+<li class="has-line-data" data-line-start="163" data-line-end="165">node_modules</li>
+</ul>
+<p class="has-line-data" data-line-start="165" data-line-end="166">In this case we will be using uuid as a node_module so we won’t need to bring in the file as we did previously.</p>
+<p class="has-line-data" data-line-start="167" data-line-end="168">We will use Webpack to combine our three JavaScript files into one compiled file named <strong>bundle.js</strong>. Webpack can do more than compile our JavaScript files. It also compiles SASS into CSS.</p>
+<h2 class="code-line" data-line-start=169 data-line-end=170 ><a id="Setting_up_Webpack_169"></a>Setting up Webpack</h2>
+<p class="has-line-data" data-line-start="171" data-line-end="172">The website is <a href="https://webpack.js.org/">webpack.js.org</a>. The most important part of this website is the documentation.</p>
+<p class="has-line-data" data-line-start="173" data-line-end="174">In this case we are going to install Webpack locally into our boilerplate app.</p>
+<pre class="prettyprint">npm install webpack@4.5.0 webpack-cli@2.0.14
+</pre>
+<p class="has-line-data" data-line-start="177" data-line-end="178">Webpack will make changes to our <em>package.json</em> configuration file.</p>
+<p class="has-line-data" data-line-start="179" data-line-end="180">Once we have Installed Webpack we can configure it. Like Babel we have to let Webpack know where our source code resides and where to save the generated code. We do this in a separate config file.</p>
+<p class="has-line-data" data-line-start="181" data-line-end="182">We are going to be running Webpack via a script similar to the way we run Babel. We add it to <em>package.json</em>.</p>
+<pre class="prettyprint">{
+  &quot;name&quot;: &quot;boilerplate&quot;,
+  &quot;version&quot;: &quot;1.0.0&quot;,
+  &quot;description&quot;: &quot;&quot;,
+  &quot;main&quot;: &quot;input.js&quot;,
+  &quot;scripts&quot;: {
+    &quot;webpack&quot;: &quot;webpack&quot;,
+    &quot;build&quot;: &quot;babel src/index.js -o public/js/bundle.js --presets env --watch&quot;
+  },
+  &quot;author&quot;: &quot;&quot;,
+  &quot;license&quot;: &quot;ISC&quot;,
+  &quot;dependencies&quot;: {
+    &quot;babel-preset-env&quot;: &quot;^1.6.1&quot;,
+    &quot;webpack&quot;: &quot;^4.5.0&quot;,
+    &quot;webpack-cli&quot;: &quot;^3.3.9&quot;
+  }
+}
+</pre>
+<p class="has-line-data" data-line-start="201" data-line-end="202">We don’t want to add a long command to tell Webpack where the code resides and how to compile inside of <em>package.json</em> so we will create a new JavaScript file named <strong>webpack.config.js</strong>  in the root folder to do this.</p>
+<p class="has-line-data" data-line-start="203" data-line-end="204">We use <em>node.js</em> commands in this file.</p>
+<p class="has-line-data" data-line-start="205" data-line-end="206">The entry path must use relative paths to get to our files.</p>
+<p class="has-line-data" data-line-start="207" data-line-end="208">The output path must use an absolute paths to compile the code to. The problem with this is that it breaks if we move our project or give it to somebody else.</p>
+<p class="has-line-data" data-line-start="209" data-line-end="210">Fortunately <em>node.js</em> gives us a way to do this.</p>
+<pre class="prettyprint">const path = require('path');
+
+module.exports = {
+    entry: './src/index.js',
+    output: {
+        path: path.resolve(__dirname, 'public/js');
+    }
+}
+
+// /d/WebDev/JavaScript/js-bootcamp/boilerplate
+</pre>
+<p class="has-line-data" data-line-start="222" data-line-end="223">We need to use a node.js module to get the path information.</p>
+<pre class="prettyprint">const path = require('path');
+</pre>
+<p class="has-line-data" data-line-start="226" data-line-end="227">To get the absolute path we use a node.js variable named <strong>__dirname</strong>.</p>
+<p class="has-line-data" data-line-start="228" data-line-end="229">To get around the different operating systems you could be working on we use the method <strong>path.resolve()</strong> with two arguments. The first is the absolute path to our root and the next argument is the folder we want our compiled code to reside in.</p>
+<pre class="prettyprint">path: path.resolve(__dirname, 'public/js');
+</pre>
+<p class="has-line-data" data-line-start="232" data-line-end="233">We are now ready to start working.</p>
+<pre class="prettyprint">npm run webpack
+</pre>
+<p class="has-line-data" data-line-start="236" data-line-end="237">This will grab our <em>webpack.config.js</em> file and then run our code successfully. It creates a file named <strong>main.js</strong> which is a minified version of our compiled code.</p>
+<p class="has-line-data" data-line-start="238" data-line-end="239">We can ren name this file by adding a line to our configuration.</p>
+<p class="has-line-data" data-line-start="240" data-line-end="241">const path = require(‘path’)</p>
+<pre class="prettyprint">module.exports = {
+    entry: './src/index.js',
+    output: {
+        path: path.resolve(__dirname, 'public/js'),
+        filename: 'bundle.js'
+    }
+}
+</pre>
+<p class="has-line-data" data-line-start="250" data-line-end="251">Now rerun the webpack command to recompile our code and you will see the minified <em>bundle.js</em> file.</p>
+<h2 class="code-line" data-line-start=252 data-line-end=253 ><a id="Javascript_Modules_252"></a>Javascript Modules</h2>
+<p class="has-line-data" data-line-start="254" data-line-end="255">Create a new JavaScript file in <em>public/src</em> named <em>utilities.js</em>. We will remove all content from <em>index.js</em> and in both files we will just add a <em>console.log()</em> line. Now run Webpack.</p>
+<pre class="prettyprint">npm run webpack
+</pre>
+<p class="has-line-data" data-line-start="258" data-line-end="259">This will only compile <em>index.js</em> and ignore <em>utilities.js</em>. This because the entry point in the <em>webpack.config.js</em> pints to <em>index.js</em>. If you run the index page you will only see the <em>console.log()</em> from <em>index.js</em>.</p>
+<p class="has-line-data" data-line-start="260" data-line-end="261">The solution to this problem is to not change the Webpack config at all. We can now use the JavaScript modules system. We have two new statements.</p>
+<ul>
+<li class="has-line-data" data-line-start="262" data-line-end="263"><strong>import</strong> statement</li>
+<li class="has-line-data" data-line-start="263" data-line-end="265"><strong>export</strong> statement</li>
+</ul>
+<h3 class="code-line" data-line-start=265 data-line-end=266 ><a id="utilitiesjs_265"></a>utilities.js</h3>
+<pre class="prettyprint">console.log('utilities.js');
+</pre>
+<h3 class="code-line" data-line-start=269 data-line-end=270 ><a id="indexjs_269"></a>index.js</h3>
+<pre class="prettyprint">import './utilities';
+
+console.log('utilities.js');
+</pre>
+<p class="has-line-data" data-line-start="275" data-line-end="276">Note: in the import line we can leave off the <code>.js</code> extension of the filename. We are also using relative paths.</p>
+<p class="has-line-data" data-line-start="277" data-line-end="278">Run Webpack again. This time in the output it will mention the two JavaScript files being compiled. If you run the index page again you will get the following result in the console:</p>
+<pre class="prettyprint">utilities.js
+index.js
+</pre>
+<p class="has-line-data" data-line-start="282" data-line-end="283">We now want to create a simple function in <em>utilities.js</em>.</p>
+<pre class="prettyprint">console.log('utilities.js');
+
+const add = (a, b) =&gt; a + b;
+</pre>
+<p class="has-line-data" data-line-start="288" data-line-end="289">We would assume that this function could be called from <em>index.js</em>.</p>
+<pre class="prettyprint">import './utilities';
+
+console.log('index.js');
+console.log(add(35, 7));
+</pre>
+<p class="has-line-data" data-line-start="295" data-line-end="296">but we would be wrong because each <strong>JavaScript file has its own scope</strong>. This is actually a good thing. The way we get around this problem is to create an <strong>export</strong> statement in <em>utilities.js</em>.</p>
+<pre class="prettyprint">console.log('utilities.js');
+
+export const add = (a, b) =&gt; a + b;
+</pre>
+<p class="has-line-data" data-line-start="301" data-line-end="302">We can still use the <em>add()</em> function in <em>utilities.js</em> if we want but now we can use the <em>add()</em> function in <em>index.js</em> as well.</p>
+<p class="has-line-data" data-line-start="303" data-line-end="304">We have to make a change to the import statement in <em>index.js</em> to be able to use the function.</p>
+<pre class="prettyprint">// import './utilities';
+import { add } from './utilities';
+
+console.log('index.js');
+
+console.log(add(35, 7));
+</pre>
+<p class="has-line-data" data-line-start="312" data-line-end="313">Comment out the original <em>import</em> statement and replace it with the one above that mentions the <em>add()</em> function. This time the code will work after compiling with Webpack.</p>
+<p class="has-line-data" data-line-start="314" data-line-end="315">Now we get the following result:</p>
+<pre class="prettyprint">utilities.js
+index.js
+42
+</pre>
+<p class="has-line-data" data-line-start="320" data-line-end="321">You can export any number of objects from any file. Add another export line in <em>utilities.js</em>.</p>
+<pre class="prettyprint">console.log('utilities.js');
+
+export const add = (a, b) =&gt; a + b;
+
+export const name = 'Alan';
+</pre>
+<p class="has-line-data" data-line-start="328" data-line-end="329">In <em>index.js</em> you separate each <em>export</em> with a comma.</p>
+<pre class="prettyprint">import { add, name } from './utilities';
+
+console.log('index.js');
+
+console.log(add(35, 7));
+
+console.log(name);
+</pre>
+<p class="has-line-data" data-line-start="338" data-line-end="339">Output:</p>
+<pre class="prettyprint">utilities.js
+index.js
+42
+Alan
+</pre>
+<p class="has-line-data" data-line-start="345" data-line-end="346">As you can see we now have access to <em>add()</em> and <em>name</em>.</p>
+<p class="has-line-data" data-line-start="347" data-line-end="348">This gives us an easy way to communicate between files.</p>
+<h4 class="code-line" data-line-start=349 data-line-end=350 ><a id="Challenge_349"></a>Challenge</h4>
+<ol>
+<li class="has-line-data" data-line-start="351" data-line-end="352">create a new file named <em>scream.js</em>.</li>
+<li class="has-line-data" data-line-start="352" data-line-end="353">Export a scream function that takes a string and converts it to uppercase and adds an exclamation mark on the end.</li>
+<li class="has-line-data" data-line-start="353" data-line-end="355">Import <em>scream.js</em> into index and use it.</li>
+</ol>
+<h3 class="code-line" data-line-start=355 data-line-end=356 ><a id="screamjs_355"></a>scream.js</h3>
+<pre class="prettyprint">export const scream = (input) =&gt; {
+    input = input.toUpperCase() + '!';
+    return input;
+}
+</pre>
+<p class="has-line-data" data-line-start="362" data-line-end="363"><strong>Note:</strong> you can shorten the function if you want.</p>
+<pre class="prettyprint">export const scream = (input) =&gt; `${input.toUpperCase()}!`;
+</pre>
+<h3 class="code-line" data-line-start=366 data-line-end=367 ><a id="indexjs_366"></a>index.js</h3>
+<pre class="prettyprint">import { add, name } from './utilities';
+import { scream } from './scream';
+
+console.log('index.js');
+
+console.log(add(35, 7));
+
+console.log(name);
+
+console.log(scream('This is a line of text'));
+</pre>
+<h4 class="code-line" data-line-start=379 data-line-end=380 ><a id="Output_379"></a>Output</h4>
+<pre class="prettyprint">utilities.js
+index.js
+42
+Alan
+THIS IS A LINE OF TEXT!
+</pre>
+<p class="has-line-data" data-line-start="387" data-line-end="388">There are other ways we can use <em>import</em> and <em>export</em> to structure our files.</p>
+<p class="has-line-data" data-line-start="389" data-line-end="390">We are currently using <strong>named</strong> exports in our files. The other method is named <strong>default</strong> exports.</p>
+<p class="has-line-data" data-line-start="391" data-line-end="392"><em>Named</em> exports are where we use a name for waht we want to export and there are no limitations on the number of exports we can create. You would use <em>named</em> exports when you have a number of objects that you want to export.</p>
+<p class="has-line-data" data-line-start="393" data-line-end="394"><em>Default</em> exports means that we can only have one in each JavaScript file. Typically we would only use <em>default</em> exports when our JavaScript file contains only a single class that we need to export.</p>
+<p class="has-line-data" data-line-start="395" data-line-end="396">We can use <em>named</em> and <em>default</em> exports together in our import line. Add a <em>default</em> export in <em>utilities.js</em>.</p>
+<pre class="prettyprint">export const add = (a, b) =&gt; a + b;
+
+export const name = 'Alan';
+
+const square = (x) =&gt; x * x;
+export default square;
+</pre>
+<p class="has-line-data" data-line-start="404" data-line-end="405">We create our new function <em>square()</em> and we set up the <em>default</em> export underneath our function.</p>
+<p class="has-line-data" data-line-start="406" data-line-end="407">We can now call this in <em>index.js</em>.</p>
+<pre class="prettyprint">import otherSquare, { add, name } from './utilities';
+import { scream } from './scream';
+
+console.log(add(35, 7));
+
+console.log(name);
+
+console.log(scream('This is a line of text'));
+
+console.log(otherSquare(10));
+</pre>
+<p class="has-line-data" data-line-start="419" data-line-end="420">Note: because there is only one <em>default</em> export in each JavaScript file we don’t have to keep the same function name in both files. We can rename the function in the <em>imports</em> line as we have done above.</p>
+<h4 class="code-line" data-line-start=421 data-line-end=422 ><a id="Output_421"></a>Output</h4>
+<pre class="prettyprint">42
+Alan
+THIS IS A LINE OF TEXT!
+100
+</pre>
+<p class="has-line-data" data-line-start="428" data-line-end="429">There is a different way we can set up our exports. Currently we are defining all our exports as we use them. We can create our exports in one place. Typically that is the last line in our file.</p>
+<p class="has-line-data" data-line-start="430" data-line-end="431">Remove <em>export</em> from each line in <em>utilities.js</em>. We still want <em>square()</em> as the default export and the other objects as <em>named</em> exports.</p>
+<h3 class="code-line" data-line-start=432 data-line-end=433 ><a id="utilitiesjs_432"></a>utilities.js</h3>
+<pre class="prettyprint">const add = (a, b) =&gt; a + b;
+
+const name = 'Alan';
+
+const square = (x) =&gt; x * x;
+
+export { add, name, square as default }
+</pre>
+<p class="has-line-data" data-line-start="442" data-line-end="443">Note: the <em>exports</em> can be placed in any order.</p>
+<p class="has-line-data" data-line-start="444" data-line-end="445">Now we have changed our file we have the exact same functionality as previous so we don’t have to change anything in our <em>index.js</em> file. Compile and the index page should produce the same results.</p>
+<h4 class="code-line" data-line-start=446 data-line-end=447 ><a id="Challenge_446"></a>Challenge</h4>
+<ol>
+<li class="has-line-data" data-line-start="448" data-line-end="449">Change scream.js to a <em>default</em> export.</li>
+<li class="has-line-data" data-line-start="449" data-line-end="451">Update the <em>import</em> statement in index.js to use it.</li>
+</ol>
+<h3 class="code-line" data-line-start=451 data-line-end=452 ><a id="screamjs_451"></a>scream.js</h3>
+<pre class="prettyprint">const scream = (input) =&gt; `${input.toUpperCase()}!`;
+
+export { scream as default};
+</pre>
+<h3 class="code-line" data-line-start=457 data-line-end=458 ><a id="indexjs_457"></a>index.js</h3>
+<pre class="prettyprint">import otherSquare, { add, name } from './utilities';
+import otherScream from './scream';
+
+console.log(add(35, 7));
+
+console.log(name);
+
+console.log(otherScream('This is a line of text'));
+
+console.log(otherSquare(10));
+</pre>
+<h4 class="code-line" data-line-start=470 data-line-end=471 ><a id="Output_470"></a>Output</h4>
+<pre class="prettyprint">42
+Alan
+THIS IS A LINE OF TEXT!
+100
+</pre>
+<h2 class="code-line" data-line-start=477 data-line-end=478 ><a id="Configuring_Webpack_and_Babel_477"></a>Configuring Webpack and Babel</h2>
+<p class="has-line-data" data-line-start="479" data-line-end="480">Install the Babel loader.</p>
+<pre class="prettyprint">npm install babel-loader@7.1.4
+</pre>
+<p class="has-line-data" data-line-start="483" data-line-end="484">We need to make changes to <em>package.json</em> and <em>webpack.config.js</em>.</p>
+<h3 class="code-line" data-line-start=485 data-line-end=486 ><a id="packagejson_485"></a>package.json</h3>
+<pre class="prettyprint">{
+  &quot;name&quot;: &quot;boilerplate&quot;,
+  &quot;version&quot;: &quot;1.0.0&quot;,
+  &quot;description&quot;: &quot;&quot;,
+  &quot;main&quot;: &quot;index.js&quot;,
+  &quot;dependencies&quot;: {
+    &quot;babel-cli&quot;: &quot;^6.26.0&quot;,
+    &quot;babel-loader&quot;: &quot;^7.1.4&quot;,
+    &quot;babel-preset-env&quot;: &quot;^1.6.1&quot;,
+    &quot;webpack&quot;: &quot;^4.5.0&quot;,
+    &quot;webpack-cli&quot;: &quot;^2.0.14&quot;
+  },
+  &quot;devDependencies&quot;: {},
+  &quot;scripts&quot;: {
+    &quot;build&quot;: &quot;webpack&quot;
+  },
+  &quot;author&quot;: &quot;&quot;,
+  &quot;license&quot;: &quot;ISC&quot;
+}
+</pre>
+<p class="has-line-data" data-line-start="507" data-line-end="508">We change the build line by removing the Babel statement and adding Webpack.</p>
+<pre class="prettyprint">&quot;scripts&quot;: {
+  &quot;build&quot;: &quot;webpack&quot;
+},
+</pre>
+<h3 class="code-line" data-line-start=513 data-line-end=514 ><a id="webpackconfigjs_513"></a>webpack.config.js</h3>
+<pre class="prettyprint">const path = require('path');
+
+module.exports = {
+    entry: './src/index.js',
+    output: {
+        path: path.resolve(__dirname, 'public/js'),
+        filename: 'bundle.js'
+    },
+    module: {
+        rules: [{
+            test: /\.js$/,
+            exclude: /node_modules/,
+            use: {
+                loader: 'babel-loader',
+                options: {
+                    presets: ['env']
+                }
+            }
+        }]
+    }
+}
+</pre>
+<p class="has-line-data" data-line-start="537" data-line-end="538">We have to exclude the <em>node_modules</em> folder.</p>
+<pre class="prettyprint">exclude: /node_modules/,
+</pre>
+<p class="has-line-data" data-line-start="541" data-line-end="542">We need to include all JavaScript files from the <em>js</em> folder.</p>
+<pre class="prettyprint">test: /\.js$/,
+</pre>
+<p class="has-line-data" data-line-start="545" data-line-end="546">Also add the <em>babel-loader</em> so we can compile the code.</p>
+<pre class="prettyprint">use: {
+    loader: 'babel-loader',
+    options: {
+        presets: ['env']
+    }
+}
+</pre>
+<p class="has-line-data" data-line-start="554" data-line-end="555">Now we should be able to compile our code.</p>
+<pre class="prettyprint">npm run build
+</pre>
+<p class="has-line-data" data-line-start="558" data-line-end="559">Make sure you use this command line instead of the <em>npm run webpack</em> command we were using previously.</p>
+<h2 class="code-line" data-line-start=560 data-line-end=561 ><a id="Automating_Webpack_560"></a>Automating Webpack</h2>
+<p class="has-line-data" data-line-start="562" data-line-end="563">There are two solutions to automating Webpack. The simple one is discussed first.</p>
+<pre class="prettyprint">&quot;scripts&quot;: {
+  &quot;build&quot;: &quot;webpack --watch&quot;
+},
+</pre>
+<p class="has-line-data" data-line-start="568" data-line-end="569">This works but the second option has some extra benefits. It is the Webpack Dev Server. We can install this with:</p>
+<pre class="prettyprint">npm install webpack-dev-server@3.1.3
+</pre>
+<p class="has-line-data" data-line-start="572" data-line-end="573">We have to make changes to our configuration.</p>
+<h3 class="code-line" data-line-start=574 data-line-end=575 ><a id="webpackconfigjs_574"></a>webpack.config.js</h3>
+<p class="has-line-data" data-line-start="576" data-line-end="577">After the module object add:</p>
+<pre class="prettyprint">devServer: {
+    contentBase: path.resolve(__dirname, 'public'),
+    publicPath: '/js/'
+}
+</pre>
+<h3 class="code-line" data-line-start=583 data-line-end=584 ><a id="packagejson_583"></a>package.json</h3>
+<p class="has-line-data" data-line-start="585" data-line-end="586">Change the scripts object to:</p>
+<pre class="prettyprint">&quot;scripts&quot;: {
+    &quot;dev-server&quot;: &quot;webpack-dev-server&quot;
+  },
+</pre>
+<p class="has-line-data" data-line-start="591" data-line-end="592">Use this command to run the Webpack dev server.</p>
+<pre class="prettyprint">npm run dev-server
+</pre>
+<p class="has-line-data" data-line-start="595" data-line-end="596">The server runs on <strong>127.0.0.1:8080</strong></p>
+<p class="has-line-data" data-line-start="597" data-line-end="598">We are actually not using the <em>bundle.js</em> file so can delete it. This is why there is a reference to <em>publicPath</em> in the config file. This makes it faster to compile and run any changed code.</p>
+<h2 class="code-line" data-line-start=599 data-line-end=600 ><a id="Development_and_Production_Environments_599"></a>Development and Production Environments</h2>
+<p class="has-line-data" data-line-start="601" data-line-end="602">We are going to fix the warning that we get in the browser console window by setting up our production and development environments.</p>
+<p class="has-line-data" data-line-start="603" data-line-end="604">Working in development is faster that production as it doesn’t create an output <em>.js</em> file.</p>
+<h3 class="code-line" data-line-start=605 data-line-end=606 ><a id="packagejson_605"></a>package.json</h3>
+<p class="has-line-data" data-line-start="607" data-line-end="608">Change the script object again.</p>
+<pre class="prettyprint">&quot;scripts&quot;: {
+  &quot;dev-server&quot;: &quot;webpack-dev-server --mode development&quot;,
+  &quot;build&quot;: &quot;webpack --mode production&quot;
+},
+</pre>
+<p class="has-line-data" data-line-start="614" data-line-end="615">Restart the dev server.</p>
+<p class="has-line-data" data-line-start="616" data-line-end="617">We are now just about finished setting up our environment we will be working in development mode until we are finished with our project. Once this is done we can then compile our code for production with the following command.</p>
+<pre class="prettyprint">npm run build
+</pre>
+<p class="has-line-data" data-line-start="620" data-line-end="621">This will create our <em>bundle.js</em> file that can be uploaded to our live server.</p>
+<h2 class="code-line" data-line-start=622 data-line-end=623 ><a id="Source_Map_622"></a>Source Map</h2>
+<p class="has-line-data" data-line-start="624" data-line-end="625">We have one more change to make to our config file to show more accurate debugging information. If we look at the console output and look at the JavaScript that is running it is actually the Babel compiled JavaScript so the line numbers don’t relate to our original source code in the editor. We can fix this by:</p>
+<h3 class="code-line" data-line-start=626 data-line-end=627 ><a id="webpackconfigjs_626"></a>webpack.config.js</h3>
+<p class="has-line-data" data-line-start="628" data-line-end="629">Add a line after our devServer object.</p>
+<pre class="prettyprint">devtool: 'source-map'
+</pre>
+<p class="has-line-data" data-line-start="632" data-line-end="633">Once again if you do any changes to your configuration you have to restart the dev server.</p>
+<pre class="prettyprint">npm run dev-server
+</pre>
+<p class="has-line-data" data-line-start="636" data-line-end="637">Now you will see the correct line numbers appear in the console window. clicking on the line number will bring the source code up and this time you will see your originale source code not the Babel compiled source code. This configuration change maps the Babel compiled code to the source code.</p>
+<h2 class="code-line" data-line-start=638 data-line-end=639 ><a id="Boilerplate_638"></a>Boilerplate</h2>
+<p class="has-line-data" data-line-start="640" data-line-end="641">The application we have created is named <em>boilerplate</em> for a reason. We will use it as a template to build our future web applications saving us having to set up our devlopment and production environments again.</p>
+<h2 class="code-line" data-line-start=0 data-line-end=1 ><a id="Setting_up_Hangman_with_Babel_and_Webpack_0"></a>Setting up Hangman with Babel and Webpack</h2>
+<p class="has-line-data" data-line-start="2" data-line-end="3">Make a copy of the <em>boileplate</em> folder and save as a new hangman folder after saving the old <em>hangman</em> as <em>hangman.old</em>.</p>
+<p class="has-line-data" data-line-start="4" data-line-end="5">Copy the files across to the new folder structure. Take the code out of the old <em>app.js</em> and place it into <em>index.js</em>.</p>
+<p class="has-line-data" data-line-start="6" data-line-end="7">We have to make changes to the following files.</p>
+<h3 class="code-line" data-line-start=8 data-line-end=9 ><a id="hangmanjs_8"></a>hangman.js</h3>
+<p class="has-line-data" data-line-start="10" data-line-end="11">At the bottom of the file add:</p>
+<pre class="prettyprint">export { Hangman as default }
+</pre>
+<h3 class="code-line" data-line-start=14 data-line-end=15 ><a id="requestsjs_14"></a>requests.js</h3>
+<p class="has-line-data" data-line-start="16" data-line-end="17">At the bottom of the file add:</p>
+<pre class="prettyprint">export { getPuzzle as default }
+</pre>
+<h3 class="code-line" data-line-start=20 data-line-end=21 ><a id="indexjs_20"></a>index.js</h3>
+<p class="has-line-data" data-line-start="22" data-line-end="23">At the top of the file add:</p>
+<pre class="prettyprint">import Hangman from './hangman';
+import getPuzzle from './requests';
+</pre>
+<p class="has-line-data" data-line-start="27" data-line-end="28">In the console run the following:</p>
+<pre class="prettyprint">npm install
+</pre>
+<p class="has-line-data" data-line-start="31" data-line-end="32">This will recreate the <em>node_modules</em> directory.</p>
+<p class="has-line-data" data-line-start="33" data-line-end="34"><strong>Note:</strong> when I did this I got a number of warnings and one was for Webpack and was regarded as high severity. I initally ignored this and my web application failed. To get around this I ran the command.</p>
+<pre class="prettyprint">npm audit fix
+</pre>
+<p class="has-line-data" data-line-start="37" data-line-end="38">This fixed my issue. The interesting thing waas that I ran the production build (<em>npm run build</em>) and the web application actually worked fine so my initial problem was with Webpack not compiling my source code.</p>
+<p class="has-line-data" data-line-start="39" data-line-end="40">I have now realised that I am installing an older version of webpack-dev-server. I could have installed a newer version with the following command.</p>
+<pre class="prettyprint">npm update webpack-dev-server --depth 1
+</pre>
+<p class="has-line-data" data-line-start="43" data-line-end="44">This updates the server to <em>webpack-dev-server@3.8.2</em>. This is the version that is now in my <em>package.json</em> file. I reinstalled <em>node_modules</em> and this problem has resolved itself.</p>
+<h2 class="code-line" data-line-start=45 data-line-end=46 ><a id="Installing_BabelPolyfill_45"></a>Installing Babel-Polyfill</h2>
+<p class="has-line-data" data-line-start="47" data-line-end="48">There is still an issue with the JavaScript. This is due to our <em>async</em> method in <em>requests.js</em>. To fix this we have to install another Babel product.</p>
+<pre class="prettyprint">npm install babel-polyfill@6.26.0
+</pre>
+<p class="has-line-data" data-line-start="51" data-line-end="52">We have to load this before our entry point in the config file.</p>
+<h3 class="code-line" data-line-start=53 data-line-end=54 ><a id="webpackconfigjs_53"></a>webpack.config.js</h3>
+<p class="has-line-data" data-line-start="55" data-line-end="56">Change the <em>entry</em> value to an array.</p>
+<pre class="prettyprint">entry: ['babel-polyfill', './src/index.js'],
+</pre>
+<p class="has-line-data" data-line-start="59" data-line-end="60">Restart the dev-server and your JavaScript should be compiling correctly. Once we are happy that the application is working correctly we can do the production build.</p>
+<pre class="prettyprint">webpack --mode production
+</pre>
+<p class="has-line-data" data-line-start="63" data-line-end="64">This will create <em>bundle.js</em> in the <em>public/js</em> directory. We are now ready to redeploy to Netlify.</p>
+<p class="has-line-data" data-line-start="65" data-line-end="66">Log in to Netlify and select your current Hangman app. Now click on the Deploys button and you will see an area where you can drag the lastest version of your application to. Just pick up the public directory and drag it to Netlify. To run your app:</p>
+<pre class="prettyprint">https://todoapp-alanr.netlify.com/
+</pre>
+<p class="has-line-data" data-line-start="69" data-line-end="70">One last thing: copy the <em>babel-polyfill</em> line from <em>package.json</em> and add that to your Boilerplate application.</p>
+<h2 class="code-line" data-line-start=0 data-line-end=1 ><a id="Using_ThirdParty_Libraries_0"></a>Using Third-Party Libraries</h2>
+<h3 class="code-line" data-line-start=2 data-line-end=3 ><a id="Installing_uuid_2"></a>Installing uuid</h3>
+<pre class="prettyprint">npm install uuid@3.2.1
+</pre>
+<p class="has-line-data" data-line-start="6" data-line-end="7">Import into your JavaScript code.</p>
+<pre class="prettyprint">import uuidv4 from 'uuid/v4';
+</pre>
+<p class="has-line-data" data-line-start="10" data-line-end="11">To create a GUID.</p>
+<pre class="prettyprint">console.log(uuidv4());
+</pre>
+<p class="has-line-data" data-line-start="14" data-line-end="15">To install another third-party library</p>
+<pre class="prettyprint">https://www.npmjs.com/package/validator
+</pre>
+<p class="has-line-data" data-line-start="18" data-line-end="19">Validator is a library of string validators and sanitizers.</p>
+<p class="has-line-data" data-line-start="20" data-line-end="21">To install.</p>
+<pre class="prettyprint">npm install validator@11.1.0
+</pre>
+<p class="has-line-data" data-line-start="24" data-line-end="25">In your JavaScript code.</p>
+<pre class="prettyprint">import validator from 'validator';
+
+console.log(validator.isEmail('alan@alan.com'));  // true
+
+console.log(validator.isEmail('alan'));  // false
+</pre>
+<p class="has-line-data" data-line-start="32" data-line-end="33">Or, import only a subset of the library:</p>
+<pre class="prettyprint">import isEmail from 'validator/lib/isEmail';
+</pre>
+<p class="has-line-data" data-line-start="36" data-line-end="37">Other useful functions:</p>
+<pre class="prettyprint">console.log(validator.isCreditCard('123456789')); // false
+
+console.log(validator.isCreditCard('4595059348661611')); // true
+
+console.log(validator.isISBN('9781118102282', 13)); // true -- type is optional
+</pre>
+<p class="has-line-data" data-line-start="44" data-line-end="45">If you want to undelete the packages you just installed.</p>
+<pre class="prettyprint">npm uninstall uuid validator
+</pre>
+<h2 class="code-line" data-line-start=48 data-line-end=49 ><a id="Setting_up_NotesApp_with_Babel_and_Webpack_48"></a>Setting up Notes-App with Babel and Webpack</h2>
+<p class="has-line-data" data-line-start="50" data-line-end="51">We have to create two JavaScript files in our <em>src</em> directory. This requires changing your config file.</p>
+<p class="has-line-data" data-line-start="52" data-line-end="53">The files we need are <em>index.js</em> and a new one <em>edit.js</em>.</p>
+<h3 class="code-line" data-line-start=54 data-line-end=55 ><a id="webpackconfigjs_54"></a>webpack.config.js</h3>
+<p class="has-line-data" data-line-start="56" data-line-end="57">We need to change the <em>entry</em> and <em>filename</em> objects.</p>
+<pre class="prettyprint">entry: {
+    index: ['babel-polyfill', './src/index.js'],
+    edit: ['babel-polyfill', './src/edit.js']
+},
+output: {
+    path: path.resolve(__dirname, 'public/js'),
+    filename: '[name]-bundle.js'
+},
+</pre>
+<p class="has-line-data" data-line-start="67" data-line-end="68">In <em>filename</em> we prefix the filename with <em>[name]-</em>. This will create two bundle files, <em>index-bundle.js</em> and <em>edit-bundle.js</em>.\</p>
+<p class="has-line-data" data-line-start="69" data-line-end="70">In our <em>index.html</em> page remove all of the script references at the bottom of the <em>body</em> tag and replace them with this:</p>
+<pre class="prettyprint">&lt;script src=&quot;js/index-bundle.js&quot;&gt;&lt;/script&gt;
+</pre>
+<p class="has-line-data" data-line-start="73" data-line-end="74">Also change <em>edit.html</em> to:</p>
+<pre class="prettyprint">&lt;script src=&quot;js/edit-bundle.js&quot;&gt;&lt;/script&gt;
+</pre>
+<p class="has-line-data" data-line-start="77" data-line-end="78">Install the <em>node_modules</em> files.</p>
+<pre class="prettyprint">npm install
+</pre>
+<p class="has-line-data" data-line-start="81" data-line-end="82">We will see <em>index.js</em> in the console if the page is working properly.</p>
+<pre class="prettyprint">http://127.0.0.1:8080/edit.html
+</pre>
+<p class="has-line-data" data-line-start="85" data-line-end="86">Should show you <em>edit.js</em> in the console. This means the application is working and now we are ready to convert the app to JavaScript modules.</p>
+<p class="has-line-data" data-line-start="87" data-line-end="88">We are going to have and issue when doing this conversion because the <em>notes</em> object is global and is going to be used in multiple JavaScript files. As we know each JavaScript file has its own function scope so <em>notes</em> won’t work. We will need to use <em>imports</em> and <em>exports</em> to move data around.</p>
+<p class="has-line-data" data-line-start="89" data-line-end="90">We will need to restructure our application.</p>
+<p class="has-line-data" data-line-start="91" data-line-end="92">Install a new package.</p>
+<pre class="prettyprint">npm install moment@2.22.1
+</pre>
+<h2 class="code-line" data-line-start=0 data-line-end=1 ><a id="The_rest_parameter_0"></a>The <code>rest</code> parameter</h2>
+<p class="has-line-data" data-line-start="2" data-line-end="3">The <code>rest</code> parameter collects all remaining elements into an array.</p>
+<pre class="prettyprint">const calculateAverage = (name, ...numbers) =&gt; {
+    let sum = 0;
+
+    numbers.forEach((num) =&gt; sum += num);
+
+    const average = sum / numbers.length;
+
+    return `The average of ${name} is ${average}`;
+}
+
+// The average of grades is 63
+console.log(calculateAverage('grades', 0, 100, 88, 64));
+</pre>
+<p class="has-line-data" data-line-start="17" data-line-end="18">In this case <code>rest</code> picks up 0, 100, 88, 64 and puts them in an array named <em>numbers</em>. <em>numbers.forEach</em> sums the numbers in <em>numbers</em> and <em>average</em> gets the average of the numbers.</p>
+<p class="has-line-data" data-line-start="19" data-line-end="20">Another example:</p>
+<p class="has-line-data" data-line-start="21" data-line-end="24">const printTeam = (team, coach, …players) =&gt; {<br>
+return <code>Team: ${team}\nCoach: ${coach}\nPlayers: ${players.join(', ')}</code>;<br>
+}</p>
+<p class="has-line-data" data-line-start="25" data-line-end="26">console.log(printTeam(‘Liberty’, ‘Casey Penn’, ‘Marge’, ‘Aiden’, ‘Herbert’, ‘Sherry’));</p>
+<blockquote>
+<p class="has-line-data" data-line-start="27" data-line-end="28"><strong>Results:</strong></p>
+<p class="has-line-data" data-line-start="29" data-line-end="32">Team: Liberty<br>
+Coach: Casey Penn<br>
+Players: Marge, Aiden, Herbert, Sherry</p>
+</blockquote>
+<h2 class="code-line" data-line-start=33 data-line-end=34 ><a id="The_spread_syntax_33"></a>The <code>spread</code> syntax</h2>
+<p class="has-line-data" data-line-start="35" data-line-end="36">The <code>spread</code> syntax gives you a way to expand an array into its individual values.</p>
+<p class="has-line-data" data-line-start="37" data-line-end="38">You can also use the `spread`` syntax when you are calling a function. This allows you to break the array down into individual values.</p>
+<pre class="prettyprint">const team = {
+    name: 'Liberty',
+    coach: 'Casey Penn',
+    players: ['Marge', 'Aiden', 'Herbert', 'Sherry']
+}
+
+console.log(printTeam(team.name, team.coach, ...team.players));
+</pre>
+<p class="has-line-data" data-line-start="47" data-line-end="48">.</p>
+<pre class="prettyprint">// we want to get cities from both arrays
+let cities = ['Paris', 'Istanbul', 'Athens', 'Puglia'];
+
+let newCities = [...cities];
+
+console.log(cities);
+
+console.log(newCities);
+</pre>
+<p class="has-line-data" data-line-start="58" data-line-end="59"><em>cities</em> and <em>newCities</em> are two separate arrays.</p>
+<blockquote>
+<p class="has-line-data" data-line-start="60" data-line-end="61"><strong>Results:</strong></p>
+<p class="has-line-data" data-line-start="62" data-line-end="63">Array(4) [ “Paris”, “Istanbul”, “Athens”, “Puglia” ]</p>
+<p class="has-line-data" data-line-start="64" data-line-end="65">Array(4) [ “Paris”, “Istanbul”, “Athens”, “Puglia” ]</p>
+</blockquote>
+<p class="has-line-data" data-line-start="66" data-line-end="67">We can add a new value on <em>newCities</em></p>
+<pre class="prettyprint">newCities.push('Montenegro');
+
+console.log(cities);
+
+console.log(newCities);
+</pre>
+<blockquote>
+<p class="has-line-data" data-line-start="74" data-line-end="75"><strong>Results:</strong></p>
+<p class="has-line-data" data-line-start="76" data-line-end="78">// newCity changes and cities stays the same showing that the arrays are different.<br>
+Array(4) [ “Paris”, “Istanbul”, “Athens”, “Puglia” ]</p>
+<p class="has-line-data" data-line-start="79" data-line-end="80">Array(5) [ “Paris”, “Istanbul”, “Athens”, “Puglia”, “Montenegro” ]</p>
+</blockquote>
+<p class="has-line-data" data-line-start="81" data-line-end="82">Another way of adding a new value.</p>
+<pre class="prettyprint">newCities = ['Sydney', ...cities];
+
+console.log(cities);
+console.log(newCities);
+</pre>
+<blockquote>
+<p class="has-line-data" data-line-start="88" data-line-end="89"><strong>Results:</strong></p>
+<p class="has-line-data" data-line-start="90" data-line-end="91">Array(4) [ “Paris”, “Istanbul”, “Athens”, “Puglia” ]</p>
+<p class="has-line-data" data-line-start="92" data-line-end="93">Array(5) [ “Sydney”, “Paris”, “Istanbul”, “Athens”, “Puglia” ]</p>
+</blockquote>
+<p class="has-line-data" data-line-start="94" data-line-end="95">We can also add on to the cities array.</p>
+<pre class="prettyprint">cities = [...cities, 'Sydney']
+
+// Array(5) [ &quot;Paris&quot;, &quot;Istanbul&quot;, &quot;Athens&quot;, &quot;Puglia&quot;, &quot;Sydney&quot; ]
+console.log(cities);
+</pre>
+<h2 class="code-line" data-line-start=101 data-line-end=102 ><a id="The_object_spread_syntax_101"></a>The object <code>spread</code> syntax</h2>
+<p class="has-line-data" data-line-start="103" data-line-end="104">We can also use spread with objects but to use it with webpack we have to install another babel preset.</p>
+<pre class="prettyprint">npm install babel-plugin-transform-object-rest-spread@6.26.0</pre>
+<p class="has-line-data" data-line-start="107" data-line-end="108">We also have to make a change to the config file:</p>
+<pre class="prettyprint">options: {
+    presets: ['env'],
+    plugin: ['transform-object-rest-spread']
+}
+
+let house = {
+    bedrooms: 4,
+    bathrooms: 2.5,
+    yearBuilt: 2017
+}
+
+let newHouse = {
+    ...house
+}
+
+console.log(house);
+
+console.log(newHouse);
+</pre>
+<blockquote>
+<p class="has-line-data" data-line-start="128" data-line-end="129"><strong>Results:</strong></p>
+<p class="has-line-data" data-line-start="130" data-line-end="131">Object { bedrooms: 4, bathrooms: 2.5, yearBuilt: 2017 }</p>
+<p class="has-line-data" data-line-start="132" data-line-end="133">Object { bedrooms: 4, bathrooms: 2.5, yearBuilt: 2017 }</p>
+</blockquote>
+<pre class="prettyprint">newHouse.yearBuilt = 2018;
+
+console.log(house);
+
+console.log(newHouse);
+</pre>
+<blockquote>
+<p class="has-line-data" data-line-start="140" data-line-end="141"><strong>Results:</strong></p>
+<p class="has-line-data" data-line-start="142" data-line-end="144">// only newHouse changes. They are both different objects.<br>
+Object { bedrooms: 4, bathrooms: 2.5, yearBuilt: 2017 }</p>
+<p class="has-line-data" data-line-start="145" data-line-end="146">Object { bedrooms: 4, bathrooms: 2.5, yearBuilt: 2018 }</p>
+</blockquote>
+<pre class="prettyprint">// We can also add on new properties
+newHouse = {
+    basement: true,
+    ...house
+}
+
+// Object { basement: true, bedrooms: 4, bathrooms: 2.5, yearBuilt: 2017 } 
+console.log(newHouse);
+</pre>
+<p class="has-line-data" data-line-start="156" data-line-end="157">Order is also important - this will work because house has been added then the bedrooms are changed to 3 afterwards.</p>
+<pre class="prettyprint">newHouse = {
+    basement: true,
+    ...house,
+    bedrooms: 3
+}
+
+// Object { basement: true, bedrooms: 3, bathrooms: 2.5, yearBuilt: 2017 }
+console.log(newHouse);
+
+/**
+ * Create a person object with name and age.
+ * Create a location object with city and country.
+ * Create a new overview object and use the spread operator to add all four properties.
+ */
+
+ const person = {
+     name: 'Alan Robson',
+     age: 67
+ }
+
+ const location = {
+     city: 'Ballarat',
+     country: 'Australia'
+ }
+
+ const overview = {
+     ...person,
+     ...location
+ }
+
+ // Object { name: &quot;Alan Robson&quot;, age: 67, city: &quot;Ballarat&quot;, country: &quot;Australia&quot; }
+ console.log(overview);
+</pre>
+<h2 class="code-line" data-line-start=0 data-line-end=1 ><a id="Destructuring_0"></a>Destructuring</h2>
+<p class="has-line-data" data-line-start="2" data-line-end="3">Destructuring lets you pull values out of an object or array and store them in their own variable. More useful with objects than arrays.</p>
+<h3 class="code-line" data-line-start=4 data-line-end=5 ><a id="Destructuring_objects_4"></a>Destructuring objects</h3>
+<p class="has-line-data" data-line-start="6" data-line-end="7">In JavaScripot you often have an entire object passed to a function where you only need one or two values from that object. Destructuring will allow you to pull properties from that object or pull items off of an array.</p>
+<p class="has-line-data" data-line-start="8" data-line-end="9">Create an object:</p>
+<pre class="prettyprint">const todo = {
+    id: 'asdfpoijwermasdf',
+    text: 'Pay the bills',
+    completed: false
+}
+</pre>
+<p class="has-line-data" data-line-start="16" data-line-end="17">We can pull out a value from the object.</p>
+<pre class="prettyprint">const text = todo.text;
+const completed = todo.completed;
+</pre>
+<p class="has-line-data" data-line-start="21" data-line-end="22">This saves us from constantly having to use the object to get a value from but there is a problem it is time consuming to pull out each value from the object especially if the object is more complex than the one above.</p>
+<p class="has-line-data" data-line-start="23" data-line-end="24">We can make this a lot easier with destructuring and this allows us to take as many properties as we like and store them in variables.</p>
+<pre class="prettyprint">const {  } = todo;
+</pre>
+<p class="has-line-data" data-line-start="27" data-line-end="28">In this case we are referencing the object <em>todo</em>. We now name the properties that we require access to.</p>
+<pre class="prettyprint">const { text, completed } = todo;
+
+console.log(text); // Pay the bills
+console.log(completed); // false
+</pre>
+<p class="has-line-data" data-line-start="34" data-line-end="35">Destructuring is very similar to the <em>imports</em> lines in our previous programs. It lets JavaScript know what we want access to.</p>
+<p class="has-line-data" data-line-start="36" data-line-end="37">We can customise things a bit further. First thing we can do is change the name of the local variable created.</p>
+<pre class="prettyprint">const { text:todoText, completed } = todo;
+
+console.log(todoText); // Pay the bills
+console.log(completed); // false
+</pre>
+<p class="has-line-data" data-line-start="43" data-line-end="44">We can also pull off properties that don’t exist in the object.</p>
+<pre class="prettyprint">const { text:todoText, completed, details } = todo;
+
+console.log(todoText); // Pay the bills
+console.log(completed); // false
+console.log(details); // undefined
+</pre>
+<p class="has-line-data" data-line-start="51" data-line-end="52">We can also add a default value if one doesn’t exist. We could use either an object, array, string or number.</p>
+<pre class="prettyprint">const { text:todoText, completed, details = 'No details provided.' } = todo;
+
+console.log(todoText); // Pay the bills
+console.log(completed); // false
+console.log(details); // No details provided.
+</pre>
+<p class="has-line-data" data-line-start="59" data-line-end="60">We can combine creating a new variable name and default value.</p>
+<pre class="prettyprint">const { text:todoText, completed, details:OtherDetails = 'No details provided.' } = todo;
+
+console.log(todoText); // Pay the bills
+console.log(completed); // false
+console.log(otherDetails); // No details provided.
+</pre>
+<p class="has-line-data" data-line-start="67" data-line-end="68">We can also use a rest parameter to grab the rest of the properties in the object. In our case this is the <em>id</em> property. Add three dots and pick a name for the new object.</p>
+<pre class="prettyprint">const { text:todoText, completed, details:OtherDetails = 'No details provided.', ...others } = todo;
+
+console.log(todoText); // Pay the bills
+console.log(completed); // false
+console.log(otherDetails); // No details provided.
+console.log(others); // {id: &quot;asdfpoijwermasdf&quot;}
+</pre>
+<h3 class="code-line" data-line-start=76 data-line-end=77 ><a id="Destructuring_arrays_76"></a>Destructuring arrays</h3>
+<p class="has-line-data" data-line-start="78" data-line-end="79">In the following example ordering is important.</p>
+<pre class="prettyprint">const age = [65, 0, 21, 13];
+const [firstAge, secondAge] = age;
+
+console.log(firstAge); // 65
+console.log(secondAge); // 0
+</pre>
+<p class="has-line-data" data-line-start="86" data-line-end="87"><em>firstAge</em> gets the first value [0] and <em>secondAge</em> gets the second value [1].</p>
+<p class="has-line-data" data-line-start="88" data-line-end="89">You can also skip values.</p>
+<pre class="prettyprint">const age = [65, 0, 21, 13];
+const [firstAge, secondAge, ,fourthAge] = age;
+
+console.log(firstAge); // 65
+console.log(secondAge); // 0
+console.log(fourthAge); // 13
+</pre>
+<p class="has-line-data" data-line-start="97" data-line-end="98">As with objects we can add default values.</p>
+<pre class="prettyprint">const age = [65, 0, 21, 13];
+const [firstAge, secondAge, , fourthAge, fifthAge = 'Age not provided.'] = age;
+
+console.log(firstAge); // 65
+console.log(secondAge); // 0
+console.log(fourthAge); // 13
+console.log(fifthAge); // Age not provided.
+</pre>
+<p class="has-line-data" data-line-start="107" data-line-end="108">We can also use <em>rest</em> parameters.</p>
+<pre class="prettyprint">const age = [65, 0, 21, 13];
+const [firstAge, ...otherAges] = age;
+
+console.log(firstAge); // 65
+console.log(otherAges); // (3) [0, 21, 13]
+</pre>
+<p class="has-line-data" data-line-start="115" data-line-end="116">You can also use destructuring with functions.</p>
+<pre class="prettyprint">const todo = {
+    id: 'asdfpoijwermasdf',
+    text: 'Pay the bills',
+    completed: false
+}
+
+const printTodo = (todo) =&gt; {
+    console.log(`${todo.text}: ${todo.completed}`);
+}
+
+printTodo(todo); // Pay the bills: false
+</pre>
+<p class="has-line-data" data-line-start="129" data-line-end="130">Change this to destructuring.</p>
+<pre class="prettyprint">const printTodo = () =&gt; {
+    const {} = todo;
+}
+</pre>
+<p class="has-line-data" data-line-start="135" data-line-end="136">We don’t need to do this as we can use destructuring in the function parameter.</p>
+<pre class="prettyprint">const todo = {
+    id: 'asdfpoijwermasdf',
+    text: 'Pay the bills',
+    completed: false
+}
+
+const printTodo = ({ text, completed }) =&gt; {
+    console.log(`${text}: ${completed}`);
+}
+
+printTodo(todo); // Pay the bills: false
+</pre>
+<p class="has-line-data" data-line-start="149" data-line-end="150">Destructuring is a very powerful tool.</p>
+
+
+        </div><!-- starter-template -->
+    </div><!-- /.container -->
+
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"/>
+<script>hljs.initHighlightingOnLoad();</script>
+
+<script src="assets/js/jquery.min.js"></script>
+<script src="assets/js/bootstrap.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<title>Using Hugo</title>
+<link href="assets/css/bootstrap.css" rel="stylesheet">
+<!-- Custom styles for this template -->
+<link href="assets/css/starter-template.css" rel="stylesheet">
+<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js?lang=css&amp;skin=sunburst"></script>
+<style type="text/css">
+html {
+	font-size: 90.0%;
+}
+
+h2 {
+	margin-top: 60px;
+}
+
+h4, h3 {
+	padding-top: 40px!;		
+}
+
+p {
+	font-size: 1.2em;
+}
+h4 {
+	font-size: 1.4em;
+}
+
+img, pre.prettyprint {
+	margin-top: 1.5em;
+	margin-bottom: 1.5em;
+}
+h1, h2, h3, h4, h5, h6 {
+    color:#007bff;
+
+}
+blockquote {
+    border-left: 4px solid #999;
+    padding-left: 1rem;
+    page-break-inside: avoid;
+}
+</style>
+<link rel="shortcut icon" type="image/x-icon" href="favicon.ico" />
+</head>
+<body>
+<header>
+    <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="#">Using Hugo</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
+                aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Home</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#">Hugo <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">About</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+<div class="container">
+    <div class="starter-template">
+
+
+<h2 id="using-hugo-to-create-a-website">Using Hugo to Create a Website</h2>
+<h3 id="important-note">Important note</h3>
+<p>I upgraded my version of Hugo and all my sites stopped working. I tried reinstalling with Chocolatey but unfortunately it only installs the latest version of Hugo.</p>
+<p>I uninstalled Hugo and then used <strong>npm</strong> to globally install my version of Hugo.</p>
+<pre class="prettyprint"><code><div>    npm install -g hugo-extended@0.91.2
+</div></code></pre>
+<p>Thankfully this fixed my problem and I am able to run Hugo locally on my PC again.</p>
+<p><strong>Note:</strong> ignore the instructions below on installing Hugo with Chocolatey.</p>
+<h3 id="my-portfolio-blog">My Portfolio blog</h3>
+<h4 id="alanrobsonco">alanrobson.co</h4>
+<pre class="prettyprint"><code><div>    git remote add origin https://github.com/alanrob17/Portfolio.git
+</div></code></pre>
+<h4 id="alanrobsonau">alanrobson.au</h4>
+<pre class="prettyprint"><code><div>    git remote add origin https://github.com/alanrob17/technical-blog.git
+</div></code></pre>
+<h3 id="installing-hugo">Installing Hugo</h3>
+<pre class="prettyprint"><code><div>    choco install hugo -confirm
+
+    choco upgrade hugo -confirm --force
+
+    hugo new site mysite
+
+    <span class="hljs-built_in">cd</span> mysite
+</div></code></pre>
+<h3 id="installing-hugo-extended">Installing Hugo Extended</h3>
+<pre class="prettyprint"><code><div>    choco​ install -y hugo-extended
+</div></code></pre>
+<h3 id="running-hugo-locally">Running Hugo locally</h3>
+<pre class="prettyprint"><code><div>    hugo server
+</div></code></pre>
+<p>Or to stop having to restart (compiles slower).</p>
+<pre class="prettyprint"><code><div>    hugo server --disableFastRender
+</div></code></pre>
+<blockquote>
+<p>Ctrl-c to shutdown.</p>
+</blockquote>
+<h3 id="installing-a-theme">Installing a theme</h3>
+<p>Go to the themes folder</p>
+<p>cd themes</p>
+<pre class="prettyprint"><code><div>    git <span class="hljs-built_in">clone</span> https://github.com/eueung/hugo-casper-two.git casper-two
+</div></code></pre>
+<p>This will install the Casper Two theme.</p>
+<p>I use this theme for <code>alanrobson.co</code>.</p>
+<h3 id="how-to-implement-the-theme">How to implement the theme</h3>
+<p>Go back to mysite</p>
+<pre class="prettyprint"><code><div>    <span class="hljs-built_in">cd</span> ..
+</div></code></pre>
+<p>now we are going to edit the config file in VS Code</p>
+<pre class="prettyprint"><code><div>    code .
+</div></code></pre>
+<p>Edit config.toml</p>
+<p>Grab the example config.toml from the Casper Two web page and overwrite what is already in the page.</p>
+<h3 id="adding-content">Adding Content</h3>
+<p>Create a new post named javascript training.</p>
+<pre class="prettyprint"><code><div>    hugo new post/javascript-training.md
+</div></code></pre>
+<h3 id="creating-a-page">Creating a page</h3>
+<pre class="prettyprint"><code><div>hugo new privacy.md
+</div></code></pre>
+<h3 id="dumping-your-content">Dumping your content</h3>
+<p>This makes a quick HTML copy of your site.</p>
+<pre class="prettyprint"><code><div>    hugo --theme=casper-two --buildDrafts
+</div></code></pre>
+<p>This dumps your content into a folder named <strong>public</strong>.</p>
+<h3 id="hugo-themes">Hugo Themes</h3>
+<h4 id="ace">Ace</h4>
+<p><a href="https://themes.gohugo.io//theme/ace-documentation/getting-started/" title="Ace blog theme.">Ace blog theme.</a></p>
+<h4 id="mainroad">Mainroad</h4>
+<p>This is the theme I am using for <a href="https://alanrobson.au" title="My technical blog">alanrobson.au</a>.</p>
+<p><a href="https://themes.gohugo.io/mainroad/" title="Mainroad blog theme.">Mainroad blog theme.</a></p>
+<h4 id="casper-two">Casper Two</h4>
+<p>This is the theme I am using for <a href="https://alanrobson.co" title="My blog">alanrobson.co</a>.</p>
+<p><a href="https://github.com/eueung/hugo-casper-two" title="Casper Two theme.">Casper Two theme.</a></p>
+<h3 id="hugo-information">Hugo information</h3>
+<p>Tags and Categories.</p>
+<p><a href="https://sam.hooke.me/note/2018/03/hugo-tag-and-category-pages/" title="Casper Two theme.">Hugo tags and categories.</a></p>
+<p>Adding a form to Netlify.</p>
+<p><a href="https://blog.chrisstayte.com/coding/buildawebsitefor12dollars/2018-add-a-contact-to-your-netlify-powered-website/" title="Add a form.">Add a form.</a></p>
+<p><a href="https://discourse.gohugo.io/t/creating-static-content-that-uses-partials/265/15" title="Add a form.">Partial web pages.</a></p>
+<h3 id="adding-syntax-highlighting">Adding syntax highlighting</h3>
+<pre class="prettyprint"><code><div>    {{&lt; highlight go <span class="hljs-string">"linenos=inline,linenostart=1"</span> &gt;}}
+        s = remove from all sub folders.
+        w = write changes to all files with that particular phrase <span class="hljs-keyword">in</span> it.
+            <span class="hljs-keyword">if</span> you ignore this it will just produce a <span class="hljs-built_in">log</span> file with all of the changes to take place.
+</div></code></pre>
+<p>Or</p>
+<pre class="prettyprint"><code><div>    {{&lt; highlight go <span class="hljs-string">"linenos=table,hl_lines=8 15-17,linenostart=199"</span> &gt;}}
+    // ... code
+    {{&lt; / highlight &gt;}}
+</div></code></pre>
+<hr>
+<h2 id="my-hugo-websites">My Hugo websites</h2>
+<p>I have two live Hugo websites.</p>
+<p><a href="https://alanrobson.co" title="My blog">alanrobson.co</a></p>
+<p><a href="https://alanrobson.au" title="My technical blog">alanrobson.au</a></p>
+<p>Note that both of these sites have the same content but have different themes.</p>
+<h3 id="updating-my-hugo-websites">Updating my Hugo Websites</h3>
+<h4 id="alanrobsonco">alanrobson.co</h4>
+<p>open the site <code>projects\alanrobson.co</code> in Visual Studio Code.</p>
+<h5 id="running-hugo-locally">Running Hugo locally</h5>
+<pre class="prettyprint"><code><div>    hugo server --disableFastRender
+</div></code></pre>
+<h5 id="adding-a-new-post">Adding a new post</h5>
+<p>Stop the <strong>hugo server</strong>. Then run.</p>
+<pre class="prettyprint"><code><div>    hugo new post/the-name-of-my-new-post.md
+</div></code></pre>
+<p>This creates a new blog post in your blog.</p>
+<h5 id="editing-a-post">Editing a post</h5>
+<p>You edit content in the <code>content\post</code> folder.</p>
+<p>You add new images to the <code>static\images</code> folder.</p>
+<p>If you have added a new post into the blog you must change the header in the post.</p>
+<p>The following is a sample header from one of my posts in the <strong>Casper-Two</strong> format.</p>
+<pre class="prettyprint"><code><div><span class="hljs-code">    ---</span>
+<span class="hljs-code">    title: "Changing Link Program to Web Request"</span>
+<span class="hljs-code">    date: 2019-11-21T13:46:20+10:00</span>
+<span class="hljs-code">    draft: false</span>
+<span class="hljs-code">    image: "images/link.jpg"</span>
+<span class="hljs-code">    tags: ["csharp"]</span>
+<span class="hljs-code">    categories: ["programming"]</span>
+<span class="hljs-code">    ---</span>
+</div></code></pre>
+<p><strong>Where:</strong></p>
+<ul>
+<li><strong>title:</strong> is the name of the post and this appears at the top of your page.</li>
+<li><strong>date:</strong> is the date the page was generated. You can manually change this.</li>
+<li><strong>draft:</strong> making this <code>false</code> means publish (make it visible) it on your blog.</li>
+<li><strong>image:</strong> is the background image that appears at the top of the page. These are approximately 1280*950 pixels in size and I will download landscape images from <a href="https://unsplash.com" title="Unsplash.com">Unsplash.com</a> in medium size.</li>
+<li><strong>categories</strong> these are seen of the front page and the blog page as a menu. At present I only have two categories and they are <strong>programming</strong> and <strong>music</strong>.</li>
+<li><strong>tags:</strong> I can create any tag that refers to the category that I am under. For example, my <em>category</em> is <em>programming</em> and my tag is <em>csharp</em>. You can have multiple tags for each post.</li>
+</ul>
+<p>You can add images to the post and they have to be in this format, <code>../images/image.jpg</code>.</p>
+<h5 id="saving-your-files-to-git">Saving your files to Git</h5>
+<p>Once you have finished editing, commit and push your files to Github.</p>
+<p>Github triggers a process on <a href="Netlify.com" title="Netlify.com">Netlify.com</a> that builds the content and deploys it to <a href="https://alanrobson.co" title="My blog">alanrobson.co</a>.</p>
+<h4 id="alanrobsonau">alanrobson.au</h4>
+<p>open the site <code>projects\alanrobson.au</code> in Visual Studio Code.</p>
+<h5 id="running-hugo-locally">Running Hugo locally</h5>
+<pre class="prettyprint"><code><div>    hugo server --disableFastRender
+</div></code></pre>
+<h5 id="adding-a-new-post">Adding a new post</h5>
+<p>Stop the <strong>hugo server</strong>. Then run.</p>
+<pre class="prettyprint"><code><div>    hugo new post/the-name-of-my-new-post.md
+</div></code></pre>
+<p>This creates a new blog post in your blog.</p>
+<h5 id="editing-a-post">Editing a post</h5>
+<p>You edit content in the <code>content\post</code> folder.</p>
+<p>You add new images to the <code>static\images</code> folder.</p>
+<p>If you have added a new post into the blog you must change the header in the post.</p>
+<p>The following is a sample header from one of my posts in the <strong>Mainroad</strong> format.</p>
+<pre class="prettyprint"><code><div><span class="hljs-code">    ---</span>
+<span class="hljs-code">    title: "Changing Link Program to Web Request"</span>
+<span class="hljs-code">    description: Using Web Request to automatically download web pages.</span>
+<span class="hljs-code">    date: 2019-11-21T13:46:20+10:00</span>
+<span class="hljs-code">    draft: false</span>
+<span class="hljs-code">    tags: </span>
+<span class="hljs-bullet">        - </span>"CSharp"
+<span class="hljs-code">    categories: </span>
+<span class="hljs-bullet">        - </span>"Programming"
+<span class="hljs-code">    ---</span>
+</div></code></pre>
+<p>You can add images to the post and they have to be in this format, <code>/images/image.jpg</code>.</p>
+<p><strong>Note:</strong> the image text format is different to the <em>Casper-Two</em> format.</p>
+<h5 id="saving-your-files-to-git">Saving your files to Git</h5>
+<p>Once you have finished editing, commit and push your files to Github.</p>
+<p>Github triggers a process on <a href="Netlify.com" title="Netlify.com">Netlify.com</a> that builds the content and deploys it to <a href="https://alanrobson.au" title="My technical blog">alanrobson.au</a>.</p>
+
+
+
+</div><!-- starter-template -->
+</div><!-- /.container -->
+
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"/>
+<script>hljs.initHighlightingOnLoad();</script>
+
+<script src="assets/js/jquery.min.js"></script>
+<script src="assets/js/bootstrap.min.js"></script>
+</body>
+</html>

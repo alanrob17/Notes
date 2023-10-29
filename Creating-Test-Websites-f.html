@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<title>Creating test websites</title>
+<link href="assets/css/bootstrap.css" rel="stylesheet">
+<!-- Custom styles for this template -->
+<link href="assets/css/starter-template.css" rel="stylesheet">
+<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js?lang=css&amp;skin=sunburst"></script>
+<style type="text/css">
+h2 {
+	margin-top: 60px;
+}
+
+h4, h3 {
+	padding-top: 40px!;		
+}
+
+p {
+	font-size: 1.2em;
+}
+h4 {
+	font-size: 1.4em;
+}
+
+img, pre.prettyprint {
+	margin-top: 1.5em;
+	margin-bottom: 1.5em;
+}
+h1, h2, h3, h4, h5, h6 {
+    color:#007bff;
+
+}
+blockquote {
+    border-left: 4px solid #999;
+    padding-left: 1rem;
+    page-break-inside: avoid;
+}
+</style>
+<link rel="shortcut icon" type="image/x-icon" href="favicon.ico" />
+</head>
+<body>
+<header>
+    <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="#">Udemy - The Complete JavaScript Course 2019</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
+                aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Home</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#">Creating test websites <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">About</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+<div class="container">
+    <div class="starter-template">
+
+
+        <h1 class="code-line" data-line-start=0 data-line-end=1><a id="Creating_test_websites_0"></a>Creating test websites</h1>
+        <p class="has-line-data" data-line-start="2" data-line-end="3">There are a couple of ways you can create test websites with live domains for free.</p>
+        <h2 class="code-line" data-line-start=4 data-line-end=5><a id="Using_Netlify_for_hosting_your_websites_4"></a>Using Netlify for hosting your websites</h2>
+        <blockquote>
+        <p class="has-line-data" data-line-start="6" data-line-end="7"><a href="https://netlify.com">netlify.com</a></p>
+        </blockquote>
+        <p class="has-line-data" data-line-start="8" data-line-end="9">Netlify can be used both from a web UI and by using command line tools. I have had a quick look at the Netlify command line and it seems to be a bit more complicated than using the surge command line. Also it is only in beta at the moment.</p>
+        <p class="has-line-data" data-line-start="10" data-line-end="11">To start with the web UI, head to <a href="https://app.netlify.com">https://app.netlify.com</a> and sign in.</p>
+        <p class="has-line-data" data-line-start="12" data-line-end="13">Click on your team name to manage your projects. From here you can click on a project or create a new project by dropping your project folder in the drag-drop area of the page.</p>
+        <p class="has-line-data" data-line-start="14" data-line-end="15">This will setup a domain for you but you can change this.</p>
+        <p class="has-line-data" data-line-start="16" data-line-end="17">You can also deploy from Github.</p>
+        <p class="has-line-data" data-line-start="18" data-line-end="20">Hangman App:<br>
+        <a href="https://todoapp-alanr.netlify.app/">https://todoapp-alanr.netlify.app/</a></p>
+        <h3 class="code-line" data-line-start=21 data-line-end=22><a id="Change_your_site_name_21"></a>Change your site name</h3>
+        <p class="has-line-data" data-line-start="23" data-line-end="24">Click on your projects settings and in site details <em>change site name</em>.</p>
+        <p class="has-line-data" data-line-start="25" data-line-end="27">I have changed Hangman to:<br>
+        <a href="https://hangman-alanr.netlify.app">https://hangman-alanr.netlify.app</a></p>
+        <p class="has-line-data" data-line-start="28" data-line-end="29">The nice thing about Netlify is that the URL is https.</p>
+        <h3 class="code-line" data-line-start=30 data-line-end=31><a id="Installing_Netlify_CLI_30"></a>Installing Netlify CLI</h3>
+        <p class="has-line-data" data-line-start="32" data-line-end="33">Netlify now has a command line interface and that makes it easy to update your sites. To install Netlify CLI.</p>
+        <pre class="prettyprint">npm install netlify-cli -g
+        </pre>
+        <p class="has-line-data" data-line-start="36" data-line-end="37">You need to login.</p>
+        <pre class="prettyprint">netlify login
+        </pre>
+        <p class="has-line-data" data-line-start="40" data-line-end="41">This will popup an Authorize dialog box and connect you to your Netlify web account. Once this happens you are also logged in to the Netlify CLI.</p>
+        <h3 class="code-line" data-line-start=42 data-line-end=43><a id="To_link_a_local_site_to_a_Netlify_site_42"></a>To link a local site to a Netlify site</h3>
+        <p class="has-line-data" data-line-start="44" data-line-end="45">If you have previous netlify sites and you want to link them to your development site use this command.</p>
+        <pre class="prettyprint">netlify link
+        </pre>
+        <p class="has-line-data" data-line-start="48" data-line-end="49">It will ask you for the Site Id. You can get this from the web page for your site, e.g.</p>
+        <p class="has-line-data" data-line-start="50" data-line-end="51"><a href="https://app.netlify.com/sites/alanrblog/settings/general">app.netlify.com/sites/alanrblog/settings/general</a></p>
+        <p class="has-line-data" data-line-start="52" data-line-end="53">It also asks for part of the website name.</p>
+        <pre class="prettyprint">alanrblog
+        </pre>
+        <p class="has-line-data" data-line-start="56" data-line-end="57">This will create a hidden Netlify folder with a <strong>state.json</strong> file in it. It contains the site id.</p>
+        <p class="has-line-data" data-line-start="58" data-line-end="59"><img src="assets/notes/netlify-folder.jpg" alt="Netlify folder in your application." title="Netlify folder in your application."></p>
+        <p class="has-line-data" data-line-start="60" data-line-end="61">Now, when you update your site you can deploy it with:</p>
+        <pre class="prettyprint">netlify deploy
+        </pre>
+        <p class="has-line-data" data-line-start="64" data-line-end="65">This only updates the development site (I’ll have to work out how to access this site).</p>
+        <p class="has-line-data" data-line-start="66" data-line-end="67">To deploy to the production site.</p>
+        <pre class="prettyprint">netlify deploy --prod
+        </pre>
+        <p class="has-line-data" data-line-start="70" data-line-end="71">If you want to you can unlink the site.</p>
+        <pre class="prettyprint">netlify unlink
+        </pre>
+        <p class="has-line-data" data-line-start="74" data-line-end="75">I should now be able to create a site from the command line instead of going to the Netlify site.</p>
+        <p class="has-line-data" data-line-start="76" data-line-end="77">I can also deploy from a site on Github.</p>
+        <h2 class="code-line" data-line-start=78 data-line-end=79><a id="Using_Surge_for_hosting_your_websites_78"></a>Using Surge for hosting your websites</h2>
+        <blockquote>
+        <p class="has-line-data" data-line-start="80" data-line-end="81"><a href="https://surge.sh">surge.sh</a></p>
+        </blockquote>
+        <h2 class="code-line" data-line-start=82 data-line-end=83><a id="Installing_Surge_82"></a>Installing Surge</h2>
+        <p class="has-line-data" data-line-start="84" data-line-end="85">To install <em>surge</em> on your PC make sure you have node.js installed.</p>
+        <pre class="prettyprint">npm install -g surge
+        </pre>
+        <h2 class="code-line" data-line-start=89 data-line-end=90><a id="Create_a_website_89"></a>Create a website</h2>
+        <p class="has-line-data" data-line-start="91" data-line-end="92">Run surge from the folder you want to upload.</p>
+        <pre class="prettyprint">npm run surge
+        </pre>
+        <p class="has-line-data" data-line-start="95" data-line-end="96">or</p>
+        <pre class="prettyprint">surge
+        </pre>
+        <p class="has-line-data" data-line-start="99" data-line-end="100">First time you run this it will ask for an email address and password. It will create a URL for you and you can change the prefix if you want but only if the prefix is not in use.</p>
+        <p class="has-line-data" data-line-start="101" data-line-end="102">notes-app:</p>
+        <blockquote>
+        <p class="has-line-data" data-line-start="103" data-line-end="104"><a href="https://future-oven.surge.sh/">https://future-oven.surge.sh/</a></p>
+        </blockquote>
+        <p class="has-line-data" data-line-start="105" data-line-end="106">todo-app:</p>
+        <blockquote>
+        <p class="has-line-data" data-line-start="107" data-line-end="108"><a href="https://alanr.surge.sh/">https://alanr.surge.sh/</a></p>
+        <p class="has-line-data" data-line-start="109" data-line-end="110">I created one for Ethan to have a look at.</p>
+        <p class="has-line-data" data-line-start="111" data-line-end="112"><a href="https://ethanr.surge.sh/">https://ethanr.surge.sh/</a></p>
+        </blockquote>
+        <h3 class="code-line" data-line-start=113 data-line-end=114><a id="List_all_of_your_projects_113"></a>List all of your projects</h3>
+        <p class="has-line-data" data-line-start="115" data-line-end="116">surge list</p>
+        <h3 class="code-line" data-line-start=117 data-line-end=118><a id="Remove_a_website_117"></a>Remove a website</h3>
+        <p class="has-line-data" data-line-start="119" data-line-end="120">I have created a website but wanted to remove it. You can do this by:</p>
+        <blockquote>
+        <p class="has-line-data" data-line-start="121" data-line-end="122">surge teardown <a href="https://stimulating-pizzas.surge.sh">stimulating-pizzas.surge.sh</a></p>
+        </blockquote>
+        <h3 class="code-line" data-line-start=123 data-line-end=124><a id="Updating_a_project_123"></a>Updating a project</h3>
+        <p class="has-line-data" data-line-start="125" data-line-end="126">You can update your project at any stage and reupload by running <em>surge</em> from the project folder again. It will give you a new domain but you can change it back to the old domain. For example if I want to update my todo app:</p>
+        <pre class="prettyprint">surge --domain alanr.surge.sh
+        </pre>
+        <p class="has-line-data" data-line-start="129" data-line-end="130">Another more efficient way of doing this is to create a CNAME file in the root of your application:</p>
+        <pre class="prettyprint">echo alanr.surge.sh &gt; CNAME
+        </pre>
+        <p class="has-line-data" data-line-start="133" data-line-end="134">Now to install:</p>
+        <pre class="prettyprint">surge
+        </pre>
+             
+
+        </div><!-- starter-template -->
+    </div><!-- /.container -->
+
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"/>
+<script>hljs.initHighlightingOnLoad();</script>
+
+<script src="assets/js/jquery.min.js"></script>
+<script src="assets/js/bootstrap.min.js"></script>
+</body>
+</html>

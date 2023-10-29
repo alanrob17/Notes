@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<title>Linux notes</title>
+<link href="assets/css/bootstrap.css" rel="stylesheet">
+<!-- Custom styles for this template -->
+<link href="assets/css/starter-template.css" rel="stylesheet">
+<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js?lang=css&amp;skin=sunburst"></script>
+<style type="text/css">
+html {
+	font-size: 90.0%;
+}
+
+h2 {
+	margin-top: 60px;
+}
+
+h4, h3 {
+	padding-top: 40px!;		
+}
+
+p {
+	font-size: 1.2em;
+}
+h4 {
+	font-size: 1.4em;
+}
+
+img, pre.prettyprint {
+	margin-top: 1.5em;
+	margin-bottom: 1.5em;
+}
+h1, h2, h3, h4, h5, h6 {
+    color:#007bff;
+
+}
+blockquote {
+    border-left: 4px solid #999;
+    padding-left: 1rem;
+    page-break-inside: avoid;
+}
+</style>
+<link rel="shortcut icon" type="image/x-icon" href="favicon.ico" />
+</head>
+<body>
+<header>
+    <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="#">Linux</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
+                aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Home</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#">Linux notes <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">About</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+<div class="container">
+    <div class="starter-template">
+
+<h1 id="linux-notes">Linux Notes</h1>
+<p>These are notes I am keep that are based on what I am doing with my Linux netbook.</p>
+<h2 id="checking-memory">Checking Memory</h2>
+<h3 id="1-free">1. free</h3>
+<p>The free command is the most simple and easy to use command to check memory usage on linux. Here is a quick example.</p>
+<pre class="prettyprint"> free -m
+</pre>
+<blockquote>
+<p>total       used       free     shared    buffers     cached<br>
+Mem:          7976       6459       1517          0        865       2248<br>
+-/+ buffers/cache:       3344       4631<br>
+Swap:         1951          0       1951</p>
+</blockquote>
+<p>The <code>m</code> option displays all data in MBs. The total is 7976 MB is the total amount of RAM installed on the system, that is 8GB. The used column shows the amount of RAM that has been used by linux, in this case around 6.4 GB. The output is pretty self explanatory. The catch over here is the cached and buffers column. The second line tells that 4.6 GB is free. This is the free memory in first line added with the buffers and cached amount of memory.</p>
+<p>Linux has the habit of caching lots of things for faster performance, so that memory can be freed and used if needed.
+The last line is the swap memory.</p>
+<pre class="prettyprint"> free -h
+</pre>
+<p>Shows memory in Gbs, better</p>
+<h3 id="2-procmeminfo">2. /proc/meminfo</h3>
+<p>The next way to check memory usage is to read the /proc/meminfo file. Know that the /proc file system does not contain real files. They are rather virtual files that contain dynamic information about the kernel and the system.</p>
+<pre class="prettyprint"> cat /proc/meminfo
+</pre>
+<p>Returns.</p>
+<blockquote>
+<p>MemTotal:        8167848 kB<br>
+MemFree:         1409696 kB<br>
+...</p>
+</blockquote>
+<p>Check the values of MemTotal, MemFree, Buffers, Cached, SwapTotal, SwapFree.
+They indicate same values of memory usage as the free command.</p>
+<h3 id="vmstat">vmstat</h3>
+<p>The vmstat command with the s option, lays out the memory usage statistics much like the proc command. Here is an example</p>
+<pre class="prettyprint"> vmstat -s
+</pre>
+<p>Returns.</p>
+<blockquote>
+<p>8167848 K total memory<br>
+7449376 K used memory<br>
+3423872 K active memory<br>
+3140312 K inactive memory<br>
+718472 K free memory<br>
+...</p>
+</blockquote>
+<p>The top few lines indicate total memory, free memory etc and so on.</p>
+<h3 id="4-top-command">4. top command</h3>
+<p>The top command is generally used to check memory and cpu usage per process. However it also reports total memory usage and can be used to monitor the total RAM usage. The header on output has the required information.</p>
+<pre class="prettyprint"> top
+</pre>
+<h3 id="5-htop">5. htop</h3>
+<p>Is on the Lubuntu menu and has a graphical interface. If you are using another distro then you may have to install this.</p>
+<h2 id="running-nodemon-on-linux-mint">Running Nodemon on Linux Mint</h2>
+<p>I created a project on Linux Mint using an Express server and wanted to use Nodemon to automatically compile on any JavaScript saves.</p>
+<p>I used the local version of Neodemon in my project.</p>
+<pre class="prettyprint">    npm install nodemon
+</pre>
+<p>When I went to run the server I got a &quot;nodemon: command not found&quot; error.</p>
+<p>I found that I had to globally install Nodemon.</p>
+<pre class="prettyprint">    npm install -g nodemon
+</pre>
+<p>This failed as well because I didn't have permission. I got around this with.</p>
+<pre class="prettyprint">    sudo npm install -g nodemon
+</pre>
+<p>Now when I run Nodemon it works and is able to recompile on all JavaScript code saves.</p>
+<h2 id="changing-the-swapfile-size">Changing the swapfile size</h2>
+<p>I am having real problems keeping my little Lubuntu netboook running. It doesn't have enough specs to run a lightweight version of Linux.</p>
+<p>Increasing the size of the swapfile is supposed to improve the performance of low specced machines.</p>
+<p>I have worked out how to change the swapfile size in the hope that it may help.</p>
+<p>To check if you actually have a swapfile.</p>
+<pre class="prettyprint">    swapon -s
+</pre>
+<p>This will either return nothing or detail the swapfiles statistics. In my case.</p>
+<blockquote>
+<p>/swapfile file    512M    0</p>
+</blockquote>
+<p>I have a 512 Mb swapfile and 0 Mb is being used.</p>
+<p>I need to increase the size of the swapfile so the first thing is to turn off the swapfile.</p>
+<pre class="prettyprint">    sudo swapoff -a
+</pre>
+<p>Once I do this I have to remove the current swapfile.</p>
+<pre class="prettyprint">    sudo rm -i /swapfile
+</pre>
+<p>In general you want to create a swapfile that is twice the size of your RAM. My RAM is 2 Gb so I need to create a 4 Gb swapfile.</p>
+<pre class="prettyprint">    sudo dd <span class="hljs-keyword">if</span>=/dev/zero of=/swapfile bs=1M count=4096
+</pre>
+<p>Set file permissions.</p>
+<pre class="prettyprint">    sudo chmod 600 /swapfile
+</pre>
+<p>Verify the permissions.</p>
+<pre class="prettyprint">    ls -lh /swapfile
+</pre>
+<blockquote>
+<p>-rw------- 1 root root 4.0G Aug 27 16:59 /swapfile</p>
+</blockquote>
+<p>We can see that only root user has the read and write flags enabled.</p>
+<p>Mark the file as swap space by typing.</p>
+<pre class="prettyprint">    sudo mkswap /swapfile
+</pre>
+<p>We then enable the swap file.</p>
+<pre class="prettyprint">    sudo swapon /swapfile
+</pre>
+<p>Verify that the swap is available and confirm 4 GB RAM and 8 GB swap by typing.</p>
+<pre class="prettyprint">    free -h
+</pre>
+<blockquote>
+<pre><code>          total        used        free      shared  buff/cache   available       
+</code></pre>
+<p>Mem:          1.8Gi       436Mi       778Mi        30Mi       655Mi       1.3Gi
+Swap:         4.0Gi       284Mi       3.7Gi</p>
+</blockquote>
+<p>Make the swap file permanent.</p>
+<p>First back up the <code>/etc/fstab</code> file in case something goes wrong.</p>
+<pre class="prettyprint">    sudo cp -pv /etc/fstab /etc/fstab.bak
+</pre>
+<p>Edit <code>/etc/fstab</code> in your text editor.</p>
+<pre class="prettyprint">    sudo gedit /etc/fstab 
+</pre>
+<p>Add this line in <code>/etc/fstab</code> and confirm that there are no other <strong>&quot;swap&quot;</strong> lines.</p>
+<pre class="prettyprint">    /swapfile   none    swap    sw  0   0
+</pre>
+<p>Now, reboot your system and then check that the swapfile is still there.</p>
+<pre class="prettyprint">    free -h
+</pre>
+<blockquote>
+<pre><code>          total        used        free      shared  buff/cache   available       
+</code></pre>
+<p>Mem:          1.8Gi       336Mi       878Mi        30Mi       655Mi       1.3Gi
+Swap:         4.0Gi       184Mi       3.8Gi</p>
+</blockquote>
+<p>The swapfile has been permanently increased.</p>
+<p>This is a copy of my <code>/etc/fstab</code> file.</p>
+<pre class="prettyprint">    <span class="hljs-comment"># /etc/fstab: static file system information.</span>
+    <span class="hljs-comment">#</span>
+    <span class="hljs-comment"># Use 'blkid' to print the universally unique identifier for a device; this may</span>
+    <span class="hljs-comment"># be used with UUID= as a more robust way to name devices that works even if</span>
+    <span class="hljs-comment"># disks are added and removed. See fstab(5).</span>
+    <span class="hljs-comment">#</span>
+    <span class="hljs-comment"># &lt;file system&gt;             &lt;mount point&gt;  &lt;type&gt;  &lt;options&gt;  &lt;dump&gt;  &lt;pass&gt;</span>
+    UUID=76EF-29F0                            /boot/efi      vfat    <span class="hljs-built_in">umask</span>=0077 0 2
+    UUID=046ce35e-f04a-41d8-ab8e-d5adcd58424e /              ext4    defaults   0 1
+    /swapfile none swap  sw  0 0
+</pre>
+<h2 id="moving-files-from-multiple-folders">Moving files from multiple folders</h2>
+<p>I needed to move all <em>.jpg</em> files from sub folders to another folder. I couldn't do this in DOS but was able to find a linux command that could complete this task.</p>
+<pre class="prettyprint">    mv -t /d/Projects/Soft.UX/Soft.UI/bin/Debug/images */*.jpg
+</pre>
+<h2 id="lightweight-distros">Lightweight Distros</h2>
+<p>This is a list of distros that can be used on my netbook.</p>
+<h3 id="1-lite-linux-os">1. Lite Linux OS</h3>
+<p><a href="https://www.linuxliteos.com/">https://www.linuxliteos.com/</a></p>
+<p>Linux Lite is a popular and easy-to-use lightweight distribution. It is based on the latest Ubuntu LTS (Long Term Support) which provides regular updates. Apart from that it also has access to a vast collection of software repository.</p>
+<p>Linux Lite usage XFCE desktop environment which is simple, lite, and user-friendly.</p>
+<p>Requirements –</p>
+<ul>
+<li>1 GHz CPU</li>
+<li>786 MB RAM</li>
+<li>8GB of Disk space</li>
+<li>720p (1024 x 768) Display resolution</li>
+</ul>
+<h3 id="2-zorin-os-lite">2. Zorin OS Lite</h3>
+<p><a href="https://zorinos.com/">https://zorinos.com/</a></p>
+<p>Zorin Lite is a lightning-fast lightweight Linux distribution. It runs snappy on computers as old as 15 years (Claimed by the developers).</p>
+<p>This one again an Ubuntu-based distribution that means it has all the Ubuntu perks. It features XFCE desktop environment which mimics the Windows desktop layout, making it user-friendly for a lot of users.</p>
+<p><strong>Note:</strong> Zorin also has two different versions of the distro. A commercial Zorin Ultimate and free Zorin core build.</p>
+<p>Requirements –</p>
+<ul>
+<li>700 MHz CPU</li>
+<li>512 MB RAM</li>
+<li>8GB of Disk space</li>
+<li>&lt;720p (640 x 480) Display resolution</li>
+<li>Has support for 32-Bit</li>
+</ul>
+<h3 id="3-puppy-linux">3. Puppy Linux</h3>
+<p><a href="https://www.puppylinux.org/">https://www.puppylinux.org/</a></p>
+<p>Puppy Linux is lightweight and come with different bases: Ubuntu, Slackware, etc. Users can can download different build-versions of Puppy Linux as per their preference.</p>
+<p>It comes with lots of in-house puppy-specific applications and Joe’s windows manager.</p>
+<p>Requirements –</p>
+<ul>
+<li>600 MHz CPU</li>
+<li>256 MB RAM</li>
+<li>512 MB of disk space</li>
+<li>Has support for 32-Bit</li>
+<li>&lt;300 MB ISO size</li>
+</ul>
+<p>As of the latest release Linux lite 5.0, it is primarily targeting 64-bit systems only. This is because of Ubuntu which has recently dropped support for 32-bit.</p>
+<h3 id="4-lubuntu">4. Lubuntu</h3>
+<p><a href="https://www.lubuntu.net/">https://www.lubuntu.net/</a></p>
+<p>Requirements –</p>
+<ul>
+<li>&lt;1 GHz CPU</li>
+<li>512 MB RAM</li>
+<li>2GB of Disk space</li>
+<li>Has support For 32-Bit</li>
+</ul>
+<h3 id="5-bodhi-linux">5. Bodhi Linux</h3>
+<p><a href="https://www.bodhilinux.com/">https://www.bodhilinux.com/</a></p>
+<p>Bodhi Linux is specially designed to run on hardware with limited capabilities. It has a very minimal approach to everything it comes with except the performance.</p>
+<p>Bodhi is also based on Ubuntu LTS so it gets all the updates and repository perks from Ubuntu.</p>
+<p>It comes with Moksha desktop environment which can be customized with Compiz. The distro is available in four editions: Standard, Legacy, AppPack, and HWE.</p>
+<p>Requirements –</p>
+<ul>
+<li>500 MHz CPU</li>
+<li>256 MB RAM</li>
+<li>5GB of disk space</li>
+<li>640 x 480 Display resolution</li>
+<li>Has support for 32-Bit</li>
+</ul>
+<h3 id="6-ubuntu-mate">6. Ubuntu Mate</h3>
+<p><a href="https://www.ubuntu-mate.org/">https://www.ubuntu-mate.org/</a></p>
+<p>Ubuntu Mate is very impressive lightweight Linux distribution. It features MATE desktop environment and based on Ubuntu as the name gives that away.</p>
+<p>It provides the best of both world’s, the lightweight and the regular flagship Linux distributions. This makes it a perfect choice for beginners.</p>
+<p>Requirements –</p>
+<ul>
+<li>1 GHz CPU</li>
+<li>1 GB RAM</li>
+<li>8GB of Disk space</li>
+<li>720p (1024 x 768) Display resolution</li>
+<li>Has support for 32-Bit until April 2021</li>
+</ul>
+
+</div><!-- starter-template -->
+</div><!-- /.container -->
+
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"/>
+<script>hljs.initHighlightingOnLoad();</script>
+
+<script src="assets/js/jquery.min.js"></script>
+<script src="assets/js/bootstrap.min.js"></script>
+</body>
+</html>

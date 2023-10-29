@@ -1,0 +1,1367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<title>Typescript notes</title>
+<link href="assets/css/bootstrap.css" rel="stylesheet">
+<!-- Custom styles for this template -->
+<link href="assets/css/starter-template.css" rel="stylesheet">
+<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js?lang=css&amp;skin=sunburst"></script>
+<style type="text/css">
+h2 {
+	margin-top: 60px;
+}
+
+h4, h3 {
+	padding-top: 40px!;		
+}
+
+p {
+	font-size: 1.2em;
+}
+h4 {
+	font-size: 1.4em;
+}
+
+img, pre.prettyprint {
+	margin-top: 1.5em;
+	margin-bottom: 1.5em;
+}
+h1, h2, h3, h4, h5, h6 {
+    color:#007bff;
+
+}
+blockquote {
+    border-left: 4px solid #999;
+    padding-left: 1rem;
+    page-break-inside: avoid;
+}
+</style>
+<link rel="shortcut icon" type="image/x-icon" href="favicon.ico" />
+</head>
+<body>
+<header>
+    <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="#">Typescript</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
+                aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Home</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#">Typescript <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">About</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+<div class="container">
+    <div class="starter-template">
+
+
+<h2 id="what-is-typescript">What is Typescript?</h2>
+<p>TypeScript is an open-source language which builds on JavaScript, one of the world's most used tools, by adding static type definitions.</p>
+<p>Types provide a way to describe the shape of an object, providing better documentation, and allowing TypeScript to validate that your code is working correctly.</p>
+<p>Writing types can be optional in TypeScript, because type inference allows you to get a lot of power without writing additional code.</p>
+<p>All valid JavaScript code is also TypeScript code. You might get type-checking errors, but that won't stop you from running the resulting JavaScript. While you can go for stricter behavior, that means you're still in control.</p>
+<p>TypeScript code is transformed into JavaScript code via the TypeScript compiler or Babel. This JavaScript is clean, simple code which runs anywhere JavaScript runs: In a browser, on Node.JS or in your apps.</p>
+<p>Adopting TypeScript is not a binary choice, you can start by annotating existing JavaScript with JSDoc, then switch a few files to be checked by TypeScript and over time prepare your codebase to convert completely.</p>
+<p>TypeScript's type inference means that you don't have to annotate your code until you want more safety.</p>
+<h2 id="setup">Setup</h2>
+<p>The simplest way to start using Typescript is to create a new project and then run the following commands.</p>
+<p>First intialise the project.</p>
+<pre class="prettyprint">    npm init
+</pre>
+<p>Now install Typescript locally.</p>
+<pre class="prettyprint">    npm install typescript@latest 
+</pre>
+<p>This will allow us to transpile our Typescript code into JavaScript.</p>
+<p>We can do this with,</p>
+<pre class="prettyprint">    npx tsc sandbox.ts -w
+</pre>
+<p><strong>where:</strong></p>
+<p><strong>npx</strong> runs the local version of Typescript.</p>
+<p><em>sandbox.ts</em> is our Typescript file. This will create the <em>sandbox.js</em> file.</p>
+<p><strong>-w</strong> watches the Typescript file for changes and recompiles when the file is saved.</p>
+<p>We can use a HTML file to run our new JavaScript file or run it through Node.js.</p>
+<p><strong>Note:</strong> I am running Typescript locally because I had all sorts of drama running Typescript globally. On my PC I have various versions of Visual Studio running and these install their own versions of Typescript. I ended up getting errors because the global version of Typescript was version 1.0 and I couldn't upgrade to a later version without causing more errors.</p>
+<h2 id="writing-typescript">Writing Typescript</h2>
+<p>In Typescript you can write everything that you used to write as JavaScript. For example:</p>
+<pre class="prettyprint">    let firstName = 'Alan';
+    console.log(firstName);
+</pre>
+<p>Now if you change the code to the following:</p>
+<pre class="prettyprint">    firstName = 27;
+    console.log(firstName);
+</pre>
+<p>You will get an error when the code is transpiled because Typescript is expecting <code>firstName</code> to be a string.</p>
+<p>This is a major benefit of Typescript that forces you to use strongly type variables. We can take this one step further by settting the variable type.</p>
+<pre class="prettyprint">    let firstName: string = 'Alan';
+    console.log(firstName);
+</pre>
+<p>Now, write some more code.</p>
+<pre class="prettyprint">    let firstName: string = 'Alan';
+    console.log(firstName);
+
+    const age : number = 30;
+    console.log(age);
+
+    const isBlackBelt : boolean = true;
+    console.log(isBlackBelt);
+
+    const inputs = document.querySelectorAll('input');
+    console.log(inputs);
+
+    inputs.forEach((input) =&gt; {
+      console.log(input);
+    });
+</pre>
+<p><em>Results</em></p>
+<blockquote>
+<p>Alan<br>
+30<br>
+true<br>
+NodeList(3) [input#tofrom, input#details, input#amount]<br>
+&lt;input type=​&quot;text&quot; id=​&quot;tofrom&quot;&gt;​<br>
+&lt;input type=​&quot;text&quot; id=​&quot;details&quot;&gt;​<br>
+&lt;input type=​&quot;number&quot; id=​&quot;amount&quot;&gt;​</p>
+</blockquote>
+<p>The <strong>inputs</strong> statement grabs all of the input statements in our sample HTML page.</p>
+<p>Now, if we look at the <em>sandbox.js</em> file that has been created it looks similar to the <em>.ts</em> file but it has been reduced to basic JavaScript.</p>
+<p><strong><strong>sandbox.js</strong></strong></p>
+<pre class="prettyprint">    &quot;use strict&quot;;
+    var firstName = 'Alan';
+    console.log(firstName);
+    var age = 30;
+    console.log(age);
+    var isBlackBelt = true;
+    console.log(isBlackBelt);
+    var inputs = document.querySelectorAll('input');
+    console.log(inputs);
+    inputs.forEach(function (input) {
+        console.log(input);
+    });    
+</pre>
+<p>This can be used anywhere that JavaScript can run because it has been transpiled into an older version of JavaScript.</p>
+<p><strong>Note:</strong> Our <code>const</code> types have been transpiled into <code>let</code> types because <code>const</code> is a slightly newer feature in JavaScript.</p>
+<p>The main benefit of using Typescript is that it can show you a lot more errors than you will see if you are just using JavaScript.</p>
+<h3 id="creating-functions">Creating functions</h3>
+<p>You can add a type to the arguments to make sure you get the correct argument values.</p>
+<pre class="prettyprint">    const circ = (diameter: number) =&gt; {
+      return diameter * Math.PI;
+    }
+
+    console.log(circ(3));
+</pre>
+<blockquote>
+<p>9.42477796076938</p>
+</blockquote>
+<p>In the JavaScript file:</p>
+<pre class="prettyprint">    var circ = function (diameter) {
+        return diameter * Math.PI;
+    };
+    console.log(circ(3));
+</pre>
+<p>Seeing as we have set the argument as a number in our Typescript function this will tell us if the wrong argument type is sent into the <code>console.log()</code> line and won't allow us to compile.</p>
+<p>This is Typescript making sure we are using the correct values for our arguments. It stops errors during development and makes our final JavaScript more robust.</p>
+<h3 id="creating-arrays">Creating Arrays</h3>
+<p>We can create an array and the following code will infer a string array.</p>
+<pre class="prettyprint">    let names = ['Alan', 'James', 'Charley'];
+    names.push('Ethan');
+    console.log(names);
+</pre>
+<blockquote>
+<p>[&quot;Alan&quot;, &quot;James&quot;, &quot;Charley&quot;, &quot;Ethan&quot;]</p>
+</blockquote>
+<p>Or we can add the type.</p>
+<pre class="prettyprint">    let names: string = ['Alan', 'James', 'Charley'];
+    names.push('Ethan');
+    console.log(names);
+</pre>
+<blockquote>
+<p>[&quot;Alan&quot;, &quot;James&quot;, &quot;Charley&quot;, &quot;Ethan&quot;]</p>
+</blockquote>
+<p>A better way of creating an array of strings would be:</p>
+<pre class="prettyprint">    const names: string[] = [];
+
+    names.push('Alan');
+    names.push('Ethan');
+    names.push('Andrew');
+    console.log(names);
+</pre>
+<blockquote>
+<p>[&quot;Alan&quot;, &quot;Ethan&quot;, &quot;Andrew&quot;]</p>
+</blockquote>
+<p>You can also create an array of numbers.</p>
+<pre class="prettyprint">    const ages: number[] = [];
+
+    ages.push(68)
+    ages.push(35)
+    ages.push(14)
+    ages.push(9)
+
+    console.log(ages);
+</pre>
+<blockquote>
+<p>[68, 35, 14, 9]</p>
+</blockquote>
+<p>You can also create mixed arrays.</p>
+<pre class="prettyprint">    const mixed = ['Alan', 68, 'James', 14];
+    mixed.push('Charley');
+    mixed.push(9);
+
+    console.log(mixed);
+</pre>
+<blockquote>
+<p>(6) [&quot;Alan&quot;, 68, &quot;James&quot;, 14, &quot;Charley&quot;, 9]</p>
+</blockquote>
+<h3 id="creating-objects">Creating Objects</h3>
+<p>We can also create objects.</p>
+<pre class="prettyprint">    let item : object;
+
+    // can create an object of any type
+    item = {
+      name: 'Widget',
+      colour: 'Brown',
+      count: 100
+    }
+
+    console.log(item);
+</pre>
+<blockquote>
+<p>{name: &quot;Widget&quot;, colour: &quot;Brown&quot;, count: 100}</p>
+</blockquote>
+<p>A better way to create an object is to set the variable's types.</p>
+<pre class="prettyprint">    let newItem: {
+        name: string,
+        colour: string,
+        count: number
+    }
+
+    newItem = {
+      name: 'Buckle',
+      colour: 'Brown',
+      count: 230
+    }
+
+    console.log(newItem);
+</pre>
+<p>Now if we try to add a variable or change an existing variable's type we will generate errors.</p>
+<p>This will create an error.</p>
+<pre class="prettyprint">    newItem = {
+      name: 'Buckle',
+      colour: 'Brown',
+      count: '230'
+    }
+</pre>
+<p>This will also create an error.</p>
+<pre class="prettyprint">    newItem = {
+      name: 'Buckle',
+      colour: 'Brown',
+      count: 230,
+      size: 'large'
+    }
+</pre>
+<h3 id="explicit-types">Explicit Types</h3>
+<p>I can create a variable and give it a type but not define the value.</p>
+<pre class="prettyprint">    let firstName: string;
+    let age: number;
+    let isLoggedIn: boolean;
+</pre>
+<p>Later in the code I can add values but the variable's values have to be the correct type.</p>
+<p>These values will work.</p>
+<pre class="prettyprint">    firstName = 'Alan';
+    age = 68;
+    isLoggedIn = false
+</pre>
+<p>We can use explicit types for arrays as well.</p>
+<pre class="prettyprint">    let names: string[];
+
+    names = ['Alan', 'James', 'Charley'];
+    names.push('Ethan');
+
+    console.log(names);
+</pre>
+<blockquote>
+<p>(4) [&quot;Alan&quot;, &quot;James&quot;, &quot;Charley&quot;, &quot;Ethan&quot;]</p>
+</blockquote>
+<p>This won't work!</p>
+<pre class="prettyprint">    let names: string[];
+
+    names.push('Alan')
+</pre>
+<p>To be able to push values onto an explicitly typed array we could do this.</p>
+<pre class="prettyprint">    let names: string[] = [];
+
+    names.push('Alan');
+    names.push('James');
+
+    console.log(names);
+</pre>
+<p>Or, if we wanted to create a mixed array we could use union types to specify a number of different types.</p>
+<pre class="prettyprint">    const mixed: (string|number|boolean)[] = [];
+
+    mixed.push('Alan');
+    mixed.push(27);
+    mixed.push(true);
+
+    console.log(mixed);
+</pre>
+<blockquote>
+<p>(3) [&quot;Alan&quot;, 27, true]</p>
+</blockquote>
+<p>You can also use union types for variables.</p>
+<pre class="prettyprint">    let uid: string|number;
+
+    uid = '123';
+    uid= 456;
+
+    console.log(uid);
+</pre>
+<blockquote>
+<p>456</p>
+</blockquote>
+<h2 id="dynamic-any-types">Dynamic (any) Types</h2>
+<p>There is one more type that we can create. This is the <code>any</code> type that can be useful where we don't know what type we will use and will decide in the future. we may create it as a boolean at first and then change it to a string in the future.</p>
+<pre class="prettyprint">    let age: any = 26;
+
+    age = 'Widget';
+    age = true;
+    age = 27;
+
+    console.log(age);
+</pre>
+<blockquote>
+<p>27</p>
+</blockquote>
+<p>This takes away a lot of the advantages we get with Typescript so we should use this sparingly.</p>
+<p>We can also create an array with the type of <code>any</code>.</p>
+<pre class="prettyprint">    const mixed: any[] = [];
+
+    mixed.push('James');
+    mixed.push(14);
+    mixed.push(true);
+
+    console.log(mixed);
+</pre>
+<blockquote>
+<p>(3) [&quot;James&quot;, 14, true]</p>
+</blockquote>
+<h2 id="better-workflow-and-tsconfigjson">Better Workflow and tsconfig.json</h2>
+<p>The project that we have been using so far has a simple workflow containing all files in one folder. For more complex projects we need to set up a different workflow.</p>
+<p>In our case we are going to create two new folders</p>
+<blockquote>
+<p>dist<br>
+src</p>
+</blockquote>
+<p>Where <strong>dist/</strong> will contain the files we will distribute with our project and <strong>src</strong> will be the files required to create our project. The <strong>src</strong> files will not be distributed.</p>
+<p><strong>dist/</strong> will contain the HTML and CSS files that will run our project.</p>
+<p><strong>dist/js</strong> will contain the JavaScript files that will run our project.</p>
+<p><strong>src</strong> will contain one or more Typescript files that will be required to build our JavaScript files.</p>
+<p>We need to create a <strong>tsconfig.json</strong> file to manage our project.</p>
+<pre class="prettyprint">    npx tsc --init
+</pre>
+<p>This will create a <strong>tsconfig.json</strong> file with a complete list of options that you can use.</p>
+<p>We need to make some modifications to our <strong>tsconfig.json</strong> file so that it will compile and run successfully.</p>
+<h5 id="tsconfigjson">tsconfig.json</h5>
+<pre class="prettyprint">    {
+      &quot;compilerOptions&quot;: {
+        &quot;target&quot;: &quot;es5&quot;,
+        &quot;module&quot;: &quot;commonjs&quot;,
+        &quot;outDir&quot;: &quot;./dist/js&quot;,
+        &quot;rootDir&quot;: &quot;./src&quot;,
+        &quot;strict&quot;: true,
+        &quot;esModuleInterop&quot;: true,
+        &quot;forceConsistentCasingInFileNames&quot;: true
+      },
+      &quot;include&quot;: [&quot;src&quot;]
+    }
+</pre>
+<p>Now we can use the following line to transpile all of our Typescript code files.</p>
+<pre class="prettyprint">    npx tsc -w
+</pre>
+<p>Note that we don't have to specify the names of all the Typescript files and also if there are multiple files then the JavaScript files will be published in the <strong>disc</strong> folder.</p>
+<p><strong>Note:</strong> Any Typescript files that are created in the root folder of the project won't be transpiled into the <strong>dist/js</strong> folder because of the following line in the <strong>tsconfig.json</strong> file.</p>
+<pre class="prettyprint">    ,
+    &quot;include&quot;: [&quot;src&quot;]
+</pre>
+<p>This forces the transpiler to only include <code>.ts</code> files that are inside the <strong>src</strong> folder. This is the behavior that we require.</p>
+<p>We are going to add a new <code>test.ts</code> file into the <strong>src</strong> folder to prove that multiple JavaScript files will be created in the <strong>dist/js</strong> folder.</p>
+<h4 id="srctestts">src/test.ts</h4>
+<pre class="prettyprint">    console.log('Testing 1.2.3.');
+</pre>
+<p>When we save this file Typescript will compile the <strong>test.js</strong> file to the <strong>dist/js</strong> folder ready for distribution.</p>
+<p>Our project is now set up for a more complex workflow.</p>
+<h2 id="function-basics">Function Basics</h2>
+<p>When Typescript sees this expression it infers it is a function.</p>
+<pre class="prettyprint">    const greet = () =&gt; {
+        console.log('Hello!');
+    }
+</pre>
+<p>We can explicitly type <code>greet</code> as a function.</p>
+<pre class="prettyprint">    let greet: Function;
+
+    greet = () =&gt; {
+        console.log('Hello!');
+    }
+
+    greet();
+</pre>
+<blockquote>
+<p>Hello!</p>
+</blockquote>
+<p>We can add parameters.</p>
+<pre class="prettyprint">    let add = (a: number, b: number) =&gt; {
+        console.log(a + b);
+    }
+
+    add(5, 6);
+</pre>
+<blockquote>
+<p>11</p>
+</blockquote>
+<p>What if we wanted to add an optional parameter?</p>
+<pre class="prettyprint">    let add = (a: number, b: number, c?: number) =&gt; {
+        console.log(a + b);
+    }
+
+    add(5, 6);
+</pre>
+<blockquote>
+<p>11</p>
+</blockquote>
+<p>We add a question mark beside the variable name to make it optional.</p>
+<p>What if we try and extract the parameter value in this case?</p>
+<pre class="prettyprint">    let add = (a: number, b: number, c?: number | string) =&gt; {
+        console.log(a + b);
+        console.log(c);
+    }
+
+    add(5, 6);
+</pre>
+<blockquote>
+<p>11<br>
+undefined</p>
+</blockquote>
+<p>In this case it produces and <strong>undefined</strong> because we haven't added an argument.</p>
+<p>We can also give the parameter a default value.</p>
+<pre class="prettyprint">    let add = (a: number, b: number, c: number | string = 12) =&gt; {
+        console.log(a + b);
+        console.log(c);
+    }
+
+    add(5, 6);
+</pre>
+<blockquote>
+<p>11<br>
+12</p>
+</blockquote>
+<p><strong>Note:</strong> We have removed the optional question mark, <code>?</code> because it isn't needed anymore.</p>
+<p><strong>Note:</strong> If you use optional parameters you should put them at the end of the parameter list.</p>
+<p>What if we want to return a value from our function?</p>
+<p>Let's create another function.</p>
+<pre class="prettyprint">    const minus = (a: number, b: number) =&gt; a - b;
+
+    const result = minus(25, 17);
+
+    console.log(result);
+</pre>
+<blockquote>
+<p>8</p>
+</blockquote>
+<p>In this case when we create a new variable (<strong>result</strong>) it infers the type from the returned value.</p>
+<p>What if we want to explicitly set the return type? We can do this after the parameters.</p>
+<pre class="prettyprint">    const minus = (a: number, b: number): number =&gt; a - b;
+
+    const result = minus(25, 17);
+
+    console.log(result);
+</pre>
+<p>In most cases this is overkill but for complex functions it can actually add a bit of clarity.</p>
+<h2 id="type-aliases">Type Aliases</h2>
+<p>The parameters in functions where a value can be one or more types start to become complex. Have a look at the next two functions.</p>
+<pre class="prettyprint">    const logDetails = (uid: string | number, item: string) =&gt; {
+        console.log(`${item} has a uid of ${uid}`);
+    }
+
+    const greet = (user: {name: string, uid: string | number}) =&gt; {
+        console.log(`${user.name} (${user.uid}) says hello!`);
+    }
+
+    logDetails('1234', 'James');
+    greet({name: 'Alan', uid: '4567'});
+</pre>
+<blockquote>
+<p>James has a uid of 1234<br>
+Alan (4567) says hello!</p>
+</blockquote>
+<p>The parameter list can be simplified by using a type alias as you can see in the following function examples.</p>
+<pre class="prettyprint">    type StrOrNum = string | number;
+
+    const logDetails = (uid: StrOrNum, item: string) =&gt; {
+        console.log(`${item} has a uid of ${uid}`);
+    }
+
+    const greet = (user: {name: string, uid: StrOrNum}) =&gt; {
+        console.log(`${user.name} (${user.uid}) says hello!`);
+    }
+
+    logDetails('1234', 'James');
+    greet({name: 'Alan', uid: '4567'});
+</pre>
+<blockquote>
+<p>James has a uid of 1234<br>
+Alan (4567) says hello!</p>
+</blockquote>
+<p>The type alias makes the parameter list look a bit simpler.</p>
+<p>We can also abstract out the object as well.</p>
+<pre class="prettyprint">    type StrOrNum = string | number;
+    type ObjWithName = { name: string, uid: StrOrNum };
+
+    const logDetails = (uid: StrOrNum, item: string) =&gt; {
+        console.log(`${item} has a uid of ${uid}`);
+    }
+
+    const greet = (user: ObjWithName) =&gt; {
+        console.log(`${user.name} (${user.uid}) says hello!`);
+    }
+
+    logDetails('1234', 'James');
+    greet({name: 'Alan', uid: '4567'});
+</pre>
+<blockquote>
+<p>James has a uid of 1234<br>
+Alan (4567) says hello!</p>
+</blockquote>
+<h2 id="function-signatures">Function Signatures</h2>
+<p>We have already seen how to sign a type of <code>function</code> to a variable.</p>
+<pre class="prettyprint">    let greet: Function;
+</pre>
+<p>We can go one step further by setting a function signature.</p>
+<pre class="prettyprint">    () =&gt; void;
+</pre>
+<p>This is a function that passes back nothing, ie, void.</p>
+<p>Now, we are going to see some different examples of function signatures.</p>
+<h4 id="example-1">Example 1</h4>
+<pre class="prettyprint">    let greet: (a: string, b: string) =&gt; void;
+
+    greet = (firstName: string, greeting: string) =&gt; {
+        console.log(`${firstName} says ${greeting}`);
+    }
+
+    greet('Alan', 'Hello!');
+</pre>
+<blockquote>
+<p>Alan says Hello!</p>
+</blockquote>
+<p>The function signature has two parameters and returns a void result.</p>
+<p>Note that the two parameter names in the function signature are different to the two parameter names in the actual function. They don't have to be the same. They are just two parameters of type string.</p>
+<p>In the function we could add a return type of void as well but we don't have to because the function signature infers a type of void for us.</p>
+<pre class="prettyprint">    greet = (firstName: string, greeting: string): void =&gt; {
+        console.log(`${firstName} says ${greeting}`);
+    }
+</pre>
+<h3 id="example-2">Example 2</h3>
+<pre class="prettyprint">    let calc: (a: number, b: number, c: string) =&gt; number;
+
+    calc = (numOne: number, numTwo: number, action: string) =&gt; {
+        if (action === 'add') {
+            return numOne + numTwo;    
+        } else {
+            return numOne - numTwo;
+        }
+    }
+
+    const result = calc(7, 6, 'add');
+
+    console.log(result);
+</pre>
+<blockquote>
+<p>13</p>
+</blockquote>
+<p>In the function example above we have to add an <code>else</code> statement. If we don't then the functions return type would be <em>void</em> instead of <em>number</em> and this would cause an error.</p>
+<h3 id="example-3">Example 3</h3>
+<pre class="prettyprint">    let logDetails: (obj: {name: string, age: number}) =&gt; void;
+
+    logDetails = (person: {name: string, age: number}) =&gt; {
+        console.log(`${person.name} is ${person.age} years old.`);
+    }
+
+    logDetails({name: 'Alan', age: 68});
+</pre>
+<blockquote>
+<p>Alan is 68 years old.</p>
+</blockquote>
+<p>In the 3rd example we are passing an object as a parameter.</p>
+<p>Once again we could create a type to simplify the function parameter list.</p>
+<pre class="prettyprint">    let logDetails: (obj: {name: string, age: number}) =&gt; void;
+
+    type details = {name: string, age: number};
+
+    logDetails = (person: details) =&gt; {
+        console.log(`${person.name} is ${person.age} years old.`);
+    }
+
+    logDetails({name: 'Alan', age: 68});
+</pre>
+<blockquote>
+<p>Alan is 68 years old.</p>
+</blockquote>
+<h2 id="dom-interaction-and-type-casting">DOM Interaction and Type Casting</h2>
+<p>Just like JavaScript we can use Typescript to interact with the DOM.</p>
+<p>We have an <strong>index.html</strong> web page and are now going to create a new Typescript file named <strong>app.js</strong> to interrogate elements on our web page.</p>
+<p>There are a few key differences to working with Typescript that we need to be aware of.</p>
+<p>We are going to display the anchor tag on our web page. There is one at the bottom of the page.</p>
+<pre class="prettyprint">    const anchor = document.querySelector('a');
+
+    console.log(anchor);
+</pre>
+<blockquote>
+<p>&lt;a href=​&quot;https:​/​/​www.thenetninja.co.uk&quot;&gt;​The Net Ninja​</a>​</p>
+</blockquote>
+<p>This works fine but if we grab an attribute of the anchor tag we will have an issue.</p>
+<pre class="prettyprint">    const anchor = document.querySelector('a');
+
+    console.log(anchor.href);
+</pre>
+<p>This causes an error that tells us that there could be a null reference error.</p>
+<blockquote>
+<p>const anchor: HTMLAnchorElement | null<br>
+Object is possibly 'null'.ts(2531)</p>
+</blockquote>
+<p>This happens because Typescript isn't aware of the <strong>index.html</strong> page.</p>
+<p>There are a couple of ways to work around this.</p>
+<pre class="prettyprint">    const anchor = document.querySelector('a');
+
+    if (anchor) {
+        console.log(anchor.href);
+    }
+</pre>
+<blockquote>
+<p>https://www.thenetninja.co.uk/</p>
+</blockquote>
+<p>or:</p>
+<pre class="prettyprint">    const anchor = document.querySelector('a')!;
+
+    console.log(anchor.href);
+</pre>
+<blockquote>
+<p>https://www.thenetninja.co.uk/</p>
+</blockquote>
+<p>We add an exclamation mark to the end of the .querySelector() expression and this tells Typescript that we know that the anchor tag exista in our web page and the error disappears.</p>
+<p>Another benefit of working with Typescript and DOM interaction is that it contains special types for every DOM element. If we hover over the <code>anchor</code> element in our code it will tell us the following.</p>
+<blockquote>
+<p>const anchor: HTMLAnchorElement</p>
+</blockquote>
+<p>This means that when we use the <code>anchor</code> element Typescript knows all of the methods and properties on that type and it's going to make them available to us as intellisense data.</p>
+<p>So if we type <code>anchor.</code> it will show all of the methods and properties that are available for use on an anchor tag.</p>
+<p>On our web page we have a <code>form</code> and we are now going to try and access elements on that form.</p>
+<pre class="prettyprint">    const form = document.querySelector('form')!;
+</pre>
+<p>This will give us access to the form and remove the error but what if we have two forms on the web page. How do we know that we have selected the correct form?</p>
+<p>We could use a class instead.</p>
+<pre class="prettyprint">    const form = document.querySelector('.new-item-form')!;
+
+    console.log(form);
+</pre>
+<p><img src="assets/notes/form-values.jpg" alt="Form values" title="Form values"></p>
+<p>Now when we hover over the form the element type is not shown. This is because we are accessing a <strong>class</strong> not an element so how do we get around this?</p>
+<p>We can cast it to be a type of element.</p>
+<pre class="prettyprint">    const form = document.querySelector('.new-item-form') as HTMLFormElement;
+
+    console.log(form.children);
+</pre>
+<p>We can cast it as a <code>HTMLFormElement</code> and now we get all the methods and properties that are available to that tag.</p>
+<p><strong>Note:</strong> we have to remove the exclamation mark.</p>
+<p>Now, we will try to get all of the form values.</p>
+<pre class="prettyprint">    // inputs
+    const type = document.querySelector('#type') as HTMLSelectElement;
+    const tofrom = document.querySelector('#tofrom') as HTMLInputElement;
+    const details = document.querySelector('#details') as HTMLInputElement;
+    const amount = document.querySelector('#amount') as HTMLInputElement;
+
+    form.addEventListener('submit', (e: Event) =&gt; {
+        e.preventDefault();
+
+        console.log(type.value);
+        console.log(tofrom.value);
+        console.log(details.value);
+        console.log(amount.value);
+    });
+</pre>
+<h4 id="form">Form</h4>
+<p><img src="assets/notes/form.jpg" alt="Finance form" title="Finance form"></p>
+<h4 id="results">Results</h4>
+<p><img src="assets/notes/form-results.jpg" alt="Form results" title="Form results"></p>
+<p>We have one minor issue with the form results. The amount is a string and we want this to read as a number. We can do this with.</p>
+<pre class="prettyprint">        console.log(amount.valueAsNumber);
+</pre>
+<p>Now in the results you will see the amount value in a blue font in the console meaning that it is a number.</p>
+<h2 id="classes">Classes</h2>
+<p>Classes in Typescript are very similar to classes in JavaScript.</p>
+<p>As you know a class is a blueprint for an object.</p>
+<p>We are going to create an Invoice object.</p>
+<pre class="prettyprint">    class Invoice {
+        client: string;
+        details: string;
+        amount: number;
+
+        constructor(c: string, d: string, a: number) {
+            this.client = c;
+            this.details = d;
+            this.amount = a;
+        }
+
+        format() {
+            return `${this.client} owes $${this.amount} for ${this.details}.`;
+        }
+    }
+
+    const invOne = new Invoice('Alan', 'subscription renewal', 49.99);
+    const invTwo = new Invoice('James', 'Steam game', 30.00);
+
+    console.log(invOne);
+    console.log(invOne.format());
+    console.log(invTwo);
+    console.log(invTwo.format());
+</pre>
+<blockquote>
+<p>Invoice {client: &quot;Alan&quot;, details: &quot;subscription renewal&quot;, amount: 49.99}<br>
+Alan owes $49.99 for subscription renewal.<br>
+Invoice {client: &quot;James&quot;, details: &quot;Steam game&quot;, amount: 30}<br>
+James owes $30 for Steam game.</p>
+</blockquote>
+<p>When we are dealing with a number of invoices it would be better to add them to an array of <strong>Invoice</strong> objects.</p>
+<p>We can do this by creating an array of Invoice type objects.</p>
+<pre class="prettyprint">    let invoices: Invoice[] = [];
+
+    invoices.push(invOne);
+    invoices.push(invTwo);
+
+    console.log(invoices);
+</pre>
+<blockquote>
+<p>(2) [Invoice, Invoice]<br>
+0: Invoice {client: &quot;Alan&quot;, details: &quot;subscription renewal&quot;, amount: 49.99}<br>
+1: Invoice {client: &quot;James&quot;, details: &quot;Steam game&quot;, amount: 30}<br>
+length: 2<br>
+<strong>proto</strong>: Array(0)</p>
+</blockquote>
+<p>This only allows us to add objects of type Invoice into our array.</p>
+<p>Now that we have created our classes we can change them as well.</p>
+<pre class="prettyprint">    invOne.amount = 55.00;
+    invTwo.amount = 40.00;
+
+    invoices.forEach(inv =&gt; {
+        console.log(inv.client, inv.details, inv.amount, inv.format());
+    });
+</pre>
+<blockquote>
+<p>Alan subscript'on renewal 55 Alan owes $55 for subscription renewal.<br>
+James Steam game 40 James owes $40 for Steam game.</p>
+</blockquote>
+<p>We may not want to be able to change these invoice properties so in Typescript we can use access modifiers to limit this behavior.</p>
+<h2 id="public-private-and-readonly">Public, Private and ReadOnly</h2>
+<p>All classes are <strong>public</strong> default.</p>
+<p>In our class we can add an access modifier to our properties.</p>
+<pre class="prettyprint">    readonly client: string;
+    private details: string;
+    public amount: number;
+</pre>
+<p><strong>Note:</strong> making amount public isn't necessary because public is the default.</p>
+<p>We can access the properties within the class. for example, the <code>format()</code> method has access to <strong>details</strong> even though it is private.</p>
+<p>Outside of the class the <strong>details</strong> property is not accessible.</p>
+<p><strong>client</strong> is <code>readonly</code> and that means that we are not allowed to change the value of <strong>client</strong> inside or outside of the class.</p>
+<p>We can still read the <strong>client</strong> property in the <code>console.log()</code> output line.</p>
+<pre class="prettyprint">    invoices.forEach(inv =&gt; {
+        console.log(inv.client, inv.details, inv.amount, inv.format());
+    });
+</pre>
+<p>In the code above <strong>inv.details</strong> is not accessible so the code will <strong>not</strong> compile.</p>
+<p><strong>inv.format()</strong> also has access to <strong>inv.details</strong> but in this case because <strong>inv.format()</strong> is within the class we can access <strong>inv.details</strong>.</p>
+<p>If we modified the code above to:</p>
+<pre class="prettyprint">    invoices.forEach(inv =&gt; {
+        console.log(inv.client, inv.amount, inv.format());
+    });
+</pre>
+<p>It will now compile producing the following results.</p>
+<blockquote>
+<p>Alan 55 Alan owes $55 for subscription renewal.<br>
+James 40 James owes $40 for Steam game.</p>
+</blockquote>
+<p>There is a shorthand method to creating the properties with access modifiers in our class.</p>
+<pre class="prettyprint">    class Invoice {
+        constructor(
+            readonly client: string,
+            private details: string,
+            public amount: number   
+        ) {}
+
+        format() {
+            return `${this.client} owes $${this.amount} for ${this.details}.`;
+        }
+    }
+</pre>
+<p>This reduces the amount of code we have to write to create a class.</p>
+<p><strong>Note:</strong> the following constructor will produce errors. We need to have the access modifiers in front of the properties. Therefore, it will not see the properties as public properties.</p>
+<pre class="prettyprint">    constructor(
+        client: string,
+        details: string,
+        amount: number   
+    ) {}
+</pre>
+<h2 id="modules">Modules</h2>
+<p><strong>Note:</strong> Modules are a fairly new JavaScript concept and may not work in older browsers.</p>
+<p>At present we are writing all of our code in one file. This is okay for small projects but for large projects it becomes unmanageable.</p>
+<p>It is better to split our code down into smaller modular files. We could have one file that manages the DOM interactions, another that manages the database interaction and so on. This makes the files much easier to read and update in the future.</p>
+<p>The best way we can do this in Typescript is by using the ES6 module system where we can import and export things from different files when we need to. Modern browsers support modules in JavaScript so we can use them in Typescript as well. This won't work in older browsers.</p>
+<p>There is a way around this by transpiling your code into one file using Webpack. We won't be doing this at the moment.</p>
+<p>We need to make changes to our <em>tsconfig.json</em> file.</p>
+<h5 id="tsconfigjson">tsconfig.json</h5>
+<pre class="prettyprint">    {
+      &quot;compilerOptions&quot;: {
+        &quot;target&quot;: &quot;es6&quot;,
+        &quot;module&quot;: &quot;es2015&quot;,
+        &quot;outDir&quot;: &quot;./dist/js&quot;,
+        &quot;rootDir&quot;: &quot;./src&quot;,
+        &quot;strict&quot;: true,
+        &quot;esModuleInterop&quot;: true,
+        &quot;forceConsistentCasingInFileNames&quot;: true
+      },
+      &quot;include&quot;: [&quot;src&quot;]
+    }
+</pre>
+<p>We change the <strong>target</strong> attribute to <code>es6</code> and the <strong>module</strong> attribute to <code>es2015</code>.</p>
+<p>We also need to change the script line at the bottom of the <strong>index.html</strong> page to allow for modules.</p>
+<pre class="prettyprint">    &lt;script type=&quot;module&quot; src='js/app.js'&gt;&lt;/script&gt;
+</pre>
+<p>Now we are ready to use the module system. The first thing we will do is take out the <strong>Invoice</strong> class and put it into the Typescript <strong>src/classes</strong> folder.</p>
+<h4 id="srcclassesinvoicets">/src/classes/invoice.ts</h4>
+<pre class="prettyprint">    export class Invoice {
+        constructor(
+            readonly client: string,
+            private details: string,
+            public amount: number   
+        ) {}
+
+        format() {
+            return `${this.client} owes $${this.amount} for ${this.details}.`;
+        }
+    }
+</pre>
+<p>We add the word <strong>export</strong> to the start of the class definition.</p>
+<p>We also have to add an <strong>import</strong> statement to the top of the <strong>app.ts</strong> file.</p>
+<h4 id="srcappts">/src/app.ts</h4>
+<pre class="prettyprint">    import {Invoice} from './classes/invoice.js';
+
+    const invOne = new Invoice('Alan', 'subscription renewal', 49.99);
+    const invTwo = new Invoice('James', 'Steam game', 30.00);
+
+    let invoices: Invoice[] = [];
+
+    invoices.push(invOne);
+    invoices.push(invTwo);
+
+    invOne.amount = 55.00;
+    invTwo.amount = 40.00;
+
+    invoices.forEach(inv =&gt; {
+        console.log(inv.client, inv.amount, inv.format());
+    });   
+</pre>
+<p>If we have done this correctly we should be able to see the <code>console.log()</code> output on the web page.</p>
+<blockquote>
+<p>Alan 55 Alan owes $55 for subscription renewal.<br>
+James 40 James owes $40 for Steam game.</p>
+</blockquote>
+<h2 id="interfaces">Interfaces</h2>
+<p>A tool we can use in Typescript but can't use in JavaScript is an interface.</p>
+<p>An interface allows us to enforce a certain structure of a class or an object. We can use it to describe the methods and properties of an object and the types of those properties.</p>
+<p>You might think it sounds very much like a class but an interface doesn't generate objects. We only use an interface to add a structure to a class or object.</p>
+<p>We create an <code>isPerson</code> interface with properties and methods.</p>
+<pre class="prettyprint">    interface isPerson {
+        name: string;
+        age: number;
+        speak(a: string): void;
+        spend(a: number): number;
+    }
+
+    const me: isPerson = {
+
+    };
+</pre>
+<p>The code as it is will come up with an error on the object name <strong>me</strong>. As the code stands the me object does not comply with the <code>isPerson</code> interface so we have to fill in the methods and properties. The final code is below.</p>
+<pre class="prettyprint">    interface isPerson {
+        name: string;
+        age: number;
+        speak(a: string): void;
+        spend(a: number): number;
+    }
+
+    const me: isPerson = {
+        name: 'Alan',
+        age: 68,
+        speak(text: string): void {
+            console.log(text);
+        },
+        spend(amount: number): number {
+            console.log(`I spent ${amount}.`);
+            return amount;
+        }
+    };
+
+console.log(me);
+</pre>
+<blockquote>
+<p>{name: &quot;Alan&quot;, age: 68, speak: ƒ, spend: ƒ}</p>
+</blockquote>
+<p>The benefit of this is that we can have multiple objects of type <code>isPerson</code> that implement this interface. The other objects can have different values but they must always follow the interface's structure.</p>
+<p>We can create another object of type <code>isPerson</code>.</p>
+<pre class="prettyprint">    let someone: isPerson;
+</pre>
+<p>Later on we could build up the content for the someone variable based on the <code>isPerson</code> interface.</p>
+<p>We can also create a new function and use the object we created with the <code>isPerson</code> interface.</p>
+<pre class="prettyprint">    interface isPerson {
+        name: string;
+        age: number;
+        speak(a: string): void;
+        spend(a: number): number;
+    }
+
+    const me: isPerson = {
+        name: 'Alan',
+        age: 68,
+        speak(text: string): void {
+            console.log(text);
+        },
+        spend(amount: number): number {
+            console.log(`I spent ${amount}.`);
+            return amount;
+        }
+    };
+
+    const greetPerson = (person: isPerson) =&gt; {
+        console.log(`Hello ${person.name}.`);
+    }
+
+    greetPerson(me);
+</pre>
+<p>In this case the function we created uses the <strong>me</strong> object that was created with the <code>isPerson</code> interface.</p>
+<h2 id="interfaces-with-classes">Interfaces with Classes</h2>
+<p>We are going to create a new folder in the <strong>src</strong> folder named <strong>interfaces</strong>.</p>
+<h4 id="srcintercaseshasformatterts">/src/intercases/HasFormatter.ts</h4>
+<pre class="prettyprint">    export interface HasFormatter {
+        format(): string;
+    }
+</pre>
+<p>In the <strong>invoice.ts</strong> file we need to implement a HasFormatter interface.</p>
+<h4 id="srcclassesinvoicets">/src/classes/invoice.ts</h4>
+<pre class="prettyprint">    import {HasFormatter} from '../../src/interfaces/HasFormatter.js';
+
+    export class Invoice implements HasFormatter {
+        constructor(
+            readonly client: string,
+            private details: string,
+            public amount: number   
+        ) {}
+
+        format() {
+            return `${this.client} owes $${this.amount} for ${this.details}.`;
+        }
+    }
+</pre>
+<p>We also need to create a <strong>payment</strong> class.</p>
+<h4 id="srcclassespaymentts">/src/classes/payment.ts</h4>
+<pre class="prettyprint">    import {HasFormatter} from '../../src/interfaces/HasFormatter.js';
+
+    export class Payment implements HasFormatter {
+        constructor(
+            readonly recipient: string,
+            private details: string,
+            public amount: number   
+        ) {}
+
+        format() {
+            return `${this.recipient} is owed $${this.amount} for ${this.details}.`;
+        }
+    }
+</pre>
+<p>Both of these classes must inherit from the HasFormatter interface.</p>
+<p>Now change the <strong>app.ts</strong> file.</p>
+<h4 id="appts">app.ts</h4>
+<pre class="prettyprint">    import {Invoice} from './classes/invoice.js';
+    import {Payment} from './classes/payment.js';
+    import {HasFormatter} from './interfaces/HasFormatter.js';
+
+    const form = document.querySelector('.new-item-form') as HTMLFormElement;
+
+    const type = document.querySelector('#type') as HTMLSelectElement;
+    const tofrom = document.querySelector('#tofrom') as HTMLInputElement;
+    const details = document.querySelector('#details') as HTMLInputElement;
+    const amount = document.querySelector('#amount') as HTMLInputElement;
+
+    form.addEventListener('submit', (e: Event) =&gt; {
+        e.preventDefault();
+
+        let doc: HasFormatter;
+
+        if (type.value === 'invoice') {
+            doc = new Invoice(tofrom.value, details.value, amount.valueAsNumber);
+        } else {
+            doc = new Payment(tofrom.value, details.value, amount.valueAsNumber);
+        }
+        console.log(doc);
+    });
+</pre>
+<h4 id="results">Results</h4>
+<h4 id="invoice">Invoice</h4>
+<p><img src="assets/notes/invoice.jpg" alt="Invoice" title="Invoice"></p>
+<h4 id="payment">Payment</h4>
+<p><img src="assets/notes/payment.jpg" alt="Payment" title="Payment"></p>
+<h2 id="creating-a-renderlistitem-class">Creating a RenderListItem Class</h2>
+<p>Previously we rendered our output to the console window. Now we are going to render the results to an unordered list. Each invoice or payment will appear in a list item.</p>
+<p>We create a list template file as a new class to render the <code>li</code> element on a page. This is inserted into the <code>ul</code> tag on the <strong>index.html</strong> web page.</p>
+<pre class="prettyprint">    &lt;!-- output list --&gt;
+    &lt;ul class=&quot;item-list&quot;&gt;
+      
+    &lt;/ul&gt;
+</pre>
+<h4 id="listtemplatets-class">ListTemplate.ts (class)</h4>
+<pre class="prettyprint">    import { HasFormatter } from &quot;../interfaces/HasFormatter&quot;;
+
+    export class ListTemplate {
+      constructor(private container: HTMLUListElement){}
+
+      render(item: HasFormatter, heading: string, pos: 'start' | 'end'){
+        const li = document.createElement('li');
+    
+        const h4 = document.createElement('h4');
+        h4.innerText = heading;
+        li.append(h4);
+
+        const p = document.createElement('p');
+        p.innerText = item.format();
+        li.append(p);
+
+        if(pos === 'start'){
+          this.container.prepend(li);
+        } else {
+          this.container.append(li);
+        }
+      }
+    }
+</pre>
+<p>Now we will reformat the <strong>app.ts</strong> files so that we can render the form contents to the web page.</p>
+<h4 id="appts">app.ts</h4>
+<pre class="prettyprint">    import {Invoice} from './classes/invoice.js';
+    import {Payment} from './classes/payment.js';
+    import { ListTemplate } from './classes/ListTemplate.js';
+    import {HasFormatter} from './interfaces/HasFormatter.js';
+
+    const form = document.querySelector('.new-item-form') as HTMLFormElement;
+
+    const type = document.querySelector('#type') as HTMLSelectElement;
+    const tofrom = document.querySelector('#tofrom') as HTMLInputElement;
+    const details = document.querySelector('#details') as HTMLInputElement;
+    const amount = document.querySelector('#amount') as HTMLInputElement;
+
+    // list template instance
+    const ul = document.querySelector('ul')!;
+    const list = new ListTemplate(ul);
+
+    form.addEventListener('submit', (e: Event) =&gt; {
+        e.preventDefault();
+
+        let doc: HasFormatter;
+
+        if (type.value === 'invoice') {
+            doc = new Invoice(tofrom.value, details.value, amount.valueAsNumber);
+        } else {
+            doc = new Payment(tofrom.value, details.value, amount.valueAsNumber);
+        }
+
+        list.render(doc, type.value, 'end');
+    });
+</pre>
+<p>We create new invoice and payment records and should see the results in the unordered list.</p>
+<p><img src="assets/notes/finance-logger.jpg" alt="Finance logger screen" title="Finance logger screen"></p>
+<h2 id="generics">Generics</h2>
+<p>Generics allow us to create reusable blocks of code that can be used with different types.</p>
+<p>As an example we are going to take in an object and create a new object from it that contains a new user Id (UID).</p>
+<pre class="prettyprint">    const addUID = (obj: object) =&gt; {
+        let uid = Math.floor(Math.random() * 100);
+        return {...obj, uid};
+    }
+
+    let docOne = addUID({name: 'Alan', age: 68});
+    
+    console.log(docOne);
+</pre>
+<blockquote>
+<p>{name: &quot;Alan&quot;, age: 68, uid: 50}</p>
+</blockquote>
+<p>Run it again.</p>
+<blockquote>
+<p>{name: &quot;Alan&quot;, age: 68, uid: 52}</p>
+</blockquote>
+<p>This function brings in an object of any type and add a UID to the object. It returns the new object with a UID and this should be different every time we refresh the page.</p>
+<p>It seems to be working correctly but if you try to access the <code>.name</code> property of the  new object you will get an error.</p>
+<pre class="prettyprint">    console.log(docOne.name);
+</pre>
+<blockquote>
+<p>src/app.ts:39:22 - error TS2339: Property 'name' does not exist on type '{ uid: number; }&gt; '.</p>
+<p>39   console.log(docOne.name);</p>
+</blockquote>
+<p>This happens because the object doesn't know about name, age or type. We can combat this by using a generic.</p>
+<pre class="prettyprint">    const addUID = &lt;T&gt;(obj: T) =&gt; {
+      let uid = Math.floor(Math.random() * 100);
+      return {...obj, uid};
+    }
+
+    let docOne = addUID({name: 'Alan', age: 68});
+    
+    console.log(docOne.name);
+</pre>
+<blockquote>
+<p>Alan</p>
+</blockquote>
+<p>This allows us to capture the objects properties and then when we want to use a property in the console statement it will work.</p>
+<p>This function allows us to bring in in an object of any type and return it with a new object containing a UID.</p>
+<p>There is still a minor problem with our objects. If we create a new variable and run the function again it will access a string as an object and the output will show the original string as an object and this makes no sense.</p>
+<pre class="prettyprint">    let docOne = addUID({name: 'Alan', age: 68});
+    let docTwo = addUID('James');
+    
+    console.log(docOne.name);
+    console.log(docTwo);
+</pre>
+<blockquote>
+<p>Alan<br>
+{0: &quot;J&quot;, 1: &quot;a&quot;, 2: &quot;m&quot;, 3: &quot;e&quot;, 4: &quot;s&quot;, uid: 95}</p>
+</blockquote>
+<p>We can fix this by adding the following to the generic object.</p>
+<pre class="prettyprint">    const addUID = &lt;T extends object&gt;(obj: T) =&gt; {
+      let uid = Math.floor(Math.random() * 100);
+      return {...obj, uid};
+    }
+
+    let docOne = addUID({name: 'Alan', age: 68});
+    let docTwo = addUID('James'); // error
+    
+    console.log(docOne.name);
+</pre>
+<p>This will now show the second function call as passing in a string instead of an object. This is shown as an error.</p>
+<p>We could also extend this generic object even more by specifying that the object has to have a property of <code>name</code> with a type of <strong>string</strong>.</p>
+<pre class="prettyprint">    const addUID = &lt;T extends {name: string}&gt;(obj: T) =&gt; {
+      let uid = Math.floor(Math.random() * 100);
+      return {...obj, uid};
+    }
+
+    let docOne = addUID({name: 'Alan', age: 68});
+
+    console.log(docOne.name);
+</pre>
+<h3 id="generics-with-interfaces">Generics with Interfaces</h3>
+<p>We create an interface.</p>
+<pre class="prettyprint">    interface Resource {
+      uid: number;
+      resourceName: string;
+      data: '????';
+    }
+</pre>
+<p>For us to use this interface we must have an object that has the three properties uid, resourceName and data.</p>
+<p>We want the <code>data</code> property to be flexible. We want it to be able to use different types. So in this case we want to make the property generic and we can do this by passing in a generic to the <code>Resource</code> interface. Then we make <code>data</code> of type <strong>T</strong>.</p>
+<pre class="prettyprint">    interface Resource&lt;T&gt; {
+      uid: number;
+      resourceName: string;
+      data: T;
+    }
+
+    const docThree: Resource&lt;string&gt; = {
+        uid: 1,
+        resourceName: 'person',
+        data: 'Alan'
+    }
+    
+    console.log(docThree);
+</pre>
+<blockquote>
+<p>{uid: 1, resourceName: &quot;person&quot;, data: &quot;Alan&quot;}</p>
+</blockquote>
+<p>We can change this interface to an object.</p>
+<pre class="prettyprint">    interface Resource&lt;T&gt; {
+      uid: number;
+      resourceName: string;
+      data: T;
+    }
+
+    const docFour: Resource&lt;object&gt; = {
+        uid: 1,
+        resourceName: 'person',
+        data: { name: 'James'}
+    }
+    
+    console.log(docFour);
+</pre>
+<blockquote>
+<p>{uid: 1, resourceName: &quot;person&quot;, data: {…}}<br>
+data: {name: &quot;James&quot;}<br>
+resourceName: &quot;person&quot;<br>
+uid: 1<br>
+<strong>proto</strong>: Object</p>
+</blockquote>
+<p>We could even add a string array as our <code>Resource</code> type.</p>
+<pre class="prettyprint">    const docFive: Resource&lt;string[]&gt; = {
+        uid: 1,
+        resourceName: 'family',
+        data: ['Alan', 'James', 'Charley ']
+    }
+
+    console.log(docFive);
+</pre>
+<blockquote>
+<p>{uid: 1, resourceName: &quot;family&quot;, data: Array(3)}<br>
+data: (3) [&quot;Alan&quot;, &quot;James&quot;, &quot;Charley &quot;]<br>
+resourceName: &quot;family&quot;<br>
+uid: 1<br>
+<strong>proto</strong>: Object</p>
+</blockquote>
+<h2 id="enums">Enums</h2>
+<p>Now we are going to learn how to use <strong>enums</strong>. First, we change the <strong>Resource</strong> interface to include a <strong>resourceType</strong> which is a number that is used to hold a specific type of resource, for example 3 could equal a book title, 2 could be a person.</p>
+<p>The more of these resource types that you have, the harder it is to remember what each number stands for. This is where <strong>enums</strong> come in handy. An <strong>enum</strong> is a descriptive constant that is used to describe a list of items.</p>
+<p>In the ResourceType enum below the items in the list start with an index of 0 so 0 stands for a BOOK type and 4 is a Person.</p>
+<pre class="prettyprint">    enum ResourceType { BOOK, AUTHOR, FILM, DIRECTOR, PERSON };
+
+    interface Resource&lt;T&gt; {
+      uid: number;
+      resourceType: ResourceType;
+      data: T;
+    }
+
+    const docOne: Resource&lt;object&gt; = {
+        uid: 53,
+        resourceType: ResourceType.BOOK,
+        data: { title: 'Name of the wind.'}
+    }
+
+    const docTwo: Resource&lt;object&gt; = {
+        uid: 54,
+        resourceType: ResourceType.PERSON,
+        data: { name: 'Alan'}
+    }
+
+    const docThree: Resource&lt;object&gt; = {
+        uid: 55,
+        resourceType: ResourceType.AUTHOR,
+        data: { name: 'James Joyce'}
+    }
+
+    const docFour: Resource&lt;object&gt; = {
+        uid: 55,
+        resourceType: ResourceType.FILM,
+        data: { name: 'Titanic'}
+    }
+
+    console.log(docOne);
+    console.log(docTwo);
+    console.log(docThree);
+    console.log(docFour);
+</pre>
+<h4 id="results">Results</h4>
+<p><img src="assets/notes/resource-types.jpg" alt="Resource types" title="Resource types"></p>
+<h2 id="tuples">Tuples</h2>
+<p>Tuples are similar to arrays but there is one major difference. Once an item has been added to a tuple its position is fixed.</p>
+<p>First we will create an array.</p>
+<p>let arr = ['Alan', 43, true];</p>
+<p>We know that we can change a value in an array.</p>
+<p>arr[0] = true;</p>
+<p>We also know that we can do this because any value in the <strong>arr[]</strong> array can be either a string, number or boolean. The array can be flexible once we have assigned the array types.</p>
+<p>To define a tuple.</p>
+<pre class="prettyprint">    let tup: [string, number, boolean] = ['Alan', 75, false];
+
+    tup[0] = 'James'; // works
+    tup[0] = 43; // fails
+</pre>
+<p>Once I have defined a tuple I can't change the type in a particular position, i.e. tup[0] can't be a number or boolean, only a string.</p>
+<p>This would work.</p>
+<pre class="prettyprint">    tup = ['James', 14, true];
+</pre>
+<p>This wouldn't work.</p>
+<pre class="prettyprint">    tup = ['James', 14];
+</pre>
+<p>So the types are <strong>fixed</strong> once we define a tuple.</p>
+<p>A more realistic example of a tuple would be.</p>
+<pre class="prettyprint">    let student: [string, number];
+
+    student = ['Charley', 123456];
+</pre>
+<p>We can now use tuples in our Finance Logger program. First we will create an array to show you that they don't work.</p>
+<pre class="prettyprint">    let values = [tofrom.value, details.value, amount.valueAsNumber];
+
+        if (type.value === 'invoice') {
+            doc = new Invoice(...values); // causes an error
+</pre>
+<p>The spread <code>...values</code> in this case doesn't work because the position in an array doesn't know the first value is a string, the second a string and the third a number as they are in our invoice and payment constructors.</p>
+<p>If we change this to a tuple then it will work. You can see this in our final code.</p>
+<h4 id="srcappts">/src/app.ts</h4>
+<pre class="prettyprint">    import {Invoice} from './classes/invoice.js';
+    import {Payment} from './classes/payment.js';
+    import { ListTemplate } from './classes/ListTemplate.js';
+    import {HasFormatter} from './interfaces/HasFormatter.js';
+
+    const form = document.querySelector('.new-item-form') as HTMLFormElement;
+
+    const type = document.querySelector('#type') as HTMLSelectElement;
+    const tofrom = document.querySelector('#tofrom') as HTMLInputElement;
+    const details = document.querySelector('#details') as HTMLInputElement;
+    const amount = document.querySelector('#amount') as HTMLInputElement;
+
+    // list template instance
+    const ul = document.querySelector('ul')!;
+    const list = new ListTemplate(ul);
+
+    form.addEventListener('submit', (e: Event) =&gt; {
+        e.preventDefault();
+
+        let doc: HasFormatter;
+
+        let values: [string, string, number];
+        values = [tofrom.value, details.value, amount.valueAsNumber];
+
+        if (type.value === 'invoice') {
+            doc = new Invoice(...values);
+        } else {
+            doc = new Payment(...values);
+        }
+
+        list.render(doc, type.value, 'end');
+    });
+</pre>
+<p>Once we have made these changes we should test our app again to make sure it is still working.</p>
+
+
+</div><!-- starter-template -->
+</div><!-- /.container -->
+
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"/>
+<script>hljs.initHighlightingOnLoad();</script>
+
+<script src="assets/js/jquery.min.js"></script>
+<script src="assets/js/bootstrap.min.js"></script>
+</body>
+</html>

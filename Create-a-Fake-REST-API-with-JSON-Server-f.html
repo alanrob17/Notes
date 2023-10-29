@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<title>Create a Fake REST API with JSON-Server</title>
+<link href="assets/css/bootstrap.css" rel="stylesheet">
+<!-- Custom styles for this template -->
+<link href="assets/css/starter-template.css" rel="stylesheet">
+<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js?lang=css&amp;skin=sunburst"></script>
+<style type="text/css">
+h2 {
+	margin-top: 60px;
+}
+
+h4, h3 {
+	padding-top: 40px!;		
+}
+
+p {
+	font-size: 1.2em;
+}
+h4 {
+	font-size: 1.4em;
+}
+
+img, pre.prettyprint {
+	margin-top: 1.5em;
+	margin-bottom: 1.5em;
+}
+h1, h2, h3, h4, h5, h6 {
+    color:#007bff;
+
+}
+blockquote {
+    border-left: 4px solid #999;
+    padding-left: 1rem;
+    page-break-inside: avoid;
+}
+</style>
+<link rel="shortcut icon" type="image/x-icon" href="favicon.ico" />
+</head>
+<body>
+<header>
+    <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="#">JSON-Server</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
+                aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Home</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#">Create a Fake REST API with JSON-Server <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">About</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+<div class="container">
+    <div class="starter-template">
+
+<h2 id="create-a-fake-rest-api-with-json-server">Create a Fake REST API with JSON-Server</h2>
+<p>As developers we usually need a REST API for testing purposes. There is a website that allows you to use their web API for testing but you can also download a server version to install on your own development environment.</p>
+<p><a href="https://jsonplaceholder.typicode.com" title="JSON Placeholder Fake REST API website">JSON Placeholder Fake REST API website</a>.</p>
+<p><a href="https://github.com/typicode/json-server" title="You can download a copy of the server here">You can download a copy of the server here</a>.</p>
+<p><a href="https://github.com/typicode/lowdb" title="The server uses LowDB as a JSON data store">The server uses LowDB as a JSON data store</a>.</p>
+<p>We are going to build our own server.</p>
+<p>Create a folder <strong>jsonserver</strong>.</p>
+<pre class="prettyprint">    npm init
+</pre>
+<p>Now install the server.</p>
+<pre class="prettyprint">    npm install --save json-server
+</pre>
+<p>In <strong>package.json</strong> add the following.</p>
+<pre class="prettyprint">    &quot;scripts&quot;: {
+       &quot;dev&quot;: &quot;json-server --watch db.json&quot;,
+       &quot;remote&quot;: &quot;json-server https://jsonplaceholder.typicode.com/db&quot;
+    },
+</pre>
+<p>On either the <strong>dev</strong> or the <strong>remote</strong> instance to can see all of the resources in your database with.</p>
+<p><a href="http://localhost:3000" title="localhost:3000">localhost:3000</a>.</p>
+<p><img src="assets/notes/json-server.jpg" alt="JSON Server resources" title="JSON Server resources"></p>
+<p>This allows us to use our own data or use the remote data.</p>
+<p>Create a new file in the root folder named <strong>db.json</strong>.</p>
+<pre class="prettyprint">    {
+        &quot;users&quot;: [
+            {
+                &quot;id&quot;: &quot;1&quot;,
+                &quot;firstName&quot;: &quot;Alan&quot;,
+                &quot;lastName&quot;: &quot;Robson&quot;,
+                &quot;email&quot;: &quot;alan@alan.com&quot;,
+                &quot;age&quot;: 68,
+                &quot;companyId&quot;: &quot;1&quot;
+            },
+
+        ...
+
+        ],
+        &quot;companies&quot;: [
+            {
+                &quot;id&quot;: &quot;1&quot;,
+                &quot;name&quot;: &quot;Microsoft&quot;,
+                &quot;description&quot;: &quot;Microsoft Corporation is an American multinational technology company with  headquarters in Redmond, Washington. It develops, manufactures, licenses, supports, and sells    computer software, consumer electronics, personal computers, and related services.&quot;
+            },
+
+        ...
+        ]
+    }
+</pre>
+<p>You can use the following routes locally or remote.</p>
+<pre class="prettyprint">    // GET ALL USERS
+    http://localhost:3000/users
+
+    // GET SINGLE USER
+    http://localhost:3000/users/1
+
+    // GET ALL COMPANIES
+    http://localhost:3000/companies
+
+    // GET SINGLE COMPANY
+    http://localhost:3000/companies/1
+
+    // GET ALL USERS OF A COMPANY
+    http://localhost:3000/companies/1/users
+
+    // FILTER COMPANIES BY NAME
+    http://localhost:3000/companies?name=Microsoft
+    http://localhost:3000/companies?name=Microsoft&amp;name=Google
+
+    // PAGINATION &amp; LIMIT
+    http://localhost:3000/companies?_page=1&amp;_limit=2
+
+    // SORTING
+    http://localhost:3000/companies?_sort=name&amp;_order=asc
+
+    // USERS AGE RANGE
+    http://localhost:3000/users?age_gte=30
+    http://localhost:3000/users?age_gte=30&amp;age_lte=40
+
+    // FULL TEXT SEARCH
+    http://localhost:3000/users?q=Alan
+</pre>
+<p>On the dev site you can also create CRUD requests and use Postman to handle these requests.</p>
+        
+
+
+
+</div><!-- starter-template -->
+</div><!-- /.container -->
+
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"/>
+<script>hljs.initHighlightingOnLoad();</script>
+
+<script src="assets/js/jquery.min.js"></script>
+<script src="assets/js/bootstrap.min.js"></script>
+</body>
+</html>

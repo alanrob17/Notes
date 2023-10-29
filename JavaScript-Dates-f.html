@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>JavaScript dates</title>
+    <link href="assets/css/bootstrap.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="assets/css/starter-template.css" rel="stylesheet">
+    <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js?lang=css&amp;skin=sunburst"></script>
+	<style type="text/css">
+	h2 {
+		margin-top: 60px;
+	}
+	
+	h4, h3 {
+		padding-top: 40px!;		
+	}
+	
+	p {
+		font-size: 1.2em;
+	}
+
+	h4 {
+		font-size: 1.4em;
+	}
+	
+	img, pre.prettyprint {
+		margin-top: 1.5em;
+		margin-bottom: 1.5em;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+        color:#007bff;
+  
+    }
+
+    blockquote {
+        border-left: 4px solid #999;
+        padding-left: 1rem;
+        page-break-inside: avoid;
+    }
+	</style>
+    <link rel="shortcut icon" type="image/x-icon" href="favicon.ico" />
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href="#">Udemy - The Complete JavaScript Course 2019</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
+                    aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarCollapse">
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Home</a>
+                        </li>
+                        <li class="nav-item active">
+                            <a class="nav-link" href="#">JavaScript dates <span class="sr-only">(current)</span></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">About</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container">
+        <div class="starter-template">
+
+<h2 class="code-line" data-line-start=0 data-line-end=1 ><a id="JavaScript_Dates_0"></a>Creating dates in JavaScript</h2>
+<p class="has-line-data" data-line-start="4" data-line-end="5">We can create a JavaScript date for the current point of time:</p>
+<pre class="prettyprint">const now = new Date(); // right now
+console.log(now.toString()); // Sun Sep 29 2019 10:42:01 GMT+1000 (Australian Eastern Standard Time)
+</pre>
+<p class="has-line-data" data-line-start="9" data-line-end="10">We can also specify a date in time.</p>
+<pre class="prettyprint">const particularDate = new Date('January 21 2001 6:25:12');
+</pre>
+<p class="has-line-data" data-line-start="13" data-line-end="14">There are a number of methods for getting parts of JavaScript dates.</p>
+<pre class="prettyprint">console.log(`Year: ${now.getFullYear()}`); // Year: 2019
+
+console.log(`Month: ${now.getMonth() + 1}`); // Month: 9
+</pre>
+<p class="has-line-data" data-line-start="19" data-line-end="20">Note that month values a zero based so we have to add 1 to get the correct month value.</p>
+<pre class="prettyprint">console.log(`Day: ${now.getDay()}`); // Day: 0 (Sunday)
+
+console.log(`Day of the month: ${now.getDate()}`); // Day of the month: 29
+
+console.log(`Hours: ${now.getHours()}`); // Hours: 10
+
+console.log(`Minutes: ${now.getMinutes()}`); // Minutes: 42
+
+console.log(`Seconds: ${now.getSeconds()}`); // Seconds: 1
+</pre>
+<h3 class="code-line" data-line-start=31 data-line-end=32 ><a id="Working_with_Timestamps_31"></a>Working with Timestamps</h3>
+<p class="has-line-data" data-line-start="33" data-line-end="34">A timestamp is nothing more than a number. This number represents the number of milliseconds since January 1st 1970 at midnight. Positive numbers go forward in time from that point. A date in 2018 would represent a positive number. A date in 1969 would represent a negative number.</p>
+<p class="has-line-data" data-line-start="35" data-line-end="36">Timestamps are handy because you only have to hand around a single number.</p>
+<p class="has-line-data" data-line-start="37" data-line-end="38">You can create a timestamp from a date with the following.</p>
+<pre class="prettyprint">const timestamp = now.getTime();
+const today = new Date(timestamp);
+
+console.log(`Year: ${today.getFullYear()}`); // Year: 2019
+</pre>
+<h3 class="code-line" data-line-start=44 data-line-end=45 ><a id="Working_with_dates_44"></a>Working with dates</h3>
+<ol>
+<li class="has-line-data" data-line-start="46" data-line-end="47">Create 2 dates in the past (use string for date)</li>
+<li class="has-line-data" data-line-start="47" data-line-end="48">Get timesamps for both</li>
+<li class="has-line-data" data-line-start="48" data-line-end="50">Figure out which is first and print its time (use toString)</li>
+</ol>
+<p class="has-line-data" data-line-start="50" data-line-end="51">.</p>
+<pre class="prettyprint">const date1 = new Date('2018-02-09 12:25:20');
+
+const date2 = new Date('2017-08-10 14:20:40');  
+
+console.log(`date 1: ${date1.toString()}`); // date 1: Fri Feb 09 2018 12:25:20 GMT+1100 (Australian Eastern    Daylight Time)
+
+console.log(`date 2: ${date2.toString()}`); // date 2: Thu Aug 10 2017 14:20:40 GMT+1000 (Australian Eastern    Standard Time)  
+
+const date1Timestamp = date1.getTime();
+const date2Timestamp = date2.getTime();
+
+console.log(`date 1 timestamp: ${date1Timestamp}`); // date 2: Thu Aug 10 2017 14:20:40 GMT+1000 (Australian    Eastern Standard Time)
+console.log(`date 2 timestamp: ${date2Timestamp}`); // date 2 timestamp: 1502338840000  
+
+if (date1 &lt; date2) {
+    console.log(`date 1: ${date1.toString()}`);
+} else {
+    console.log(`date 2: ${date2.toString()}`);
+}
+
+// result:
+date 2: Thu Aug 10 2017 14:20:40 GMT+1000 (Australian Eastern Standard Time)
+</pre>
+<h3 class="code-line" data-line-start=75 data-line-end=76 ><a id="Working_with_Momentjs_75"></a>Working with Moment.js</h3>
+<p class="has-line-data" data-line-start="77" data-line-end="78">Working with JavaScript dates isn’t easy. A better way to work with dates is to use a third party library named Moment.js.</p>
+<p class="has-line-data" data-line-start="4" data-line-end="5"><a href="https://momentjs.com">Moment.js website</a>.</p>
+<h5 class="code-line" data-line-start=6 data-line-end=7><a id="Installation_6"></a>Installation</h5>
+<pre class="prettyprint">npm install moment --save
+</pre>
+<p class="has-line-data" data-line-start="10" data-line-end="11">or</p>
+<pre class="prettyprint">&lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment-with-locales.min.js&quot;&gt;&lt;/script&gt;
+</pre>    
+<p class="has-line-data" data-line-start="79" data-line-end="80">You can create a moment:</p>
+<pre class="prettyprint">const nowDate = moment();
+</pre>
+<p class="has-line-data" data-line-start="83" data-line-end="84">Then use moment functions to print the results.</p>
+<pre class="prettyprint">console.log(nowDate.toString()); // Sun Sep 29 2019 18:16:01 GMT+1000
+
+console.log(nowDate.weekday()); // 0
+
+console.log(nowDate.isoWeekday()); // 7
+
+console.log(nowDate.minutes()); // 21
+
+console.log(nowDate.hours()); // 18
+
+console.log(nowDate.get('year')); // 2019
+</pre>
+<p class="has-line-data" data-line-start="97" data-line-end="98">You can create a moment with a date string.</p>
+<pre class="prettyprint">const date = moment('2019-11-03 12:00:00');
+console.log(date.toString());
+</pre>
+<p class="has-line-data" data-line-start="102" data-line-end="103">Moment has a large number of date formatting options.</p>
+<pre class="prettyprint">console.log(date.format('MMMM Do, YYYY')); // November 3rd, 2019
+
+console.log(date.format('Do MMMM YYYY')); // 3rd November 2019
+
+console.log(date.format('Do of MMMM YYYY')); // 3rd of November 2019
+
+console.log(date.format('dddd MMMM YYYY')); // Sunday November 2019
+
+console.log(date.format('DD-MM-YYYY')); // 03-11-2019
+
+console.log(date.format('DD/MM/YYYY')); // 03/11/2019
+
+console.log(moment([2016, 07, 22]).format('DD/MM/YYYY')); // 22/08/2016 -- note: month is zero based
+
+console.log(moment([2016, 07, 22]).fromNow()); // 3 years ago
+
+nowDate.add(2, 'year').subtract(4, 'months').add(20, 'days'); 
+
+console.log(nowDate.toString()); // Wed May 12 2021 13:28:25 GMT+1000
+
+console.log(nowDate.fromNow()); // in 2 years
+</pre>
+<p class="has-line-data" data-line-start="126" data-line-end="127">Create a timestamp.</p>
+<pre class="prettyprint">const nowTimestamp = nowDate.valueOf();
+
+console.log(nowTimestamp); // 1620790340567
+
+console.log(moment(nowTimestamp).toString()); // Wed May 12 2021 13:34:50 GMT+1000
+
+console.log(moment(nowTimestamp).format('(dddd) Do MMMM, YYYY')); // (Wednesday) 12th May, 2021
+</pre>
+<p class="has-line-data" data-line-start="136" data-line-end="137">Work out how many days to my birthday next year.</p>
+<pre class="prettyprint">const currentDay = moment();
+
+const birthDay = moment([2020, 03, 17]);
+
+console.log(birthDay.format('Do MMMM, YYYY')); // 17th April, 2020
+
+console.log(birthDay.diff(currentDay).valueOf()); // 20599924849
+
+console.log(`Days to birthday: ${birthDay.diff(currentDay, 'days')}`); // Days to birthday: 238
+</pre>
+<p class="has-line-data" data-line-start="0" data-line-end="1">Another way to create a timestamp is:</p>
+<pre class="prettyprint">const myTimestamp = moment().valueOf();
+</pre>
+           
+            
+        </div><!-- starter-template -->
+    </div><!-- /.container -->
+
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"/>
+<script>hljs.initHighlightingOnLoad();</script>
+
+<script src="assets/js/jquery.min.js"></script>
+<script src="assets/js/bootstrap.min.js"></script>
+</body>
+</html>

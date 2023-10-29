@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>UsingHugo.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<h2 id="using-hugo-to-create-a-website">Using Hugo to Create a Website</h2>
+<h3 id="important-note">Important note</h3>
+<p>I upgraded my version of Hugo and all my sites stopped working. I tried reinstalling with Chocolatey but unfortunately it only installs the latest version of Hugo.</p>
+<p>I uninstalled Hugo and then used <strong>npm</strong> to globally install my version of Hugo.</p>
+<pre class="hljs"><code><div>    npm install -g hugo-extended@0.91.2
+</div></code></pre>
+<p>Thankfully this fixed my problem and I am able to run Hugo locally on my PC again.</p>
+<p><strong>Note:</strong> ignore the instructions below on installing Hugo with Chocolatey.</p>
+<h3 id="my-portfolio-blog">My Portfolio blog</h3>
+<h4 id="alanrobsonco">alanrobson.co</h4>
+<pre class="hljs"><code><div>    git remote add origin https://github.com/alanrob17/Portfolio.git
+</div></code></pre>
+<h4 id="alanrobsonau">alanrobson.au</h4>
+<pre class="hljs"><code><div>    git remote add origin https://github.com/alanrob17/technical-blog.git
+</div></code></pre>
+<h3 id="installing-hugo">Installing Hugo</h3>
+<pre class="hljs"><code><div>    choco install hugo -confirm
+
+    choco upgrade hugo -confirm --force
+
+    hugo new site mysite
+
+    <span class="hljs-built_in">cd</span> mysite
+</div></code></pre>
+<h3 id="installing-hugo-extended">Installing Hugo Extended</h3>
+<pre class="hljs"><code><div>    choco​ install -y hugo-extended
+</div></code></pre>
+<h3 id="running-hugo-locally">Running Hugo locally</h3>
+<pre class="hljs"><code><div>    hugo server
+</div></code></pre>
+<p>Or to stop having to restart (compiles slower).</p>
+<pre class="hljs"><code><div>    hugo server --disableFastRender
+</div></code></pre>
+<blockquote>
+<p>Ctrl-c to shutdown.</p>
+</blockquote>
+<h3 id="installing-a-theme">Installing a theme</h3>
+<p>Go to the themes folder</p>
+<p>cd themes</p>
+<pre class="hljs"><code><div>    git <span class="hljs-built_in">clone</span> https://github.com/eueung/hugo-casper-two.git casper-two
+</div></code></pre>
+<p>This will install the Casper Two theme.</p>
+<p>I use this theme for <code>alanrobson.co</code>.</p>
+<h3 id="how-to-implement-the-theme">How to implement the theme</h3>
+<p>Go back to mysite</p>
+<pre class="hljs"><code><div>    <span class="hljs-built_in">cd</span> ..
+</div></code></pre>
+<p>now we are going to edit the config file in VS Code</p>
+<pre class="hljs"><code><div>    code .
+</div></code></pre>
+<p>Edit config.toml</p>
+<p>Grab the example config.toml from the Casper Two web page and overwrite what is already in the page.</p>
+<h3 id="adding-content">Adding Content</h3>
+<p>Create a new post named javascript training.</p>
+<pre class="hljs"><code><div>    hugo new post/javascript-training.md
+</div></code></pre>
+<h3 id="creating-a-page">Creating a page</h3>
+<pre class="hljs"><code><div>hugo new privacy.md
+</div></code></pre>
+<h3 id="dumping-your-content">Dumping your content</h3>
+<p>This makes a quick HTML copy of your site.</p>
+<pre class="hljs"><code><div>    hugo --theme=casper-two --buildDrafts
+</div></code></pre>
+<p>This dumps your content into a folder named <strong>public</strong>.</p>
+<h3 id="hugo-themes">Hugo Themes</h3>
+<h4 id="ace">Ace</h4>
+<p><a href="https://themes.gohugo.io//theme/ace-documentation/getting-started/" title="Ace blog theme.">Ace blog theme.</a></p>
+<h4 id="mainroad">Mainroad</h4>
+<p>This is the theme I am using for <a href="https://alanrobson.au" title="My technical blog">alanrobson.au</a>.</p>
+<p><a href="https://themes.gohugo.io/mainroad/" title="Mainroad blog theme.">Mainroad blog theme.</a></p>
+<h4 id="casper-two">Casper Two</h4>
+<p>This is the theme I am using for <a href="https://alanrobson.co" title="My blog">alanrobson.co</a>.</p>
+<p><a href="https://github.com/eueung/hugo-casper-two" title="Casper Two theme.">Casper Two theme.</a></p>
+<h3 id="hugo-information">Hugo information</h3>
+<p>Tags and Categories.</p>
+<p><a href="https://sam.hooke.me/note/2018/03/hugo-tag-and-category-pages/" title="Casper Two theme.">Hugo tags and categories.</a></p>
+<p>Adding a form to Netlify.</p>
+<p><a href="https://blog.chrisstayte.com/coding/buildawebsitefor12dollars/2018-add-a-contact-to-your-netlify-powered-website/" title="Add a form.">Add a form.</a></p>
+<p><a href="https://discourse.gohugo.io/t/creating-static-content-that-uses-partials/265/15" title="Add a form.">Partial web pages.</a></p>
+<h3 id="adding-syntax-highlighting">Adding syntax highlighting</h3>
+<pre class="hljs"><code><div>    {{&lt; highlight go <span class="hljs-string">"linenos=inline,linenostart=1"</span> &gt;}}
+        s = remove from all sub folders.
+        w = write changes to all files with that particular phrase <span class="hljs-keyword">in</span> it.
+            <span class="hljs-keyword">if</span> you ignore this it will just produce a <span class="hljs-built_in">log</span> file with all of the changes to take place.
+</div></code></pre>
+<p>Or</p>
+<pre class="hljs"><code><div>    {{&lt; highlight go <span class="hljs-string">"linenos=table,hl_lines=8 15-17,linenostart=199"</span> &gt;}}
+    // ... code
+    {{&lt; / highlight &gt;}}
+</div></code></pre>
+<hr>
+<h2 id="my-hugo-websites">My Hugo websites</h2>
+<p>I have two live Hugo websites.</p>
+<p><a href="https://alanrobson.co" title="My blog">alanrobson.co</a></p>
+<p><a href="https://alanrobson.au" title="My technical blog">alanrobson.au</a></p>
+<p>Note that both of these sites have the same content but have different themes.</p>
+<h3 id="updating-my-hugo-websites">Updating my Hugo Websites</h3>
+<h4 id="alanrobsonco">alanrobson.co</h4>
+<p>open the site <code>projects\alanrobson.co</code> in Visual Studio Code.</p>
+<h5 id="running-hugo-locally">Running Hugo locally</h5>
+<pre class="hljs"><code><div>    hugo server --disableFastRender
+</div></code></pre>
+<h5 id="adding-a-new-post">Adding a new post</h5>
+<p>Stop the <strong>hugo server</strong>. Then run.</p>
+<pre class="hljs"><code><div>    hugo new post/the-name-of-my-new-post.md
+</div></code></pre>
+<p>This creates a new blog post in your blog.</p>
+<h5 id="editing-a-post">Editing a post</h5>
+<p>You edit content in the <code>content\post</code> folder.</p>
+<p>You add new images to the <code>static\images</code> folder.</p>
+<p>If you have added a new post into the blog you must change the header in the post.</p>
+<p>The following is a sample header from one of my posts in the <strong>Casper-Two</strong> format.</p>
+<pre class="hljs"><code><div><span class="hljs-code">    ---</span>
+<span class="hljs-code">    title: "Changing Link Program to Web Request"</span>
+<span class="hljs-code">    date: 2019-11-21T13:46:20+10:00</span>
+<span class="hljs-code">    draft: false</span>
+<span class="hljs-code">    image: "images/link.jpg"</span>
+<span class="hljs-code">    tags: ["csharp"]</span>
+<span class="hljs-code">    categories: ["programming"]</span>
+<span class="hljs-code">    ---</span>
+</div></code></pre>
+<p><strong>Where:</strong></p>
+<ul>
+<li><strong>title:</strong> is the name of the post and this appears at the top of your page.</li>
+<li><strong>date:</strong> is the date the page was generated. You can manually change this.</li>
+<li><strong>draft:</strong> making this <code>false</code> means publish (make it visible) it on your blog.</li>
+<li><strong>image:</strong> is the background image that appears at the top of the page. These are approximately 1280*950 pixels in size and I will download landscape images from <a href="https://unsplash.com" title="Unsplash.com">Unsplash.com</a> in medium size.</li>
+<li><strong>categories</strong> these are seen of the front page and the blog page as a menu. At present I only have two categories and they are <strong>programming</strong> and <strong>music</strong>.</li>
+<li><strong>tags:</strong> I can create any tag that refers to the category that I am under. For example, my <em>category</em> is <em>programming</em> and my tag is <em>csharp</em>. You can have multiple tags for each post.</li>
+</ul>
+<p>You can add images to the post and they have to be in this format, <code>../images/image.jpg</code>.</p>
+<h5 id="saving-your-files-to-git">Saving your files to Git</h5>
+<p>Once you have finished editing, commit and push your files to Github.</p>
+<p>Github triggers a process on <a href="Netlify.com" title="Netlify.com">Netlify.com</a> that builds the content and deploys it to <a href="https://alanrobson.co" title="My blog">alanrobson.co</a>.</p>
+<h4 id="alanrobsonau">alanrobson.au</h4>
+<p>open the site <code>projects\alanrobson.au</code> in Visual Studio Code.</p>
+<h5 id="running-hugo-locally">Running Hugo locally</h5>
+<pre class="hljs"><code><div>    hugo server --disableFastRender
+</div></code></pre>
+<h5 id="adding-a-new-post">Adding a new post</h5>
+<p>Stop the <strong>hugo server</strong>. Then run.</p>
+<pre class="hljs"><code><div>    hugo new post/the-name-of-my-new-post.md
+</div></code></pre>
+<p>This creates a new blog post in your blog.</p>
+<h5 id="editing-a-post">Editing a post</h5>
+<p>You edit content in the <code>content\post</code> folder.</p>
+<p>You add new images to the <code>static\images</code> folder.</p>
+<p>If you have added a new post into the blog you must change the header in the post.</p>
+<p>The following is a sample header from one of my posts in the <strong>Mainroad</strong> format.</p>
+<pre class="hljs"><code><div><span class="hljs-code">    ---</span>
+<span class="hljs-code">    title: "Changing Link Program to Web Request"</span>
+<span class="hljs-code">    description: Using Web Request to automatically download web pages.</span>
+<span class="hljs-code">    date: 2019-11-21T13:46:20+10:00</span>
+<span class="hljs-code">    draft: false</span>
+<span class="hljs-code">    tags: </span>
+<span class="hljs-bullet">        - </span>"CSharp"
+<span class="hljs-code">    categories: </span>
+<span class="hljs-bullet">        - </span>"Programming"
+<span class="hljs-code">    ---</span>
+</div></code></pre>
+<p>You can add images to the post and they have to be in this format, <code>/images/image.jpg</code>.</p>
+<p><strong>Note:</strong> the image text format is different to the <em>Casper-Two</em> format.</p>
+<h5 id="saving-your-files-to-git">Saving your files to Git</h5>
+<p>Once you have finished editing, commit and push your files to Github.</p>
+<p>Github triggers a process on <a href="Netlify.com" title="Netlify.com">Netlify.com</a> that builds the content and deploys it to <a href="https://alanrobson.au" title="My technical blog">alanrobson.au</a>.</p>
+
+</body>
+</html>
