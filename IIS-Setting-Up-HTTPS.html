@@ -387,7 +387,7 @@ code {
 <p>You can now use <strong>https</strong> to serve your website by clicking on the <strong>Browse Website</strong> option. Make sure to select the <strong>https</strong> link.</p>
 <p><img src="assets/images/iis/browse-https.jpg" alt="Browse https" title="Browse https"></p>
 <p>You will get a browser error of <em>Potential Security Risk Ahead</em>. Continue on and ignore this.</p>
-<p>Your browser displays an error page because the self-signed certificate was issued by your computer, not by a trusted Certificate Authority (CA). Browsers will trust the certificate if you add it to the list of Trusted Root Certification Authorities in the certificates store on the local computer, or in Group Policy for the domain.</p>
+<p>Your browser displays an error page because the self-signed certificate was issued by your computer, not by a trusted Certificate Authority (CA). Browsers will trust the certificate if you add it to the list of Trusted Root Certification Authorities in the certificates store it on the local computer, or in Group Policy for the domain.</p>
 <p>You can see your certificate in Certificate Manager.</p>
 <p><img src="assets/images/iis/certificate-manager.jpg" alt="Certificate manager" title="Certificate manager"></p>
 <p><strong>Note:</strong> In Firefox you see you link as.</p>
@@ -401,6 +401,77 @@ code {
 <p><img src="assets/images/iis/edit-inbound-rule-3.jpg" alt="Inbound rule page 2" title="Inbound rule page 2"></p>
 <p><img src="assets/images/iis/edit-inbound-rule-2.jpg" alt="Inbound rule page 3" title="Inbound rule page 3"></p>
 <p>Now if a user uses the URL, <strong><a href="http://recordb.com.au">http://recordb.com.au</a></strong> it will be redirected to <strong><a href="https://recordb.com.au">https://recordb.com.au</a></strong></p>
+<h2 id="more-notes">More notes</h2>
+<p>The method I used above worked fine for the first time I created a certificate but failed when I went to renew the certificate.</p>
+<p>I ended up creating the new certificate using Powershell Admin.</p>
+<h2 id="create-the-certificate">Create the certificate</h2>
+<pre class="hljs"><code><div>New-SelfSignedCertificate -DnsName <span class="hljs-string">"recorddb.com.au"</span> -CertStoreLocation <span class="hljs-string">"cert:\LocalMachine\My"</span>
+</div></code></pre>
+<p>This produced the following output</p>
+<blockquote>
+<p>FB8A486DE7A5769CDADA6BBCE38C1528E2A75A54  CN=recorddb.com.au   {Client Authentication, Server Authentication}</p>
+</blockquote>
+<p>Where the first value was the thumbprint, (FB8A486DE7A5769CDADA6BBCE38C1528E2A75A54).</p>
+<p>Add the thubprint to the following code.</p>
+<pre class="hljs"><code><div><span class="hljs-variable">$thumbprint</span> = <span class="hljs-string">"FB8A486DE7A5769CDADA6BBCE38C1528E2A75A54"</span>
+Export-Certificate -Cert <span class="hljs-string">"cert:\LocalMachine\My\$thumbprint"</span> -FilePath <span class="hljs-string">"C:\Cert\recorddb.cer"</span>
+</div></code></pre>
+<p>This worked fine but the next step failed.</p>
+<h2 id="import-to-trusted-root-so-browser-will-trust-it">Import to Trusted Root (so browser will trust it)</h2>
+<pre class="hljs"><code><div>Import-Certificate -FilePath <span class="hljs-string">"C:\Cert\recorddb.cer"</span> -CertStoreLocation <span class="hljs-string">"cert:\LocalMachine\Root"</span>
+</div></code></pre>
+<p>This step didn't add the certificate to Trusted Root.</p>
+<p>To get around this I had to double-click on the certificate in <code>C:\Cert</code> and click on the <code>Install Certificate</code> button.</p>
+<p>I then used local user and the select the option to <code>place all certificates in the following store</code>. This allowed me to save the certificate in the <code>Trusted Root Certificate Authorities</code>.</p>
+<p>This worked!</p>
+<p>I then opened the website using <code>https</code> and it had a secure certificate.</p>
+<h2 id="final-thoughts">Final thoughts</h2>
+<p><strong>Note:</strong> Use <code>certlm.msc</code> to view your keys.</p>
+<p>It is a bit frustrating that I can't create the self-signed certificate in Internet Information Server. When I did this I could see the certificate in the Trusted Root certificate area but it wasn't working.</p>
+<p>In future I will use Powershell to create new certificates and manually install the certificate.</p>
+<p>I asked Deepseek why it didn't install the certificate in the Trusted Root Authority and it said to manually install it instead. It also came up with a more complex script to install the certificate.</p>
+<pre class="hljs"><code><div><span class="hljs-comment"># Create certificate with extended properties</span>
+<span class="hljs-variable">$cert</span> = New-SelfSignedCertificate `
+    -DnsName <span class="hljs-string">"recorddb.com.au"</span> `
+    -CertStoreLocation <span class="hljs-string">"cert:\LocalMachine\My"</span> `
+    -FriendlyName <span class="hljs-string">"recorddb.com.au Local Dev"</span> `
+    -KeySpec Signature `
+    -KeyUsage DigitalSignature `
+    -KeyUsageProperty Sign `
+    -KeyAlgorithm RSA `
+    -HashAlgorithm SHA256
+
+<span class="hljs-comment"># Export to file</span>
+<span class="hljs-variable">$certPath</span> = <span class="hljs-string">"cert:\LocalMachine\My\$(<span class="hljs-variable">$cert</span>.Thumbprint)"</span>
+Export-Certificate -Cert <span class="hljs-variable">$certPath</span> -FilePath <span class="hljs-string">"C:\Cert\recorddb.cer"</span> -Type CERT
+
+<span class="hljs-comment"># Import to Trusted Root</span>
+<span class="hljs-variable">$import</span> = Import-Certificate -FilePath <span class="hljs-string">"C:\Cert\recorddb.cer"</span> -CertStoreLocation <span class="hljs-string">"cert:\LocalMachine\Root"</span>
+
+<span class="hljs-comment"># Verify installation</span>
+Get-ChildItem -Path <span class="hljs-string">"cert:\LocalMachine\Root"</span> | Where-Object { <span class="hljs-variable">$_</span>.Thumbprint -eq <span class="hljs-variable">$cert</span>.Thumbprint }
+</div></code></pre>
+<p><strong>Note:</strong> I can select and delete expired certificates by first running this command.</p>
+<pre class="hljs"><code><div>Get-ChildItem -Path <span class="hljs-string">"cert:\LocalMachine\My"</span> | Where-Object { <span class="hljs-variable">$_</span>.NotAfter -lt (Get-Date) } | Format-Table Subject, Thumbprint, NotAfter
+</div></code></pre>
+<p>This lists expired keys.</p>
+<blockquote>
+<p>Subject              Thumbprint                               NotAfter</p>
+<hr>
+<p>CN=TIGER             A892DAD321720FB30E2898D706F8929E580AF6BD 29/01/2024 11:00:00 AM<br>
+CN=*.asus.com,       A4AF32429792FC94BF0688E3217E5DB13194CFF0 28/06/2022 1:06:58 PM<br>
+CN=localhost         911948522985599A7FF3F8C6E65C06B365DD0BE4 26/10/2022 12:29:16 PM<br>
+CN=TIGER             6B12C2C301F23E86F2A71844533645FA3F8228D7 29/01/2024 11:00:00 AM<br>
+CN=RecordDB.com.au   66E07744401E383FC4096645BB11560915C32F3F 1/03/2025 4:46:50 PM<br>
+CN=TIGER             60027298EC4F8D163B9CB4CC1EF7C260663CBCD1 29/01/2024 11:00:00 AM</p>
+</blockquote>
+<p>I want to delete the <code>RecordDB.com.au</code> certificate.</p>
+<pre class="hljs"><code><div>Remove-Item -Path <span class="hljs-string">"cert:\LocalMachine\My\66E07744401E383FC4096645BB11560915C32F3F"</span> -DeleteKey
+</div></code></pre>
+<p>This deletes the key and now you need to restart IIS.</p>
+<pre class="hljs"><code><div>    iisreset /restart
+</div></code></pre>
+<p>This works and removed the expired certificate from IIS. Do this next time your certificate expires and it will make it easier to create a new certificate.</p>
 
 </body>
 </html>
