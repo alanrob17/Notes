@@ -1,4 +1,148 @@
-# Using IIS to setup HTTPS on a website
+# Using Powershell to setup HTTPS on a website
+
+**Note:** Always use Powershell Administrator.
+
+For a test I am going to setup a certificate for ``todolist.com.au``.
+
+I have a Host record.
+
+```bash
+    127.0.0.1 todolist.com.au
+```
+
+I have previously created a certificate but it isn't working correctly so I need to remove it.
+
+First, go to **IIS** and change the bindings for the website. Add a new binding for ``http`` on port 80. Remove the ``https`` binding on port 443.
+
+## Removing an expired certificate
+
+Now if the certificate has expired you can remove it after you get its Thumbprint.
+
+Check for expired certificates.
+
+```bash
+Get-ChildItem -Path "cert:\LocalMachine\My" | Where-Object { $_.NotAfter -lt (Get-Date) } | Format-Table Subject, Thumbprint, NotAfter
+```
+
+Returns.
+
+> todolist.com.au 31919141CC571C7927759E9E88164BBDDE015BF8 CN=TIGER
+
+I want to delete the todolist.com.au certificate.
+
+Remove-Item -Path "cert:\LocalMachine\My\31919141CC571C7927759E9E88164BBDDE015BF8" -DeleteKey
+
+This will delete the certificate. If you have used this certificate in **IIS** you will have to restart **IIS**.
+
+```bash
+    iisreset /restart
+```
+
+## Removing a current certificate
+
+```bash
+Get-ChildItem -Path "cert:\LocalMachine\My" | Format-Table FriendlyName, Thumbprint, Subject, NotAfter
+```
+
+Returns.
+
+> todolist.com.au 31919141CC571C7927759E9E88164BBDDE015BF8 CN=TIGER
+
+To remove the certificate.
+
+```bash
+    $thumbprint = "31919141CC571C7927759E9E88164BBDDE015BF8"
+```
+
+Then.
+
+```bash
+    Remove-Item -Path "cert:\LocalMachine\My\$thumbprint" -DeleteKey
+```
+
+This will have completely removed the certificate. Once again restart **IIS**.
+
+```bash
+     iisreset /restart
+```
+
+## Installing a new Certificate
+
+Creating a certificate through Powershell seems to be a better way to create a robust certificate.
+
+To properly configure certificates for multiple local development sites (like recorddb.com.au and todolist.com.au), you need to include all relevant domains as Subject Alternative Names (SANs). Here's how to do it.
+
+I create a script named ``createtodolist.ps1``.
+
+```bash
+# Create certificate with multiple SANs
+New-SelfSignedCertificate `
+    -DnsName "todolist.com.au", "localhost", "127.0.0.1", "todolist" `
+    -CertStoreLocation "cert:\LocalMachine\My" `
+    -FriendlyName "todolist.com.au Development" `
+    -KeyUsage DigitalSignature, KeyEncipherment `
+    -KeyAlgorithm RSA `
+    -KeyLength 2048 `
+    -NotAfter (Get-Date).AddYears(2) `
+    -TextExtension @("2.5.29.37={text}1.3.6.1.5.5.7.3.1") `
+    -Provider "Microsoft Enhanced RSA and AES Cryptographic Provider"
+```
+
+Run.
+
+```bash
+    .\createtodolist.ps1
+```
+
+Returns.
+
+>   PSParentPath: Microsoft.PowerShell.Security\Certificate::LocalMachine\My        
+>       
+> Thumbprint                                Subject              EnhancedKeyUsageList       
+> ----------                                -------              --------------------       
+> B1407E4F61E93ED3717CE4E8431910BB2FEE1A18  CN=todolist.com.au   Server Authentication
+
+You can check that the certificate exists.
+
+```bash
+Get-ChildItem -Path "cert:\LocalMachine\My" | Format-Table FriendlyName, Thumbprint, Subject, NotAfter
+```
+
+Returns.
+
+> todolist.com.au Development B1407E4F61E93ED3717CE4E8431910BB2FEE1A18 CN=todolist.com.au
+
+This gets saved in the Personal Store and we need to export it to the Trusted Root Store. To do this you export the certificate and save it in ``C:\Cert``. This time it saves the certificate as ``todolist.com.au.pfx``. It also requires a password. I have saved this in my SecureSafe passwords.
+
+Now I need to import this key into the TrustedRoot certificate store. 
+
+**Note:** It is important to do this because it won't be trusted if you don't!
+
+Click on the certificate.
+
+Store location: Current User
+
+Add the certificate (todolist.com.au.pfx).
+
+Add the password and mark the key as exportable.
+
+Place all Certificates in the following store: ``Trusted Root Certification Authority``.
+
+## Set up your certificate in IIS
+
+In the bindings section add a new certificate.
+
+![HTTPS setup](assets/images/iis/https-setup.jpg "HTTPS setup")
+
+**Note:** Require Server Name Indication needs to be checked.
+
+Remove the ``http`` port 80 binding.
+
+Now you should have a secure website.
+
+**Note:** the following notes should be redundant. I have left them as an alternative way to create a certificate.
+
+## Using IIS to setup HTTPS on a website
 
 **Note:** I have previously setup my website in IIS and added a record in my ``hosts`` file to map to my website name.
 
