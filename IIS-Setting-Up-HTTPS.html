@@ -400,7 +400,29 @@ code {
 <p>Then.</p>
 <pre class="hljs"><code><div>    Remove-Item -Path <span class="hljs-string">"cert:\LocalMachine\My\$thumbprint"</span> -DeleteKey
 </div></code></pre>
-<p>This will have completely removed the certificate. Once again restart <strong>IIS</strong>.</p>
+<p>This will have completely removed the certificate.</p>
+<h2 id="an-alternate-way-to-remove-the-current-certificate">An alternate way to remove the current certificate</h2>
+<p>This will make sure to remove the certificate from all certificate stores.</p>
+<p>Create a script named <code>removetodolist.ps1</code>.</p>
+<pre class="hljs"><code><div><span class="hljs-variable">$thumbprint</span> = <span class="hljs-string">"31919141CC571C7927759E9E88164BBDDE015BF8"</span>
+
+<span class="hljs-comment"># List of common stores to check</span>
+<span class="hljs-variable">$stores</span> = @(<span class="hljs-string">"My"</span>, <span class="hljs-string">"Root"</span>, <span class="hljs-string">"WebHosting"</span>, <span class="hljs-string">"CA"</span>)
+
+foreach (<span class="hljs-variable">$store</span> <span class="hljs-keyword">in</span> <span class="hljs-variable">$stores</span>) {
+    <span class="hljs-variable">$cert</span> = Get-ChildItem -Path <span class="hljs-string">"cert:\LocalMachine\$store"</span> | 
+            Where-Object { <span class="hljs-variable">$_</span>.Thumbprint -eq <span class="hljs-variable">$thumbprint</span> }
+    <span class="hljs-keyword">if</span> (<span class="hljs-variable">$cert</span>) {
+        Remove-Item -Path <span class="hljs-variable">$cert</span>.PSPath -DeleteKey
+        Write-Host <span class="hljs-string">"Removed from <span class="hljs-variable">$store</span> store"</span>
+    }
+}
+</div></code></pre>
+<p>Run.</p>
+<pre class="hljs"><code><div>    .\removetodolist.ps1
+</div></code></pre>
+<p>This will remove the certificate from all certificate stores.</p>
+<p>Once again restart <strong>IIS</strong>.</p>
 <pre class="hljs"><code><div>     iisreset /restart
 </div></code></pre>
 <h2 id="installing-a-new-certificate">Installing a new Certificate</h2>

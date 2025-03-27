@@ -60,7 +60,39 @@ Then.
     Remove-Item -Path "cert:\LocalMachine\My\$thumbprint" -DeleteKey
 ```
 
-This will have completely removed the certificate. Once again restart **IIS**.
+This will have completely removed the certificate.
+
+## An alternate way to remove the current certificate
+
+This will make sure to remove the certificate from all certificate stores.
+
+Create a script named ``removetodolist.ps1``.
+
+```bash
+$thumbprint = "31919141CC571C7927759E9E88164BBDDE015BF8"
+
+# List of common stores to check
+$stores = @("My", "Root", "WebHosting", "CA")
+
+foreach ($store in $stores) {
+    $cert = Get-ChildItem -Path "cert:\LocalMachine\$store" | 
+            Where-Object { $_.Thumbprint -eq $thumbprint }
+    if ($cert) {
+        Remove-Item -Path $cert.PSPath -DeleteKey
+        Write-Host "Removed from $store store"
+    }
+}
+```
+
+Run.
+
+```bash
+    .\removetodolist.ps1
+```
+
+This will remove the certificate from all certificate stores.
+
+Once again restart **IIS**.
 
 ```bash
      iisreset /restart
